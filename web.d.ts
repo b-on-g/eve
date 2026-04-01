@@ -3938,232 +3938,46 @@ declare namespace $.$$ {
 
 declare namespace $ {
 
-	export class $mol_ghost extends $mol_view {
-		Sub( ): $mol_view
+	type $mol_book2_sub__1 = $mol_type_enforce<
+		ReturnType< $mol_book2['pages'] >[number]
+		,
+		$mol_view
+	>
+	type $mol_book2_sub__2 = $mol_type_enforce<
+		ReturnType< $mol_book2['placeholders'] >[number]
+		,
+		$mol_view
+	>
+	type $mol_view__title_mol_book2_3 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_view['title'] >
+	>
+	export class $mol_book2 extends $mol_scroll {
+		pages_deep( ): readonly($mol_view)[]
+		pages( ): ReturnType< $mol_book2['pages_deep'] >
+		Placeholder( ): $mol_view
+		placeholders( ): readonly($mol_view)[]
+		menu_title( ): string
+		sub( ): readonly($mol_view)[]
+		minimal_width( ): number
+		Gap( id: any): $mol_view
 	}
 	
 }
 
-//# sourceMappingURL=ghost.view.tree.d.ts.map
+//# sourceMappingURL=book2.view.tree.d.ts.map
 declare namespace $.$$ {
-    class $mol_ghost extends $.$mol_ghost {
-        dom_node_external(next?: Element): Element;
-        dom_node_actual(): Element;
-        dom_tree(): Element;
+    class $mol_book2 extends $.$mol_book2 {
+        pages_deep(): $mol_view[];
         title(): string;
-        minimal_width(): number;
-        minimal_height(): number;
+        menu_title(): string;
+        sub(): $mol_view[];
+        bring(): void;
     }
 }
 
 declare namespace $ {
-
-	export class $mol_follower extends $mol_ghost {
-		transform( ): string
-		Anchor( ): $mol_view
-		align( ): readonly(number)[]
-		offset( ): readonly(number)[]
-		style( ): ({ 
-			'transform': ReturnType< $mol_follower['transform'] >,
-		})  & ReturnType< $mol_ghost['style'] >
-	}
-	
-}
-
-//# sourceMappingURL=follower.view.tree.d.ts.map
-declare namespace $.$$ {
-    class $mol_follower extends $.$mol_follower {
-        pos(): {
-            left: number;
-            top: number;
-        } | null;
-        transform(): string;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-
-	type $mol_pop_bubble__content_mol_pop_1 = $mol_type_enforce<
-		ReturnType< $mol_pop['bubble_content'] >
-		,
-		ReturnType< $mol_pop_bubble['content'] >
-	>
-	type $mol_pop_bubble__height_max_mol_pop_2 = $mol_type_enforce<
-		ReturnType< $mol_pop['height_max'] >
-		,
-		ReturnType< $mol_pop_bubble['height_max'] >
-	>
-	type $mol_follower__offset_mol_pop_3 = $mol_type_enforce<
-		ReturnType< $mol_pop['bubble_offset'] >
-		,
-		ReturnType< $mol_follower['offset'] >
-	>
-	type $mol_follower__align_mol_pop_4 = $mol_type_enforce<
-		ReturnType< $mol_pop['bubble_align'] >
-		,
-		ReturnType< $mol_follower['align'] >
-	>
-	type $mol_follower__Anchor_mol_pop_5 = $mol_type_enforce<
-		ReturnType< $mol_pop['Anchor'] >
-		,
-		ReturnType< $mol_follower['Anchor'] >
-	>
-	type $mol_follower__Sub_mol_pop_6 = $mol_type_enforce<
-		ReturnType< $mol_pop['Bubble'] >
-		,
-		ReturnType< $mol_follower['Sub'] >
-	>
-	export class $mol_pop extends $mol_view {
-		bubble( ): any
-		Anchor( ): any
-		bubble_offset( ): readonly(number)[]
-		bubble_align( ): readonly(number)[]
-		bubble_content( ): readonly($mol_view_content)[]
-		height_max( ): number
-		Bubble( ): $mol_pop_bubble
-		Follower( ): $mol_follower
-		showed( next?: boolean ): boolean
-		align_vert( ): string
-		align_hor( ): string
-		align( ): string
-		prefer( ): string
-		auto( ): readonly(any)[]
-		sub( ): readonly(any)[]
-		sub_visible( ): readonly(any)[]
-	}
-	
-	export class $mol_pop_bubble extends $mol_view {
-		content( ): readonly($mol_view_content)[]
-		height_max( ): number
-		sub( ): ReturnType< $mol_pop_bubble['content'] >
-		style( ): ({ 
-			'maxHeight': ReturnType< $mol_pop_bubble['height_max'] >,
-		})  & ReturnType< $mol_view['style'] >
-		attr( ): ({ 
-			'tabindex': number,
-			'popover': string,
-		})  & ReturnType< $mol_view['attr'] >
-	}
-	
-}
-
-//# sourceMappingURL=pop.view.tree.d.ts.map
-declare namespace $.$$ {
-    class $mol_pop extends $.$mol_pop {
-        showed(next?: boolean): boolean;
-        sub_visible(): any[];
-        height_max(): number;
-        align(): string;
-        align_vert(): "suspense" | "top" | "bottom";
-        align_hor(): "suspense" | "left" | "right";
-        bubble_offset(): number[];
-        bubble_align(): number[];
-        bubble(): void;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-
-	type $mol_check__minimal_width_mol_pick_1 = $mol_type_enforce<
-		number
-		,
-		ReturnType< $mol_check['minimal_width'] >
-	>
-	type $mol_check__minimal_height_mol_pick_2 = $mol_type_enforce<
-		number
-		,
-		ReturnType< $mol_check['minimal_height'] >
-	>
-	type $mol_check__enabled_mol_pick_3 = $mol_type_enforce<
-		ReturnType< $mol_pick['trigger_enabled'] >
-		,
-		ReturnType< $mol_check['enabled'] >
-	>
-	type $mol_check__checked_mol_pick_4 = $mol_type_enforce<
-		ReturnType< $mol_pick['showed'] >
-		,
-		ReturnType< $mol_check['checked'] >
-	>
-	type $mol_check__clicks_mol_pick_5 = $mol_type_enforce<
-		ReturnType< $mol_pick['clicks'] >
-		,
-		ReturnType< $mol_check['clicks'] >
-	>
-	type $mol_check__sub_mol_pick_6 = $mol_type_enforce<
-		ReturnType< $mol_pick['trigger_content'] >
-		,
-		ReturnType< $mol_check['sub'] >
-	>
-	type $mol_check__hint_mol_pick_7 = $mol_type_enforce<
-		ReturnType< $mol_pick['hint'] >
-		,
-		ReturnType< $mol_check['hint'] >
-	>
-	export class $mol_pick extends $mol_pop {
-		keydown( next?: any ): any
-		trigger_enabled( ): boolean
-		clicks( next?: any ): any
-		trigger_content( ): readonly($mol_view_content)[]
-		hint( ): string
-		Trigger( ): $mol_check
-		event( ): ({ 
-			keydown( next?: ReturnType< $mol_pick['keydown'] > ): ReturnType< $mol_pick['keydown'] >,
-		})  & ReturnType< $mol_pop['event'] >
-		Anchor( ): ReturnType< $mol_pick['Trigger'] >
-	}
-	
-}
-
-//# sourceMappingURL=pick.view.tree.d.ts.map
-declare namespace $.$$ {
-    class $mol_pick extends $.$mol_pick {
-        keydown(event: KeyboardEvent): void;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-
-	export class $mol_nav extends $mol_plugin {
-		event_key( next?: any ): any
-		cycle( next?: boolean ): boolean
-		mod_ctrl( ): boolean
-		mod_shift( ): boolean
-		mod_alt( ): boolean
-		keys_x( next?: readonly(any)[] ): readonly(any)[]
-		keys_y( next?: readonly(any)[] ): readonly(any)[]
-		current_x( next?: any ): any
-		current_y( next?: any ): any
-		event_up( next?: any ): any
-		event_down( next?: any ): any
-		event_left( next?: any ): any
-		event_right( next?: any ): any
-		event( ): ({ 
-			keydown( next?: ReturnType< $mol_nav['event_key'] > ): ReturnType< $mol_nav['event_key'] >,
-		})  & ReturnType< $mol_plugin['event'] >
-	}
-	
-}
-
-//# sourceMappingURL=nav.view.tree.d.ts.map
-declare namespace $.$$ {
-    class $mol_nav extends $.$mol_nav {
-        event_key(event?: KeyboardEvent): undefined;
-        event_up(event?: KeyboardEvent): undefined;
-        event_down(event?: KeyboardEvent): undefined;
-        event_left(event?: KeyboardEvent): undefined;
-        event_right(event?: KeyboardEvent): undefined;
-        index_y(): number | null;
-        index_x(): number | null;
-    }
 }
 
 declare namespace $ {
@@ -4264,468 +4078,6 @@ declare namespace $.$$ {
         selection_change(event: Event): void;
         selection_start(): number;
         selection_end(): number;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-
-	export class $mol_icon_close extends $mol_icon {
-		path( ): string
-	}
-	
-}
-
-//# sourceMappingURL=close.view.tree.d.ts.map
-declare namespace $ {
-
-	type $mol_hotkey__key_mol_search_1 = $mol_type_enforce<
-		({ 
-			escape( next?: ReturnType< $mol_search['clear'] > ): ReturnType< $mol_search['clear'] >,
-		}) 
-		,
-		ReturnType< $mol_hotkey['key'] >
-	>
-	type $mol_nav__keys_y_mol_search_2 = $mol_type_enforce<
-		ReturnType< $mol_search['nav_components'] >
-		,
-		ReturnType< $mol_nav['keys_y'] >
-	>
-	type $mol_nav__current_y_mol_search_3 = $mol_type_enforce<
-		ReturnType< $mol_search['nav_focused'] >
-		,
-		ReturnType< $mol_nav['current_y'] >
-	>
-	type $mol_string__value_mol_search_4 = $mol_type_enforce<
-		ReturnType< $mol_search['query'] >
-		,
-		ReturnType< $mol_string['value'] >
-	>
-	type $mol_string__hint_mol_search_5 = $mol_type_enforce<
-		ReturnType< $mol_search['hint'] >
-		,
-		ReturnType< $mol_string['hint'] >
-	>
-	type $mol_string__submit_mol_search_6 = $mol_type_enforce<
-		ReturnType< $mol_search['submit'] >
-		,
-		ReturnType< $mol_string['submit'] >
-	>
-	type $mol_string__enabled_mol_search_7 = $mol_type_enforce<
-		ReturnType< $mol_search['enabled'] >
-		,
-		ReturnType< $mol_string['enabled'] >
-	>
-	type $mol_string__keyboard_mol_search_8 = $mol_type_enforce<
-		ReturnType< $mol_search['keyboard'] >
-		,
-		ReturnType< $mol_string['keyboard'] >
-	>
-	type $mol_string__enter_mol_search_9 = $mol_type_enforce<
-		ReturnType< $mol_search['enter'] >
-		,
-		ReturnType< $mol_string['enter'] >
-	>
-	type $mol_button_minor__hint_mol_search_10 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_button_minor['hint'] >
-	>
-	type $mol_button_minor__enabled_mol_search_11 = $mol_type_enforce<
-		ReturnType< $mol_search['enabled'] >
-		,
-		ReturnType< $mol_button_minor['enabled'] >
-	>
-	type $mol_button_minor__click_mol_search_12 = $mol_type_enforce<
-		ReturnType< $mol_search['clear'] >
-		,
-		ReturnType< $mol_button_minor['click'] >
-	>
-	type $mol_button_minor__sub_mol_search_13 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_button_minor['sub'] >
-	>
-	type $mol_list__rows_mol_search_14 = $mol_type_enforce<
-		ReturnType< $mol_search['menu_items'] >
-		,
-		ReturnType< $mol_list['rows'] >
-	>
-	type $mol_scroll__sub_mol_search_15 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_scroll['sub'] >
-	>
-	type $mol_dimmer__haystack_mol_search_16 = $mol_type_enforce<
-		ReturnType< $mol_search['suggest_label'] >
-		,
-		ReturnType< $mol_dimmer['haystack'] >
-	>
-	type $mol_dimmer__needle_mol_search_17 = $mol_type_enforce<
-		ReturnType< $mol_search['query'] >
-		,
-		ReturnType< $mol_dimmer['needle'] >
-	>
-	type $mol_search_plugins__18 = $mol_type_enforce<
-		ReturnType< $mol_pop['plugins'] >[number]
-		,
-		$mol_plugin
-	>
-	type $mol_view__sub_mol_search_19 = $mol_type_enforce<
-		ReturnType< $mol_search['anchor_content'] >
-		,
-		ReturnType< $mol_view['sub'] >
-	>
-	type $mol_button_minor__click_mol_search_20 = $mol_type_enforce<
-		ReturnType< $mol_search['suggest_select'] >
-		,
-		ReturnType< $mol_button_minor['click'] >
-	>
-	type $mol_button_minor__sub_mol_search_21 = $mol_type_enforce<
-		ReturnType< $mol_search['suggest_content'] >
-		,
-		ReturnType< $mol_button_minor['sub'] >
-	>
-	export class $mol_search extends $mol_pop {
-		clear( next?: any ): any
-		Hotkey( ): $mol_hotkey
-		nav_components( ): readonly($mol_view)[]
-		nav_focused( next?: any ): any
-		Nav( ): $mol_nav
-		suggests_showed( next?: boolean ): boolean
-		query( next?: string ): string
-		hint( ): string
-		submit( next?: any ): any
-		enabled( ): boolean
-		keyboard( ): string
-		enter( ): string
-		bring( ): ReturnType< ReturnType< $mol_search['Query'] >['bring'] >
-		Query( ): $mol_string
-		Clear_icon( ): $mol_icon_close
-		Clear( ): $mol_button_minor
-		anchor_content( ): readonly(any)[]
-		menu_items( ): readonly($mol_view)[]
-		Menu( ): $mol_list
-		Bubble_pane( ): $mol_scroll
-		suggest_select( id: any, next?: any ): any
-		suggest_label( id: any): string
-		Suggest_label( id: any): $mol_dimmer
-		suggest_content( id: any): readonly($mol_view_content)[]
-		suggests( ): readonly(string)[]
-		plugins( ): readonly($mol_plugin)[]
-		showed( next?: ReturnType< $mol_search['suggests_showed'] > ): ReturnType< $mol_search['suggests_showed'] >
-		align_hor( ): string
-		Anchor( ): $mol_view
-		bubble_content( ): readonly($mol_view_content)[]
-		Suggest( id: any): $mol_button_minor
-	}
-	
-}
-
-//# sourceMappingURL=search.view.tree.d.ts.map
-declare namespace $.$$ {
-    class $mol_search extends $.$mol_search {
-        anchor_content(): ($mol_button_minor | $.$mol_string)[];
-        suggests_showed(next?: boolean): boolean;
-        suggest_selected(next?: string): void;
-        nav_components(): ($mol_button_minor | $.$mol_string)[];
-        nav_focused(component?: $mol_view): $mol_view | $.$mol_string | null;
-        suggest_label(key: string): string;
-        menu_items(): $mol_button_minor[];
-        suggest_select(id: string, event?: MouseEvent): void;
-        clear(event?: Event): void;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-
-	export class $mol_icon_dots_vertical extends $mol_icon {
-		path( ): string
-	}
-	
-}
-
-//# sourceMappingURL=vertical.view.tree.d.ts.map
-declare namespace $ {
-    function $mol_match_text<Variant>(query: string, values: (variant: Variant) => readonly string[]): (variant: Variant) => boolean;
-}
-
-declare namespace $ {
-
-	type $mol_dimmer__haystack_mol_select_1 = $mol_type_enforce<
-		ReturnType< $mol_select['option_label'] >
-		,
-		ReturnType< $mol_dimmer['haystack'] >
-	>
-	type $mol_dimmer__needle_mol_select_2 = $mol_type_enforce<
-		ReturnType< $mol_select['filter_pattern'] >
-		,
-		ReturnType< $mol_dimmer['needle'] >
-	>
-	type $mol_nav__keys_y_mol_select_3 = $mol_type_enforce<
-		ReturnType< $mol_select['nav_components'] >
-		,
-		ReturnType< $mol_nav['keys_y'] >
-	>
-	type $mol_nav__current_y_mol_select_4 = $mol_type_enforce<
-		ReturnType< $mol_select['option_focused'] >
-		,
-		ReturnType< $mol_nav['current_y'] >
-	>
-	type $mol_nav__cycle_mol_select_5 = $mol_type_enforce<
-		ReturnType< $mol_select['nav_cycle'] >
-		,
-		ReturnType< $mol_nav['cycle'] >
-	>
-	type $mol_list__rows_mol_select_6 = $mol_type_enforce<
-		ReturnType< $mol_select['menu_content'] >
-		,
-		ReturnType< $mol_list['rows'] >
-	>
-	type $mol_scroll__sub_mol_select_7 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_scroll['sub'] >
-	>
-	type $mol_button_minor__enabled_mol_select_8 = $mol_type_enforce<
-		ReturnType< $mol_select['enabled'] >
-		,
-		ReturnType< $mol_button_minor['enabled'] >
-	>
-	type $mol_button_minor__event_click_mol_select_9 = $mol_type_enforce<
-		ReturnType< $mol_select['event_select'] >
-		,
-		ReturnType< $mol_button_minor['event_click'] >
-	>
-	type $mol_button_minor__sub_mol_select_10 = $mol_type_enforce<
-		ReturnType< $mol_select['option_content'] >
-		,
-		ReturnType< $mol_button_minor['sub'] >
-	>
-	type $mol_view__sub_mol_select_11 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_view['sub'] >
-	>
-	type $mol_search__query_mol_select_12 = $mol_type_enforce<
-		ReturnType< $mol_select['filter_pattern'] >
-		,
-		ReturnType< $mol_search['query'] >
-	>
-	type $mol_search__hint_mol_select_13 = $mol_type_enforce<
-		ReturnType< $mol_select['filter_hint'] >
-		,
-		ReturnType< $mol_search['hint'] >
-	>
-	type $mol_search__submit_mol_select_14 = $mol_type_enforce<
-		ReturnType< $mol_select['submit'] >
-		,
-		ReturnType< $mol_search['submit'] >
-	>
-	type $mol_search__enabled_mol_select_15 = $mol_type_enforce<
-		ReturnType< $mol_select['enabled'] >
-		,
-		ReturnType< $mol_search['enabled'] >
-	>
-	export class $mol_select extends $mol_pick {
-		enabled( ): boolean
-		event_select( id: any, next?: any ): any
-		option_label( id: any): string
-		filter_pattern( next?: string ): string
-		Option_label( id: any): $mol_dimmer
-		option_content( id: any): readonly(any)[]
-		no_options_message( ): string
-		nav_components( ): readonly($mol_view)[]
-		option_focused( next?: any ): any
-		nav_cycle( next?: boolean ): boolean
-		Nav( ): $mol_nav
-		menu_content( ): readonly($mol_view)[]
-		Menu( ): $mol_list
-		Bubble_pane( ): $mol_scroll
-		filter_hint( ): string
-		submit( next?: any ): any
-		dictionary( next?: Record<string, any> ): Record<string, any>
-		options( ): readonly(string)[]
-		value( next?: string ): string
-		option_label_default( ): string
-		Option_row( id: any): $mol_button_minor
-		No_options( ): $mol_view
-		plugins( ): readonly(any)[]
-		hint( ): string
-		bubble_content( ): readonly(any)[]
-		Filter( ): $mol_search
-		Trigger_icon( ): $mol_icon_dots_vertical
-		trigger_enabled( ): ReturnType< $mol_select['enabled'] >
-	}
-	
-}
-
-//# sourceMappingURL=select.view.tree.d.ts.map
-declare namespace $.$$ {
-    class $mol_select extends $.$mol_select {
-        filter_pattern(next?: string): string;
-        open(): void;
-        options(): readonly string[];
-        options_filtered(): readonly string[];
-        option_label(id: string): any;
-        option_rows(): $mol_button_minor[];
-        option_focused(component?: $mol_view): $mol_view | $.$mol_search | null;
-        event_select(id: string, event?: MouseEvent): void;
-        nav_components(): ($mol_button_minor | $.$mol_search)[];
-        trigger_content(): readonly $mol_view_content[];
-        menu_content(): $mol_view[];
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-
-	type $mol_text__text_eve_app_page_components_surface_1 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_text['text'] >
-	>
-	type $mol_select__dictionary_eve_app_page_components_surface_2 = $mol_type_enforce<
-		ReturnType< $eve_app_page_components_surface['variants'] >
-		,
-		ReturnType< $mol_select['dictionary'] >
-	>
-	type $mol_select__value_eve_app_page_components_surface_3 = $mol_type_enforce<
-		ReturnType< $eve_app_page_components_surface['Variant_select_value'] >
-		,
-		ReturnType< $mol_select['value'] >
-	>
-	type $eve_surface__sub_eve_app_page_components_surface_4 = $mol_type_enforce<
-		ReturnType< $eve_app_page_components_surface['grid_cells'] >
-		,
-		ReturnType< $eve_surface['sub'] >
-	>
-	type $eve_flex__align_items_eve_app_page_components_surface_5 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $eve_flex['align_items'] >
-	>
-	type $eve_flex__justify_content_eve_app_page_components_surface_6 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $eve_flex['justify_content'] >
-	>
-	type $eve_flex__sub_eve_app_page_components_surface_7 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $eve_flex['sub'] >
-	>
-	type $mol_paragraph__title_eve_app_page_components_surface_8 = $mol_type_enforce<
-		ReturnType< $eve_app_page_components_surface['grid_header_text'] >
-		,
-		ReturnType< $mol_paragraph['title'] >
-	>
-	type $mol_paragraph__title_eve_app_page_components_surface_9 = $mol_type_enforce<
-		ReturnType< $eve_app_page_components_surface['grid_row_text'] >
-		,
-		ReturnType< $mol_paragraph['title'] >
-	>
-	type $eve_surface__variant_eve_app_page_components_surface_10 = $mol_type_enforce<
-		ReturnType< $eve_app_page_components_surface['Variant_select_value'] >
-		,
-		ReturnType< $eve_surface['variant'] >
-	>
-	type $eve_surface__colors_eve_app_page_components_surface_11 = $mol_type_enforce<
-		ReturnType< $eve_app_page_components_surface['grid_cell_color'] >
-		,
-		ReturnType< $eve_surface['colors'] >
-	>
-	type $eve_surface__state_eve_app_page_components_surface_12 = $mol_type_enforce<
-		ReturnType< $eve_app_page_components_surface['grid_cell_state'] >
-		,
-		ReturnType< $eve_surface['state'] >
-	>
-	export class $eve_app_page_components_surface extends $eve_app_page_sb_page {
-		Hint( ): $mol_text
-		variants( ): ({ 
-			'soft': string,
-			'solid': string,
-			'outline': string,
-			'ghost': string,
-		}) 
-		Variant_select_value( next?: string ): string
-		Variant_select( ): $mol_select
-		grid_cells( ): readonly(any)[]
-		Showcase_grid( ): $eve_surface
-		Card( ): $eve_flex
-		grid_header_text( id: any): string
-		grid_row_text( id: any): string
-		grid_cell_color( id: any): string
-		grid_cell_state( id: any): string
-		title( ): string
-		body( ): readonly(any)[]
-		Grid_empty( ): $eve_surface
-		Grid_column_header( id: any): $mol_paragraph
-		Grid_row_header( id: any): $mol_paragraph
-		Grid_cell( id: any): $eve_surface
-	}
-	
-}
-
-//# sourceMappingURL=surface.view.tree.d.ts.map
-declare namespace $.$$ {
-    class $eve_app_page_components_surface extends $.$eve_app_page_components_surface {
-        grid_cells(): any[];
-        grid_header_text(state: string): string;
-        grid_row_text(color: string): string;
-        grid_cell_color(id: string): $eve_surface_color;
-        grid_cell_state(id: string): $eve_surface_state_modifiers;
-    }
-}
-
-declare namespace $.$$ {
-}
-
-declare namespace $ {
-
-	type $mol_book2_sub__1 = $mol_type_enforce<
-		ReturnType< $mol_book2['pages'] >[number]
-		,
-		$mol_view
-	>
-	type $mol_book2_sub__2 = $mol_type_enforce<
-		ReturnType< $mol_book2['placeholders'] >[number]
-		,
-		$mol_view
-	>
-	type $mol_view__title_mol_book2_3 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_view['title'] >
-	>
-	export class $mol_book2 extends $mol_scroll {
-		pages_deep( ): readonly($mol_view)[]
-		pages( ): ReturnType< $mol_book2['pages_deep'] >
-		Placeholder( ): $mol_view
-		placeholders( ): readonly($mol_view)[]
-		menu_title( ): string
-		sub( ): readonly($mol_view)[]
-		minimal_width( ): number
-		Gap( id: any): $mol_view
-	}
-	
-}
-
-//# sourceMappingURL=book2.view.tree.d.ts.map
-declare namespace $.$$ {
-    class $mol_book2 extends $.$mol_book2 {
-        pages_deep(): $mol_view[];
-        title(): string;
-        menu_title(): string;
-        sub(): $mol_view[];
-        bring(): void;
     }
 }
 
@@ -5010,6 +4362,200 @@ declare namespace $ {
 }
 
 //# sourceMappingURL=outline.view.tree.d.ts.map
+declare namespace $ {
+
+	export class $mol_ghost extends $mol_view {
+		Sub( ): $mol_view
+	}
+	
+}
+
+//# sourceMappingURL=ghost.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $mol_ghost extends $.$mol_ghost {
+        dom_node_external(next?: Element): Element;
+        dom_node_actual(): Element;
+        dom_tree(): Element;
+        title(): string;
+        minimal_width(): number;
+        minimal_height(): number;
+    }
+}
+
+declare namespace $ {
+
+	export class $mol_follower extends $mol_ghost {
+		transform( ): string
+		Anchor( ): $mol_view
+		align( ): readonly(number)[]
+		offset( ): readonly(number)[]
+		style( ): ({ 
+			'transform': ReturnType< $mol_follower['transform'] >,
+		})  & ReturnType< $mol_ghost['style'] >
+	}
+	
+}
+
+//# sourceMappingURL=follower.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $mol_follower extends $.$mol_follower {
+        pos(): {
+            left: number;
+            top: number;
+        } | null;
+        transform(): string;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+
+	type $mol_pop_bubble__content_mol_pop_1 = $mol_type_enforce<
+		ReturnType< $mol_pop['bubble_content'] >
+		,
+		ReturnType< $mol_pop_bubble['content'] >
+	>
+	type $mol_pop_bubble__height_max_mol_pop_2 = $mol_type_enforce<
+		ReturnType< $mol_pop['height_max'] >
+		,
+		ReturnType< $mol_pop_bubble['height_max'] >
+	>
+	type $mol_follower__offset_mol_pop_3 = $mol_type_enforce<
+		ReturnType< $mol_pop['bubble_offset'] >
+		,
+		ReturnType< $mol_follower['offset'] >
+	>
+	type $mol_follower__align_mol_pop_4 = $mol_type_enforce<
+		ReturnType< $mol_pop['bubble_align'] >
+		,
+		ReturnType< $mol_follower['align'] >
+	>
+	type $mol_follower__Anchor_mol_pop_5 = $mol_type_enforce<
+		ReturnType< $mol_pop['Anchor'] >
+		,
+		ReturnType< $mol_follower['Anchor'] >
+	>
+	type $mol_follower__Sub_mol_pop_6 = $mol_type_enforce<
+		ReturnType< $mol_pop['Bubble'] >
+		,
+		ReturnType< $mol_follower['Sub'] >
+	>
+	export class $mol_pop extends $mol_view {
+		bubble( ): any
+		Anchor( ): any
+		bubble_offset( ): readonly(number)[]
+		bubble_align( ): readonly(number)[]
+		bubble_content( ): readonly($mol_view_content)[]
+		height_max( ): number
+		Bubble( ): $mol_pop_bubble
+		Follower( ): $mol_follower
+		showed( next?: boolean ): boolean
+		align_vert( ): string
+		align_hor( ): string
+		align( ): string
+		prefer( ): string
+		auto( ): readonly(any)[]
+		sub( ): readonly(any)[]
+		sub_visible( ): readonly(any)[]
+	}
+	
+	export class $mol_pop_bubble extends $mol_view {
+		content( ): readonly($mol_view_content)[]
+		height_max( ): number
+		sub( ): ReturnType< $mol_pop_bubble['content'] >
+		style( ): ({ 
+			'maxHeight': ReturnType< $mol_pop_bubble['height_max'] >,
+		})  & ReturnType< $mol_view['style'] >
+		attr( ): ({ 
+			'tabindex': number,
+			'popover': string,
+		})  & ReturnType< $mol_view['attr'] >
+	}
+	
+}
+
+//# sourceMappingURL=pop.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $mol_pop extends $.$mol_pop {
+        showed(next?: boolean): boolean;
+        sub_visible(): any[];
+        height_max(): number;
+        align(): string;
+        align_vert(): "suspense" | "top" | "bottom";
+        align_hor(): "suspense" | "left" | "right";
+        bubble_offset(): number[];
+        bubble_align(): number[];
+        bubble(): void;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+
+	type $mol_check__minimal_width_mol_pick_1 = $mol_type_enforce<
+		number
+		,
+		ReturnType< $mol_check['minimal_width'] >
+	>
+	type $mol_check__minimal_height_mol_pick_2 = $mol_type_enforce<
+		number
+		,
+		ReturnType< $mol_check['minimal_height'] >
+	>
+	type $mol_check__enabled_mol_pick_3 = $mol_type_enforce<
+		ReturnType< $mol_pick['trigger_enabled'] >
+		,
+		ReturnType< $mol_check['enabled'] >
+	>
+	type $mol_check__checked_mol_pick_4 = $mol_type_enforce<
+		ReturnType< $mol_pick['showed'] >
+		,
+		ReturnType< $mol_check['checked'] >
+	>
+	type $mol_check__clicks_mol_pick_5 = $mol_type_enforce<
+		ReturnType< $mol_pick['clicks'] >
+		,
+		ReturnType< $mol_check['clicks'] >
+	>
+	type $mol_check__sub_mol_pick_6 = $mol_type_enforce<
+		ReturnType< $mol_pick['trigger_content'] >
+		,
+		ReturnType< $mol_check['sub'] >
+	>
+	type $mol_check__hint_mol_pick_7 = $mol_type_enforce<
+		ReturnType< $mol_pick['hint'] >
+		,
+		ReturnType< $mol_check['hint'] >
+	>
+	export class $mol_pick extends $mol_pop {
+		keydown( next?: any ): any
+		trigger_enabled( ): boolean
+		clicks( next?: any ): any
+		trigger_content( ): readonly($mol_view_content)[]
+		hint( ): string
+		Trigger( ): $mol_check
+		event( ): ({ 
+			keydown( next?: ReturnType< $mol_pick['keydown'] > ): ReturnType< $mol_pick['keydown'] >,
+		})  & ReturnType< $mol_pop['event'] >
+		Anchor( ): ReturnType< $mol_pick['Trigger'] >
+	}
+	
+}
+
+//# sourceMappingURL=pick.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $mol_pick extends $.$mol_pick {
+        keydown(event: KeyboardEvent): void;
+    }
+}
+
+declare namespace $ {
+}
+
 declare namespace $.$$ {
     class $hyoo_tree_edit extends $.$hyoo_tree_edit {
         value(next?: $mol_tree2): $mol_tree2;
@@ -5719,48 +5265,355 @@ declare namespace $.$$ {
 
 declare namespace $ {
 
-	type $eve_app_page_sb_playground__component_name_eve_app_page_components_flex_1 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $eve_app_page_sb_playground['component_name'] >
-	>
-	type $eve_app_page_sb_playground__default_source_eve_app_page_components_flex_2 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $eve_app_page_sb_playground['default_source'] >
-	>
-	type $eve_surface__colors_eve_app_page_components_flex_3 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $eve_surface['colors'] >
-	>
-	export class $eve_app_page_components_flex extends $eve_app_page_sb_page {
-		Playground( ): $eve_app_page_sb_playground
-		title( ): string
-		body( ): readonly(any)[]
-		Showcase_cell( id: any): $eve_surface
+	export class $mol_nav extends $mol_plugin {
+		event_key( next?: any ): any
+		cycle( next?: boolean ): boolean
+		mod_ctrl( ): boolean
+		mod_shift( ): boolean
+		mod_alt( ): boolean
+		keys_x( next?: readonly(any)[] ): readonly(any)[]
+		keys_y( next?: readonly(any)[] ): readonly(any)[]
+		current_x( next?: any ): any
+		current_y( next?: any ): any
+		event_up( next?: any ): any
+		event_down( next?: any ): any
+		event_left( next?: any ): any
+		event_right( next?: any ): any
+		event( ): ({ 
+			keydown( next?: ReturnType< $mol_nav['event_key'] > ): ReturnType< $mol_nav['event_key'] >,
+		})  & ReturnType< $mol_plugin['event'] >
 	}
 	
 }
 
-//# sourceMappingURL=flex.view.tree.d.ts.map
+//# sourceMappingURL=nav.view.tree.d.ts.map
 declare namespace $.$$ {
-    class $eve_app_page_components_flex extends $.$eve_app_page_components_flex {
+    class $mol_nav extends $.$mol_nav {
+        event_key(event?: KeyboardEvent): undefined;
+        event_up(event?: KeyboardEvent): undefined;
+        event_down(event?: KeyboardEvent): undefined;
+        event_left(event?: KeyboardEvent): undefined;
+        event_right(event?: KeyboardEvent): undefined;
+        index_y(): number | null;
+        index_x(): number | null;
     }
-}
-
-declare namespace $.$$ {
 }
 
 declare namespace $ {
 
-	export class $mol_icon_karate extends $mol_icon {
+	export class $mol_icon_close extends $mol_icon {
 		path( ): string
 	}
 	
 }
 
-//# sourceMappingURL=karate.view.tree.d.ts.map
+//# sourceMappingURL=close.view.tree.d.ts.map
+declare namespace $ {
+
+	type $mol_hotkey__key_mol_search_1 = $mol_type_enforce<
+		({ 
+			escape( next?: ReturnType< $mol_search['clear'] > ): ReturnType< $mol_search['clear'] >,
+		}) 
+		,
+		ReturnType< $mol_hotkey['key'] >
+	>
+	type $mol_nav__keys_y_mol_search_2 = $mol_type_enforce<
+		ReturnType< $mol_search['nav_components'] >
+		,
+		ReturnType< $mol_nav['keys_y'] >
+	>
+	type $mol_nav__current_y_mol_search_3 = $mol_type_enforce<
+		ReturnType< $mol_search['nav_focused'] >
+		,
+		ReturnType< $mol_nav['current_y'] >
+	>
+	type $mol_string__value_mol_search_4 = $mol_type_enforce<
+		ReturnType< $mol_search['query'] >
+		,
+		ReturnType< $mol_string['value'] >
+	>
+	type $mol_string__hint_mol_search_5 = $mol_type_enforce<
+		ReturnType< $mol_search['hint'] >
+		,
+		ReturnType< $mol_string['hint'] >
+	>
+	type $mol_string__submit_mol_search_6 = $mol_type_enforce<
+		ReturnType< $mol_search['submit'] >
+		,
+		ReturnType< $mol_string['submit'] >
+	>
+	type $mol_string__enabled_mol_search_7 = $mol_type_enforce<
+		ReturnType< $mol_search['enabled'] >
+		,
+		ReturnType< $mol_string['enabled'] >
+	>
+	type $mol_string__keyboard_mol_search_8 = $mol_type_enforce<
+		ReturnType< $mol_search['keyboard'] >
+		,
+		ReturnType< $mol_string['keyboard'] >
+	>
+	type $mol_string__enter_mol_search_9 = $mol_type_enforce<
+		ReturnType< $mol_search['enter'] >
+		,
+		ReturnType< $mol_string['enter'] >
+	>
+	type $mol_button_minor__hint_mol_search_10 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_button_minor['hint'] >
+	>
+	type $mol_button_minor__enabled_mol_search_11 = $mol_type_enforce<
+		ReturnType< $mol_search['enabled'] >
+		,
+		ReturnType< $mol_button_minor['enabled'] >
+	>
+	type $mol_button_minor__click_mol_search_12 = $mol_type_enforce<
+		ReturnType< $mol_search['clear'] >
+		,
+		ReturnType< $mol_button_minor['click'] >
+	>
+	type $mol_button_minor__sub_mol_search_13 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $mol_button_minor['sub'] >
+	>
+	type $mol_list__rows_mol_search_14 = $mol_type_enforce<
+		ReturnType< $mol_search['menu_items'] >
+		,
+		ReturnType< $mol_list['rows'] >
+	>
+	type $mol_scroll__sub_mol_search_15 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $mol_scroll['sub'] >
+	>
+	type $mol_dimmer__haystack_mol_search_16 = $mol_type_enforce<
+		ReturnType< $mol_search['suggest_label'] >
+		,
+		ReturnType< $mol_dimmer['haystack'] >
+	>
+	type $mol_dimmer__needle_mol_search_17 = $mol_type_enforce<
+		ReturnType< $mol_search['query'] >
+		,
+		ReturnType< $mol_dimmer['needle'] >
+	>
+	type $mol_search_plugins__18 = $mol_type_enforce<
+		ReturnType< $mol_pop['plugins'] >[number]
+		,
+		$mol_plugin
+	>
+	type $mol_view__sub_mol_search_19 = $mol_type_enforce<
+		ReturnType< $mol_search['anchor_content'] >
+		,
+		ReturnType< $mol_view['sub'] >
+	>
+	type $mol_button_minor__click_mol_search_20 = $mol_type_enforce<
+		ReturnType< $mol_search['suggest_select'] >
+		,
+		ReturnType< $mol_button_minor['click'] >
+	>
+	type $mol_button_minor__sub_mol_search_21 = $mol_type_enforce<
+		ReturnType< $mol_search['suggest_content'] >
+		,
+		ReturnType< $mol_button_minor['sub'] >
+	>
+	export class $mol_search extends $mol_pop {
+		clear( next?: any ): any
+		Hotkey( ): $mol_hotkey
+		nav_components( ): readonly($mol_view)[]
+		nav_focused( next?: any ): any
+		Nav( ): $mol_nav
+		suggests_showed( next?: boolean ): boolean
+		query( next?: string ): string
+		hint( ): string
+		submit( next?: any ): any
+		enabled( ): boolean
+		keyboard( ): string
+		enter( ): string
+		bring( ): ReturnType< ReturnType< $mol_search['Query'] >['bring'] >
+		Query( ): $mol_string
+		Clear_icon( ): $mol_icon_close
+		Clear( ): $mol_button_minor
+		anchor_content( ): readonly(any)[]
+		menu_items( ): readonly($mol_view)[]
+		Menu( ): $mol_list
+		Bubble_pane( ): $mol_scroll
+		suggest_select( id: any, next?: any ): any
+		suggest_label( id: any): string
+		Suggest_label( id: any): $mol_dimmer
+		suggest_content( id: any): readonly($mol_view_content)[]
+		suggests( ): readonly(string)[]
+		plugins( ): readonly($mol_plugin)[]
+		showed( next?: ReturnType< $mol_search['suggests_showed'] > ): ReturnType< $mol_search['suggests_showed'] >
+		align_hor( ): string
+		Anchor( ): $mol_view
+		bubble_content( ): readonly($mol_view_content)[]
+		Suggest( id: any): $mol_button_minor
+	}
+	
+}
+
+//# sourceMappingURL=search.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $mol_search extends $.$mol_search {
+        anchor_content(): ($mol_button_minor | $.$mol_string)[];
+        suggests_showed(next?: boolean): boolean;
+        suggest_selected(next?: string): void;
+        nav_components(): ($mol_button_minor | $.$mol_string)[];
+        nav_focused(component?: $mol_view): $mol_view | $.$mol_string | null;
+        suggest_label(key: string): string;
+        menu_items(): $mol_button_minor[];
+        suggest_select(id: string, event?: MouseEvent): void;
+        clear(event?: Event): void;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+
+	export class $mol_icon_dots_vertical extends $mol_icon {
+		path( ): string
+	}
+	
+}
+
+//# sourceMappingURL=vertical.view.tree.d.ts.map
+declare namespace $ {
+    function $mol_match_text<Variant>(query: string, values: (variant: Variant) => readonly string[]): (variant: Variant) => boolean;
+}
+
+declare namespace $ {
+
+	type $mol_dimmer__haystack_mol_select_1 = $mol_type_enforce<
+		ReturnType< $mol_select['option_label'] >
+		,
+		ReturnType< $mol_dimmer['haystack'] >
+	>
+	type $mol_dimmer__needle_mol_select_2 = $mol_type_enforce<
+		ReturnType< $mol_select['filter_pattern'] >
+		,
+		ReturnType< $mol_dimmer['needle'] >
+	>
+	type $mol_nav__keys_y_mol_select_3 = $mol_type_enforce<
+		ReturnType< $mol_select['nav_components'] >
+		,
+		ReturnType< $mol_nav['keys_y'] >
+	>
+	type $mol_nav__current_y_mol_select_4 = $mol_type_enforce<
+		ReturnType< $mol_select['option_focused'] >
+		,
+		ReturnType< $mol_nav['current_y'] >
+	>
+	type $mol_nav__cycle_mol_select_5 = $mol_type_enforce<
+		ReturnType< $mol_select['nav_cycle'] >
+		,
+		ReturnType< $mol_nav['cycle'] >
+	>
+	type $mol_list__rows_mol_select_6 = $mol_type_enforce<
+		ReturnType< $mol_select['menu_content'] >
+		,
+		ReturnType< $mol_list['rows'] >
+	>
+	type $mol_scroll__sub_mol_select_7 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $mol_scroll['sub'] >
+	>
+	type $mol_button_minor__enabled_mol_select_8 = $mol_type_enforce<
+		ReturnType< $mol_select['enabled'] >
+		,
+		ReturnType< $mol_button_minor['enabled'] >
+	>
+	type $mol_button_minor__event_click_mol_select_9 = $mol_type_enforce<
+		ReturnType< $mol_select['event_select'] >
+		,
+		ReturnType< $mol_button_minor['event_click'] >
+	>
+	type $mol_button_minor__sub_mol_select_10 = $mol_type_enforce<
+		ReturnType< $mol_select['option_content'] >
+		,
+		ReturnType< $mol_button_minor['sub'] >
+	>
+	type $mol_view__sub_mol_select_11 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $mol_view['sub'] >
+	>
+	type $mol_search__query_mol_select_12 = $mol_type_enforce<
+		ReturnType< $mol_select['filter_pattern'] >
+		,
+		ReturnType< $mol_search['query'] >
+	>
+	type $mol_search__hint_mol_select_13 = $mol_type_enforce<
+		ReturnType< $mol_select['filter_hint'] >
+		,
+		ReturnType< $mol_search['hint'] >
+	>
+	type $mol_search__submit_mol_select_14 = $mol_type_enforce<
+		ReturnType< $mol_select['submit'] >
+		,
+		ReturnType< $mol_search['submit'] >
+	>
+	type $mol_search__enabled_mol_select_15 = $mol_type_enforce<
+		ReturnType< $mol_select['enabled'] >
+		,
+		ReturnType< $mol_search['enabled'] >
+	>
+	export class $mol_select extends $mol_pick {
+		enabled( ): boolean
+		event_select( id: any, next?: any ): any
+		option_label( id: any): string
+		filter_pattern( next?: string ): string
+		Option_label( id: any): $mol_dimmer
+		option_content( id: any): readonly(any)[]
+		no_options_message( ): string
+		nav_components( ): readonly($mol_view)[]
+		option_focused( next?: any ): any
+		nav_cycle( next?: boolean ): boolean
+		Nav( ): $mol_nav
+		menu_content( ): readonly($mol_view)[]
+		Menu( ): $mol_list
+		Bubble_pane( ): $mol_scroll
+		filter_hint( ): string
+		submit( next?: any ): any
+		dictionary( next?: Record<string, any> ): Record<string, any>
+		options( ): readonly(string)[]
+		value( next?: string ): string
+		option_label_default( ): string
+		Option_row( id: any): $mol_button_minor
+		No_options( ): $mol_view
+		plugins( ): readonly(any)[]
+		hint( ): string
+		bubble_content( ): readonly(any)[]
+		Filter( ): $mol_search
+		Trigger_icon( ): $mol_icon_dots_vertical
+		trigger_enabled( ): ReturnType< $mol_select['enabled'] >
+	}
+	
+}
+
+//# sourceMappingURL=select.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $mol_select extends $.$mol_select {
+        filter_pattern(next?: string): string;
+        open(): void;
+        options(): readonly string[];
+        options_filtered(): readonly string[];
+        option_label(id: string): any;
+        option_rows(): $mol_button_minor[];
+        option_focused(component?: $mol_view): $mol_view | $.$mol_search | null;
+        event_select(id: string, event?: MouseEvent): void;
+        nav_components(): ($mol_button_minor | $.$mol_search)[];
+        trigger_content(): readonly $mol_view_content[];
+        menu_content(): $mol_view[];
+    }
+}
+
+declare namespace $ {
+}
+
 declare namespace $ {
 
 	type $mol_search__query_mol_book2_catalog_1 = $mol_type_enforce<
@@ -5932,6 +5785,688 @@ declare namespace $.$$ {
 
 declare namespace $ {
 
+	type $eve_app_page_sb_playground__component_name_eve_app_page_components_surface_1 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_playground['component_name'] >
+	>
+	type $eve_app_page_sb_playground__default_source_eve_app_page_components_surface_2 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_playground['default_source'] >
+	>
+	type $eve_app_page_sb_page__title_eve_app_page_components_surface_3 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_page['title'] >
+	>
+	type $eve_app_page_sb_page__body_eve_app_page_components_surface_4 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $eve_app_page_sb_page['body'] >
+	>
+	type $mol_text__text_eve_app_page_components_surface_5 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_text['text'] >
+	>
+	type $mol_select__dictionary_eve_app_page_components_surface_6 = $mol_type_enforce<
+		ReturnType< $eve_app_page_components_surface['variants'] >
+		,
+		ReturnType< $mol_select['dictionary'] >
+	>
+	type $mol_select__value_eve_app_page_components_surface_7 = $mol_type_enforce<
+		ReturnType< $eve_app_page_components_surface['Variant_select_value'] >
+		,
+		ReturnType< $mol_select['value'] >
+	>
+	type $eve_surface__sub_eve_app_page_components_surface_8 = $mol_type_enforce<
+		ReturnType< $eve_app_page_components_surface['grid_cells'] >
+		,
+		ReturnType< $eve_surface['sub'] >
+	>
+	type $eve_flex__align_items_eve_app_page_components_surface_9 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_flex['align_items'] >
+	>
+	type $eve_flex__justify_content_eve_app_page_components_surface_10 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_flex['justify_content'] >
+	>
+	type $eve_flex__sub_eve_app_page_components_surface_11 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $eve_flex['sub'] >
+	>
+	type $eve_app_page_sb_page__title_eve_app_page_components_surface_12 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_page['title'] >
+	>
+	type $eve_app_page_sb_page__body_eve_app_page_components_surface_13 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $eve_app_page_sb_page['body'] >
+	>
+	type $eve_app_page_sb_catalog__param_eve_app_page_components_surface_14 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_catalog['param'] >
+	>
+	type $eve_app_page_sb_catalog__spreads_eve_app_page_components_surface_15 = $mol_type_enforce<
+		({ 
+			'playground': ReturnType< $eve_app_page_components_surface['Playground_page'] >,
+			'showcase': ReturnType< $eve_app_page_components_surface['Showcase_page'] >,
+		}) 
+		,
+		ReturnType< $eve_app_page_sb_catalog['spreads'] >
+	>
+	type $mol_paragraph__title_eve_app_page_components_surface_16 = $mol_type_enforce<
+		ReturnType< $eve_app_page_components_surface['grid_header_text'] >
+		,
+		ReturnType< $mol_paragraph['title'] >
+	>
+	type $mol_paragraph__title_eve_app_page_components_surface_17 = $mol_type_enforce<
+		ReturnType< $eve_app_page_components_surface['grid_row_text'] >
+		,
+		ReturnType< $mol_paragraph['title'] >
+	>
+	type $eve_surface__variant_eve_app_page_components_surface_18 = $mol_type_enforce<
+		ReturnType< $eve_app_page_components_surface['Variant_select_value'] >
+		,
+		ReturnType< $eve_surface['variant'] >
+	>
+	type $eve_surface__colors_eve_app_page_components_surface_19 = $mol_type_enforce<
+		ReturnType< $eve_app_page_components_surface['grid_cell_color'] >
+		,
+		ReturnType< $eve_surface['colors'] >
+	>
+	type $eve_surface__state_eve_app_page_components_surface_20 = $mol_type_enforce<
+		ReturnType< $eve_app_page_components_surface['grid_cell_state'] >
+		,
+		ReturnType< $eve_surface['state'] >
+	>
+	export class $eve_app_page_components_surface extends $eve_app_page_sb_page {
+		Playground_live( ): $eve_app_page_sb_playground
+		Playground_page( ): $eve_app_page_sb_page
+		Hint( ): $mol_text
+		variants( ): ({ 
+			'soft': string,
+			'solid': string,
+			'outline': string,
+			'ghost': string,
+		}) 
+		Variant_select_value( next?: string ): string
+		Variant_select( ): $mol_select
+		grid_cells( ): readonly(any)[]
+		Showcase_grid( ): $eve_surface
+		Card( ): $eve_flex
+		Showcase_page( ): $eve_app_page_sb_page
+		Surface_catalog( ): $eve_app_page_sb_catalog
+		grid_header_text( id: any): string
+		grid_row_text( id: any): string
+		grid_cell_color( id: any): string
+		grid_cell_state( id: any): string
+		title( ): string
+		Head( ): any
+		body( ): readonly(any)[]
+		Grid_empty( ): $eve_surface
+		Grid_column_header( id: any): $mol_paragraph
+		Grid_row_header( id: any): $mol_paragraph
+		Grid_cell( id: any): $eve_surface
+	}
+	
+}
+
+//# sourceMappingURL=surface.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $eve_app_page_components_surface extends $.$eve_app_page_components_surface {
+        grid_cells(): any[];
+        grid_header_text(state: string): string;
+        grid_row_text(color: string): string;
+        grid_cell_color(id: string): $eve_surface_color;
+        grid_cell_state(id: string): $eve_surface_state_modifiers;
+    }
+}
+
+declare namespace $.$$ {
+}
+
+declare namespace $ {
+
+	type $mol_text__text_eve_text_1 = $mol_type_enforce<
+		ReturnType< $eve_text['content'] >
+		,
+		ReturnType< $mol_text['text'] >
+	>
+	export class $eve_text extends $eve_surface {
+		content( ): string
+		Body( ): $mol_text
+		variant( ): string
+		colors( next?: string ): string
+		interactive( next?: any ): any
+		text_variant( ): string
+		text_align( ): string
+		font_weight_override( next?: any ): any
+		variable_font( ): boolean
+		modifiers( ): readonly(string)[]
+		sub( ): readonly(any)[]
+	}
+	
+}
+
+//# sourceMappingURL=text.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $eve_text extends $.$eve_text {
+        static readonly TEXT_VARIANTS: readonly ["headingXs", "headingSm", "headingMd", "headingLg", "headingXl", "heading2xl", "heading3xl", "bodyXs", "bodySm", "bodyMd", "bodyLg"];
+        static readonly TEXT_ALIGNS: readonly ["start", "center", "end", "justify"];
+        static readonly FONT_WEIGHT_OVERRIDES: readonly ["regular", "medium", "semibold", "bold"];
+        static readonly MODIFIERS: readonly ["uppercase", "strikethrough", "underline"];
+        text_variant(next?: typeof $eve_text.TEXT_VARIANTS[number]): "headingXs" | "headingSm" | "headingMd" | "headingLg" | "headingXl" | "heading2xl" | "heading3xl" | "bodyXs" | "bodySm" | "bodyMd" | "bodyLg";
+        text_align(next?: typeof $eve_text.TEXT_ALIGNS[number]): "center" | "end" | "start" | "justify";
+        font_weight_override(next?: typeof $eve_text.FONT_WEIGHT_OVERRIDES[number] | null): "medium" | "bold" | "regular" | "semibold" | null;
+        variable_font(next?: boolean): boolean;
+        modifiers_normalized(): readonly (typeof $eve_text.MODIFIERS[number])[];
+        content(): string;
+        attr(): {
+            eve_text_modifiers?: string | undefined;
+            eve_text_variable?: boolean | undefined;
+            eve_text_font_weight?: "medium" | "bold" | "regular" | "semibold" | undefined;
+            eve_text_variant: "headingXs" | "headingSm" | "headingMd" | "headingLg" | "headingXl" | "heading2xl" | "heading3xl" | "bodyXs" | "bodySm" | "bodyMd" | "bodyLg";
+            eve_text_align: "center" | "end" | "start" | "justify";
+        };
+    }
+}
+
+declare namespace $.$$ {
+}
+
+declare namespace $ {
+
+	export class $eve_link extends $eve_text {
+		variant( ): string
+		colors( ): string
+		interactive( ): boolean
+		text_variant( ): string
+		modifiers( ): readonly(any)[]
+	}
+	
+}
+
+//# sourceMappingURL=link.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $eve_link extends $.$eve_link {
+    }
+}
+
+declare namespace $ {
+
+	export class $eve_button_inline extends $eve_button {
+		variant( ): string
+		colors( ): string
+		size( ): string
+		label( ): string
+	}
+	
+}
+
+//# sourceMappingURL=inline.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $eve_button_inline extends $.$eve_button_inline {
+    }
+}
+
+declare namespace $.$$ {
+}
+
+declare namespace $ {
+
+	type $eve_app_page_sb_playground__component_name_eve_app_page_components_text_1 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_playground['component_name'] >
+	>
+	type $eve_app_page_sb_playground__default_source_eve_app_page_components_text_2 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_playground['default_source'] >
+	>
+	type $eve_app_page_sb_page__title_eve_app_page_components_text_3 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_page['title'] >
+	>
+	type $eve_app_page_sb_page__body_eve_app_page_components_text_4 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $eve_app_page_sb_page['body'] >
+	>
+	type $eve_text__colors_eve_app_page_components_text_5 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['colors'] >
+	>
+	type $eve_text__text_variant_eve_app_page_components_text_6 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['text_variant'] >
+	>
+	type $eve_text__content_eve_app_page_components_text_7 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['content'] >
+	>
+	type $eve_text__text_variant_eve_app_page_components_text_8 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['text_variant'] >
+	>
+	type $eve_text__content_eve_app_page_components_text_9 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['content'] >
+	>
+	type $eve_text__text_variant_eve_app_page_components_text_10 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['text_variant'] >
+	>
+	type $eve_text__content_eve_app_page_components_text_11 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['content'] >
+	>
+	type $eve_flex__direction_eve_app_page_components_text_12 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_flex['direction'] >
+	>
+	type $eve_flex__gap_eve_app_page_components_text_13 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_flex['gap'] >
+	>
+	type $eve_flex__wrap_eve_app_page_components_text_14 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_flex['wrap'] >
+	>
+	type $eve_flex__align_items_eve_app_page_components_text_15 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_flex['align_items'] >
+	>
+	type $eve_flex__sub_eve_app_page_components_text_16 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $eve_flex['sub'] >
+	>
+	type $eve_text__text_variant_eve_app_page_components_text_17 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['text_variant'] >
+	>
+	type $eve_text__content_eve_app_page_components_text_18 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['content'] >
+	>
+	type $eve_text__text_variant_eve_app_page_components_text_19 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['text_variant'] >
+	>
+	type $eve_text__content_eve_app_page_components_text_20 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['content'] >
+	>
+	type $eve_text__text_variant_eve_app_page_components_text_21 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['text_variant'] >
+	>
+	type $eve_text__content_eve_app_page_components_text_22 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['content'] >
+	>
+	type $eve_flex__direction_eve_app_page_components_text_23 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_flex['direction'] >
+	>
+	type $eve_flex__gap_eve_app_page_components_text_24 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_flex['gap'] >
+	>
+	type $eve_flex__sub_eve_app_page_components_text_25 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $eve_flex['sub'] >
+	>
+	type $eve_text__colors_eve_app_page_components_text_26 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['colors'] >
+	>
+	type $eve_text__text_variant_eve_app_page_components_text_27 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['text_variant'] >
+	>
+	type $eve_text__text_align_eve_app_page_components_text_28 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['text_align'] >
+	>
+	type $eve_text__content_eve_app_page_components_text_29 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['content'] >
+	>
+	type $eve_text__text_variant_eve_app_page_components_text_30 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['text_variant'] >
+	>
+	type $eve_text__font_weight_override_eve_app_page_components_text_31 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['font_weight_override'] >
+	>
+	type $eve_text__content_eve_app_page_components_text_32 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['content'] >
+	>
+	type $eve_text__colors_eve_app_page_components_text_33 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['colors'] >
+	>
+	type $eve_text__text_variant_eve_app_page_components_text_34 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['text_variant'] >
+	>
+	type $eve_text__content_eve_app_page_components_text_35 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['content'] >
+	>
+	type $eve_text__text_variant_eve_app_page_components_text_36 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['text_variant'] >
+	>
+	type $eve_text__modifiers_eve_app_page_components_text_37 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $eve_text['modifiers'] >
+	>
+	type $eve_text__content_eve_app_page_components_text_38 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['content'] >
+	>
+	type $eve_text__text_variant_eve_app_page_components_text_39 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['text_variant'] >
+	>
+	type $eve_text__modifiers_eve_app_page_components_text_40 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $eve_text['modifiers'] >
+	>
+	type $eve_text__content_eve_app_page_components_text_41 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['content'] >
+	>
+	type $eve_text__text_variant_eve_app_page_components_text_42 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['text_variant'] >
+	>
+	type $eve_text__modifiers_eve_app_page_components_text_43 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $eve_text['modifiers'] >
+	>
+	type $eve_text__content_eve_app_page_components_text_44 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['content'] >
+	>
+	type $eve_text__text_variant_eve_app_page_components_text_45 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['text_variant'] >
+	>
+	type $eve_text__modifiers_eve_app_page_components_text_46 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $eve_text['modifiers'] >
+	>
+	type $eve_text__content_eve_app_page_components_text_47 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['content'] >
+	>
+	type $eve_flex__direction_eve_app_page_components_text_48 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_flex['direction'] >
+	>
+	type $eve_flex__gap_eve_app_page_components_text_49 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_flex['gap'] >
+	>
+	type $eve_flex__align_items_eve_app_page_components_text_50 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_flex['align_items'] >
+	>
+	type $eve_flex__wrap_eve_app_page_components_text_51 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_flex['wrap'] >
+	>
+	type $eve_flex__sub_eve_app_page_components_text_52 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $eve_flex['sub'] >
+	>
+	type $eve_link__content_eve_app_page_components_text_53 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_link['content'] >
+	>
+	type $eve_button_inline__label_eve_app_page_components_text_54 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_button_inline['label'] >
+	>
+	type $eve_flex__direction_eve_app_page_components_text_55 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_flex['direction'] >
+	>
+	type $eve_flex__gap_eve_app_page_components_text_56 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_flex['gap'] >
+	>
+	type $eve_flex__align_items_eve_app_page_components_text_57 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_flex['align_items'] >
+	>
+	type $eve_flex__wrap_eve_app_page_components_text_58 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_flex['wrap'] >
+	>
+	type $eve_flex__sub_eve_app_page_components_text_59 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $eve_flex['sub'] >
+	>
+	type $eve_flex__direction_eve_app_page_components_text_60 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_flex['direction'] >
+	>
+	type $eve_flex__gap_eve_app_page_components_text_61 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_flex['gap'] >
+	>
+	type $eve_flex__sub_eve_app_page_components_text_62 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $eve_flex['sub'] >
+	>
+	type $eve_app_page_sb_page__title_eve_app_page_components_text_63 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_page['title'] >
+	>
+	type $eve_app_page_sb_page__body_eve_app_page_components_text_64 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $eve_app_page_sb_page['body'] >
+	>
+	type $eve_app_page_sb_catalog__param_eve_app_page_components_text_65 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_catalog['param'] >
+	>
+	type $eve_app_page_sb_catalog__spreads_eve_app_page_components_text_66 = $mol_type_enforce<
+		({ 
+			'playground': ReturnType< $eve_app_page_components_text['Playground_page'] >,
+			'samples': ReturnType< $eve_app_page_components_text['Samples_page'] >,
+		}) 
+		,
+		ReturnType< $eve_app_page_sb_catalog['spreads'] >
+	>
+	export class $eve_app_page_components_text extends $eve_app_page_sb_page {
+		Playground_live( ): $eve_app_page_sb_playground
+		Playground_page( ): $eve_app_page_sb_page
+		H1( ): $eve_text
+		H2( ): $eve_text
+		H3( ): $eve_text
+		H_stack( ): $eve_flex
+		B_lg( ): $eve_text
+		B_md( ): $eve_text
+		B_sm( ): $eve_text
+		Body_stack( ): $eve_flex
+		Align_demo( ): $eve_text
+		Weight_demo( ): $eve_text
+		Variable_hint( ): $eve_text
+		Mod_upper( ): $eve_text
+		Mod_strike( ): $eve_text
+		Mod_under( ): $eve_text
+		Mod_combo( ): $eve_text
+		Modifiers_row( ): $eve_flex
+		Demo_link( ): $eve_link
+		Demo_btn( ): $eve_button_inline
+		Interactive_row( ): $eve_flex
+		Samples( ): $eve_flex
+		Samples_page( ): $eve_app_page_sb_page
+		Text_catalog( ): $eve_app_page_sb_catalog
+		title( ): string
+		Head( ): any
+		body( ): readonly(any)[]
+	}
+	
+}
+
+//# sourceMappingURL=text.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $eve_app_page_components_text extends $.$eve_app_page_components_text {
+    }
+}
+
+declare namespace $ {
+
+	type $eve_app_page_sb_playground__component_name_eve_app_page_components_link_1 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_playground['component_name'] >
+	>
+	type $eve_app_page_sb_playground__default_source_eve_app_page_components_link_2 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_playground['default_source'] >
+	>
+	export class $eve_app_page_components_link extends $eve_app_page_sb_page {
+		Playground_live( ): $eve_app_page_sb_playground
+		title( ): string
+		Head( ): any
+		body( ): readonly(any)[]
+	}
+	
+}
+
+//# sourceMappingURL=link.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $eve_app_page_components_link extends $.$eve_app_page_components_link {
+    }
+}
+
+declare namespace $ {
+
+	type $eve_app_page_sb_playground__component_name_eve_app_page_components_flex_1 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_playground['component_name'] >
+	>
+	type $eve_app_page_sb_playground__default_source_eve_app_page_components_flex_2 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_playground['default_source'] >
+	>
+	type $eve_surface__colors_eve_app_page_components_flex_3 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_surface['colors'] >
+	>
+	export class $eve_app_page_components_flex extends $eve_app_page_sb_page {
+		Playground( ): $eve_app_page_sb_playground
+		title( ): string
+		body( ): readonly(any)[]
+		Showcase_cell( id: any): $eve_surface
+	}
+	
+}
+
+//# sourceMappingURL=flex.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $eve_app_page_components_flex extends $.$eve_app_page_components_flex {
+    }
+}
+
+declare namespace $.$$ {
+}
+
+declare namespace $ {
+
+	export class $mol_icon_karate extends $mol_icon {
+		path( ): string
+	}
+	
+}
+
+//# sourceMappingURL=karate.view.tree.d.ts.map
+declare namespace $ {
+
 	type $eve_app_page_sb_playground__component_name_eve_app_page_components_button_1 = $mol_type_enforce<
 		string
 		,
@@ -5947,14 +6482,35 @@ declare namespace $ {
 		,
 		ReturnType< $eve_app_page_sb_page['body'] >
 	>
-	type $eve_app_page_sb_catalog__param_eve_app_page_components_button_4 = $mol_type_enforce<
+	type $eve_app_page_sb_playground__component_name_eve_app_page_components_button_4 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_playground['component_name'] >
+	>
+	type $eve_app_page_sb_playground__default_source_eve_app_page_components_button_5 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_playground['default_source'] >
+	>
+	type $eve_app_page_sb_page__title_eve_app_page_components_button_6 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_page['title'] >
+	>
+	type $eve_app_page_sb_page__body_eve_app_page_components_button_7 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $eve_app_page_sb_page['body'] >
+	>
+	type $eve_app_page_sb_catalog__param_eve_app_page_components_button_8 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $eve_app_page_sb_catalog['param'] >
 	>
-	type $eve_app_page_sb_catalog__spreads_eve_app_page_components_button_5 = $mol_type_enforce<
+	type $eve_app_page_sb_catalog__spreads_eve_app_page_components_button_9 = $mol_type_enforce<
 		({ 
 			'overview': ReturnType< $eve_app_page_components_button['Overview_page'] >,
+			'inline': ReturnType< $eve_app_page_components_button['Inline_page'] >,
 		}) 
 		,
 		ReturnType< $eve_app_page_sb_catalog['spreads'] >
@@ -5962,6 +6518,8 @@ declare namespace $ {
 	export class $eve_app_page_components_button extends $eve_app_page_sb_page {
 		Playground( ): $eve_app_page_sb_playground
 		Overview_page( ): $eve_app_page_sb_page
+		Inline_playground( ): $eve_app_page_sb_playground
+		Inline_page( ): $eve_app_page_sb_page
 		Button_catalog( ): $eve_app_page_sb_catalog
 		title( ): string
 		Head( ): any
@@ -8764,6 +9322,8 @@ declare namespace $ {
 	type $eve_app_page_sb_catalog__spreads_eve_app_page_components_3 = $mol_type_enforce<
 		({ 
 			'surfaces': ReturnType< $eve_app_page_components['Surfaces'] >,
+			'text': ReturnType< $eve_app_page_components['Text'] >,
+			'link': ReturnType< $eve_app_page_components['Link'] >,
 			'flex': ReturnType< $eve_app_page_components['Flex'] >,
 			'button': ReturnType< $eve_app_page_components['Button'] >,
 			'alert': ReturnType< $eve_app_page_components['Alert'] >,
@@ -8785,6 +9345,8 @@ declare namespace $ {
 	>
 	export class $eve_app_page_components extends $eve_page {
 		Surfaces( ): $eve_app_page_components_surface
+		Text( ): $eve_app_page_components_text
+		Link( ): $eve_app_page_components_link
 		Flex( ): $eve_app_page_components_flex
 		Button( ): $eve_app_page_components_button
 		Alert( ): $eve_app_page_components_alert

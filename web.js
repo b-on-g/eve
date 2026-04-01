@@ -10137,13 +10137,37 @@ var $;
 })($ || ($ = {}));
 
 ;
-	($.$mol_ghost) = class $mol_ghost extends ($.$mol_view) {
-		Sub(){
+	($.$mol_book2) = class $mol_book2 extends ($.$mol_scroll) {
+		pages_deep(){
+			return [];
+		}
+		pages(){
+			return (this.pages_deep());
+		}
+		Placeholder(){
 			const obj = new this.$.$mol_view();
 			return obj;
 		}
+		placeholders(){
+			return [(this.Placeholder())];
+		}
+		menu_title(){
+			return "";
+		}
+		sub(){
+			return [...(this.pages()), ...(this.placeholders())];
+		}
+		minimal_width(){
+			return 0;
+		}
+		Gap(id){
+			const obj = new this.$.$mol_view();
+			(obj.title) = () => ("");
+			return obj;
+		}
 	};
-	($mol_mem(($.$mol_ghost.prototype), "Sub"));
+	($mol_mem(($.$mol_book2.prototype), "Placeholder"));
+	($mol_mem_key(($.$mol_book2.prototype), "Gap"));
 
 
 ;
@@ -10155,117 +10179,68 @@ var $;
 (function ($) {
     var $$;
     (function ($$) {
-        class $mol_ghost extends $.$mol_ghost {
-            dom_node_external(next) {
-                return this.Sub().dom_node(next);
-            }
-            dom_node_actual() {
-                this.dom_node();
-                const node = this.Sub().dom_node_actual();
-                const attr = this.attr();
-                const style = this.style();
-                const fields = this.field();
-                $mol_dom_render_attributes(node, attr);
-                $mol_dom_render_styles(node, style);
-                $mol_dom_render_fields(node, fields);
-                return node;
-            }
-            dom_tree() {
-                const Sub = this.Sub();
-                const node = Sub.dom_tree();
-                try {
-                    this.dom_node_actual();
-                    this.auto();
+        class $mol_book2 extends $.$mol_book2 {
+            pages_deep() {
+                let result = [];
+                for (const subpage of this.pages()) {
+                    if (subpage instanceof $mol_book2)
+                        result = [...result, ...subpage.pages_deep()];
+                    else
+                        result.push(subpage);
                 }
-                catch (error) {
-                    $mol_fail_log(error);
-                }
-                return node;
+                return result;
             }
             title() {
-                return this.Sub().title();
+                return this.pages_deep().map(page => {
+                    try {
+                        return page?.title();
+                    }
+                    catch (error) {
+                        $mol_fail_log(error);
+                    }
+                }).reverse().filter(Boolean).join(' | ');
             }
-            minimal_width() {
-                return this.Sub().minimal_width();
+            menu_title() {
+                return this.pages_deep()[0]?.title() || this.title();
             }
-            minimal_height() {
-                return this.Sub().minimal_height();
+            sub() {
+                const placeholders = this.placeholders();
+                const next = this.pages_deep().filter(Boolean);
+                const prev = $mol_mem_cached(() => this.sub())?.filter(page => !placeholders.includes(page)) ?? [];
+                for (let i = 1; i; ++i) {
+                    const p = prev[prev.length - i];
+                    const n = next[next.length - i];
+                    if (!n)
+                        break;
+                    if (p === n)
+                        continue;
+                    new this.$.$mol_after_tick(() => {
+                        const b = this.dom_node();
+                        const p = n.dom_node();
+                        b.scroll({
+                            left: p.offsetLeft + p.offsetWidth - b.offsetWidth,
+                            behavior: 'smooth',
+                        });
+                    });
+                    break;
+                }
+                return [...next, ...placeholders];
             }
-        }
-        __decorate([
-            $mol_mem
-        ], $mol_ghost.prototype, "dom_node_actual", null);
-        $$.$mol_ghost = $mol_ghost;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-
-;
-	($.$mol_follower) = class $mol_follower extends ($.$mol_ghost) {
-		transform(){
-			return "";
-		}
-		Anchor(){
-			const obj = new this.$.$mol_view();
-			return obj;
-		}
-		align(){
-			return [-.5, -.5];
-		}
-		offset(){
-			return [0, 0];
-		}
-		style(){
-			return {...(super.style()), "transform": (this.transform())};
-		}
-	};
-	($mol_mem(($.$mol_follower.prototype), "Anchor"));
-
-
-;
-"use strict";
-
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $mol_follower extends $.$mol_follower {
-            pos() {
-                const self_rect = this.view_rect();
-                const prev = $mol_wire_probe(() => this.pos());
-                const anchor_rect = this.Anchor()?.view_rect();
-                if (!anchor_rect)
-                    return null;
-                const offset = this.offset();
-                const align = this.align();
-                const left = Math.floor((prev?.left ?? 0)
-                    - (self_rect?.left ?? 0)
-                    + (self_rect?.width ?? 0) * align[0]
-                    + (anchor_rect?.left ?? 0)
-                    + offset[0] * (anchor_rect?.width ?? 0));
-                const top = Math.floor((prev?.top ?? 0)
-                    - (self_rect?.top ?? 0)
-                    + (self_rect?.height ?? 0) * align[1]
-                    + (anchor_rect?.top ?? 0)
-                    + offset[1] * (anchor_rect?.height ?? 0));
-                return { left, top };
-            }
-            transform() {
-                const pos = this.pos();
-                if (!pos)
-                    return 'scale(0)';
-                const { left, top } = pos;
-                return `translate( ${left}px, ${top}px )`;
+            bring() {
+                const pages = this.pages_deep();
+                if (pages.length)
+                    pages[pages.length - 1].bring();
+                else
+                    super.bring();
             }
         }
         __decorate([
             $mol_mem
-        ], $mol_follower.prototype, "pos", null);
+        ], $mol_book2.prototype, "pages_deep", null);
         __decorate([
             $mol_mem
-        ], $mol_follower.prototype, "transform", null);
-        $$.$mol_follower = $mol_follower;
+        ], $mol_book2.prototype, "sub", null);
+        $$.$mol_book2 = $mol_book2;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
 
@@ -10273,464 +10248,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("mol/follower/follower.view.css", "[mol_follower] {\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n\ttransition: none;\n}\n");
-})($ || ($ = {}));
-
-;
-	($.$mol_pop) = class $mol_pop extends ($.$mol_view) {
-		bubble(){
-			return null;
-		}
-		Anchor(){
-			return null;
-		}
-		bubble_offset(){
-			return [0, 1];
-		}
-		bubble_align(){
-			return [0, 0];
-		}
-		bubble_content(){
-			return [];
-		}
-		height_max(){
-			return 9999;
-		}
-		Bubble(){
-			const obj = new this.$.$mol_pop_bubble();
-			(obj.content) = () => ((this.bubble_content()));
-			(obj.height_max) = () => ((this.height_max()));
-			return obj;
-		}
-		Follower(){
-			const obj = new this.$.$mol_follower();
-			(obj.offset) = () => ((this.bubble_offset()));
-			(obj.align) = () => ((this.bubble_align()));
-			(obj.Anchor) = () => ((this.Anchor()));
-			(obj.Sub) = () => ((this.Bubble()));
-			return obj;
-		}
-		showed(next){
-			if(next !== undefined) return next;
-			return false;
-		}
-		align_vert(){
-			return "";
-		}
-		align_hor(){
-			return "";
-		}
-		align(){
-			return "bottom_center";
-		}
-		prefer(){
-			return "vert";
-		}
-		auto(){
-			return [(this.bubble())];
-		}
-		sub(){
-			return [(this.Anchor())];
-		}
-		sub_visible(){
-			return [(this.Anchor()), (this.Follower())];
-		}
-	};
-	($mol_mem(($.$mol_pop.prototype), "Bubble"));
-	($mol_mem(($.$mol_pop.prototype), "Follower"));
-	($mol_mem(($.$mol_pop.prototype), "showed"));
-	($.$mol_pop_bubble) = class $mol_pop_bubble extends ($.$mol_view) {
-		content(){
-			return [];
-		}
-		height_max(){
-			return 9999;
-		}
-		sub(){
-			return (this.content());
-		}
-		style(){
-			return {...(super.style()), "maxHeight": (this.height_max())};
-		}
-		attr(){
-			return {
-				...(super.attr()), 
-				"tabindex": 0, 
-				"popover": "manual"
-			};
-		}
-	};
-
-
-;
-"use strict";
-
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $mol_pop extends $.$mol_pop {
-            showed(next = false) {
-                this.focused();
-                return next;
-            }
-            sub_visible() {
-                return [
-                    this.Anchor(),
-                    ...this.showed() ? [this.Follower()] : [],
-                ];
-            }
-            height_max() {
-                const viewport = this.$.$mol_window.size();
-                const rect_bubble = this.view_rect();
-                const align = this.align_vert();
-                if (align === 'bottom')
-                    return (viewport.height - rect_bubble.bottom);
-                if (align === 'top')
-                    return rect_bubble.top;
-                return 0;
-            }
-            align() {
-                switch (this.prefer()) {
-                    case 'hor': return `${this.align_hor()}_${this.align_vert()}`;
-                    case 'vert': return `${this.align_vert()}_${this.align_hor()}`;
-                    default: return this.prefer();
-                }
-            }
-            align_vert() {
-                const rect_pop = this.view_rect();
-                if (!rect_pop)
-                    return 'suspense';
-                const viewport = this.$.$mol_window.size();
-                return rect_pop.top > viewport.height / 2 ? 'top' : 'bottom';
-            }
-            align_hor() {
-                const rect_pop = this.view_rect();
-                if (!rect_pop)
-                    return 'suspense';
-                const viewport = this.$.$mol_window.size();
-                return rect_pop.left > viewport.width / 2 ? 'left' : 'right';
-            }
-            bubble_offset() {
-                const tags = new Set(this.align().split('_'));
-                if (tags.has('suspense'))
-                    return [0, 0];
-                const hor = tags.has('right') ? 'right' : tags.has('left') ? 'left' : 'center';
-                const vert = tags.has('bottom') ? 'bottom' : tags.has('top') ? 'top' : 'center';
-                if ([...tags][0] === hor) {
-                    return [
-                        { left: 0, center: .5, right: 1 }[hor],
-                        { top: 1, center: .5, bottom: 0 }[vert],
-                    ];
-                }
-                else {
-                    return [
-                        { left: 1, center: .5, right: 0 }[hor],
-                        { top: 0, center: .5, bottom: 1 }[vert],
-                    ];
-                }
-            }
-            bubble_align() {
-                const tags = new Set(this.align().split('_'));
-                if (tags.has('suspense'))
-                    return [-.5, -.5];
-                const hor = tags.has('right') ? 'right' : tags.has('left') ? 'left' : 'center';
-                const vert = tags.has('bottom') ? 'bottom' : tags.has('top') ? 'top' : 'center';
-                return [
-                    { left: -1, center: -.5, right: 0, suspense: -.5 }[hor],
-                    { top: -1, center: -.5, bottom: 0, suspense: -.5 }[vert],
-                ];
-            }
-            bubble() {
-                if (!this.showed())
-                    return;
-                this.Bubble().dom_node().showPopover?.();
-            }
-        }
-        __decorate([
-            $mol_mem
-        ], $mol_pop.prototype, "showed", null);
-        __decorate([
-            $mol_mem
-        ], $mol_pop.prototype, "sub_visible", null);
-        __decorate([
-            $mol_mem
-        ], $mol_pop.prototype, "height_max", null);
-        __decorate([
-            $mol_mem
-        ], $mol_pop.prototype, "align", null);
-        __decorate([
-            $mol_mem
-        ], $mol_pop.prototype, "align_vert", null);
-        __decorate([
-            $mol_mem
-        ], $mol_pop.prototype, "align_hor", null);
-        __decorate([
-            $mol_mem
-        ], $mol_pop.prototype, "bubble_offset", null);
-        __decorate([
-            $mol_mem
-        ], $mol_pop.prototype, "bubble_align", null);
-        __decorate([
-            $mol_mem
-        ], $mol_pop.prototype, "bubble", null);
-        $$.$mol_pop = $mol_pop;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/pop/pop.view.css", "@keyframes mol_pop_show {\n\tfrom {\n\t\topacity: 0;\n\t}\n}\n\n[mol_pop] {\n\tposition: relative;\n\tdisplay: inline-flex;\n}\n\n[mol_pop_bubble] {\n\tborder: none;\n\tpadding: 0;\n\tcolor: var(--mol_theme_text);\n\tbox-shadow: 0 0 1rem hsla(0,0%,0%,.5);\n\tborder-radius: var(--mol_gap_round);\n\tposition: fixed;\n\tz-index: var(--mol_layer_popup);\n\tbackground: var(--mol_theme_back);\n\tmax-width: none;\n\tmax-height: none;\n\t/* overflow: hidden;\n\toverflow-y: scroll;\n\toverflow-y: overlay; */\n\tword-break: normal;\n\twidth: max-content;\n\t/* height: max-content; */\n\tflex-direction: column;\n\tmax-width: calc( 100vw - var(--mol_gap_page) );\n\tmax-height: 80vw;\n\tcontain: paint;\n\ttransition-property: opacity;\n\t/* Safari ios layer fix, https://t.me/mam_mol/170017 */\n\ttransform: translateZ(0);\n\tanimation: mol_pop_show .1s ease-in;\n}\n\n:where( [mol_pop_bubble] > * ) {\n\tbackground: var(--mol_theme_card);\n}\n\n[mol_pop_bubble][mol_scroll] {\n\tbackground: var(--mol_theme_back);\n}\n\n[mol_pop_bubble]:focus {\n\toutline: none;\n}\n");
-})($ || ($ = {}));
-
-;
-	($.$mol_pick) = class $mol_pick extends ($.$mol_pop) {
-		keydown(next){
-			if(next !== undefined) return next;
-			return null;
-		}
-		trigger_enabled(){
-			return true;
-		}
-		clicks(next){
-			if(next !== undefined) return next;
-			return null;
-		}
-		trigger_content(){
-			return [(this.title())];
-		}
-		hint(){
-			return "";
-		}
-		Trigger(){
-			const obj = new this.$.$mol_check();
-			(obj.minimal_width) = () => (40);
-			(obj.minimal_height) = () => (40);
-			(obj.enabled) = () => ((this.trigger_enabled()));
-			(obj.checked) = (next) => ((this.showed(next)));
-			(obj.clicks) = (next) => ((this.clicks(next)));
-			(obj.sub) = () => ((this.trigger_content()));
-			(obj.hint) = () => ((this.hint()));
-			return obj;
-		}
-		event(){
-			return {...(super.event()), "keydown": (next) => (this.keydown(next))};
-		}
-		Anchor(){
-			return (this.Trigger());
-		}
-	};
-	($mol_mem(($.$mol_pick.prototype), "keydown"));
-	($mol_mem(($.$mol_pick.prototype), "clicks"));
-	($mol_mem(($.$mol_pick.prototype), "Trigger"));
-
-
-;
-"use strict";
-
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $mol_pick extends $.$mol_pick {
-            keydown(event) {
-                if (!this.trigger_enabled())
-                    return;
-                if (event.defaultPrevented)
-                    return;
-                if (event.keyCode === $mol_keyboard_code.escape) {
-                    if (!this.showed())
-                        return;
-                    event.preventDefault();
-                    this.showed(false);
-                }
-            }
-        }
-        $$.$mol_pick = $mol_pick;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/pick/pick.view.css", "[mol_pick_trigger] {\n\talign-items: center;\n\tflex-grow: 1;\n}\n");
-})($ || ($ = {}));
-
-;
-	($.$mol_nav) = class $mol_nav extends ($.$mol_plugin) {
-		event_key(next){
-			if(next !== undefined) return next;
-			return null;
-		}
-		cycle(next){
-			if(next !== undefined) return next;
-			return false;
-		}
-		mod_ctrl(){
-			return false;
-		}
-		mod_shift(){
-			return false;
-		}
-		mod_alt(){
-			return false;
-		}
-		keys_x(next){
-			if(next !== undefined) return next;
-			return [];
-		}
-		keys_y(next){
-			if(next !== undefined) return next;
-			return [];
-		}
-		current_x(next){
-			if(next !== undefined) return next;
-			return null;
-		}
-		current_y(next){
-			if(next !== undefined) return next;
-			return null;
-		}
-		event_up(next){
-			if(next !== undefined) return next;
-			return null;
-		}
-		event_down(next){
-			if(next !== undefined) return next;
-			return null;
-		}
-		event_left(next){
-			if(next !== undefined) return next;
-			return null;
-		}
-		event_right(next){
-			if(next !== undefined) return next;
-			return null;
-		}
-		event(){
-			return {...(super.event()), "keydown": (next) => (this.event_key(next))};
-		}
-	};
-	($mol_mem(($.$mol_nav.prototype), "event_key"));
-	($mol_mem(($.$mol_nav.prototype), "cycle"));
-	($mol_mem(($.$mol_nav.prototype), "keys_x"));
-	($mol_mem(($.$mol_nav.prototype), "keys_y"));
-	($mol_mem(($.$mol_nav.prototype), "current_x"));
-	($mol_mem(($.$mol_nav.prototype), "current_y"));
-	($mol_mem(($.$mol_nav.prototype), "event_up"));
-	($mol_mem(($.$mol_nav.prototype), "event_down"));
-	($mol_mem(($.$mol_nav.prototype), "event_left"));
-	($mol_mem(($.$mol_nav.prototype), "event_right"));
-
-
-;
-"use strict";
-
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $mol_nav extends $.$mol_nav {
-            event_key(event) {
-                if (!event)
-                    return event;
-                if (event.defaultPrevented)
-                    return;
-                if (this.mod_ctrl() && !event.ctrlKey)
-                    return;
-                if (this.mod_shift() && !event.shiftKey)
-                    return;
-                if (this.mod_alt() && !event.altKey)
-                    return;
-                switch (event.keyCode) {
-                    case $mol_keyboard_code.up: return this.event_up(event);
-                    case $mol_keyboard_code.down: return this.event_down(event);
-                    case $mol_keyboard_code.left: return this.event_left(event);
-                    case $mol_keyboard_code.right: return this.event_right(event);
-                    case $mol_keyboard_code.pageUp: return this.event_up(event);
-                    case $mol_keyboard_code.pageDown: return this.event_down(event);
-                }
-            }
-            event_up(event) {
-                if (!event)
-                    return event;
-                const keys = this.keys_y();
-                if (keys.length < 1)
-                    return;
-                const index_y = this.index_y();
-                const index_old = index_y === null ? 0 : index_y;
-                const index_new = (index_old + keys.length - 1) % keys.length;
-                event.preventDefault();
-                if (index_old === 0 && !this.cycle())
-                    return;
-                this.current_y(this.keys_y()[index_new]);
-            }
-            event_down(event) {
-                if (!event)
-                    return event;
-                const keys = this.keys_y();
-                if (keys.length < 1)
-                    return;
-                const index_y = this.index_y();
-                const index_old = index_y === null ? keys.length - 1 : index_y;
-                const index_new = (index_old + 1) % keys.length;
-                event.preventDefault();
-                if (index_new === 0 && !this.cycle())
-                    return;
-                this.current_y(this.keys_y()[index_new]);
-            }
-            event_left(event) {
-                if (!event)
-                    return event;
-                const keys = this.keys_x();
-                if (keys.length < 1)
-                    return;
-                const index_x = this.index_x();
-                const index_old = index_x === null ? 0 : index_x;
-                const index_new = (index_old + keys.length - 1) % keys.length;
-                event.preventDefault();
-                if (index_old === 0 && !this.cycle())
-                    return;
-                this.current_x(this.keys_x()[index_new]);
-            }
-            event_right(event) {
-                if (!event)
-                    return event;
-                const keys = this.keys_x();
-                if (keys.length < 1)
-                    return;
-                const index_x = this.index_x();
-                const index_old = index_x === null ? keys.length - 1 : index_x;
-                const index_new = (index_old + 1) % keys.length;
-                event.preventDefault();
-                if (index_new === 0 && !this.cycle())
-                    return;
-                this.current_x(this.keys_x()[index_new]);
-            }
-            index_y() {
-                let index = this.keys_y().indexOf(this.current_y());
-                if (index < 0)
-                    return null;
-                return index;
-            }
-            index_x() {
-                let index = this.keys_x().indexOf(this.current_x());
-                if (index < 0)
-                    return null;
-                return index;
-            }
-        }
-        $$.$mol_nav = $mol_nav;
-    })($$ = $.$$ || ($.$$ = {}));
+    $mol_style_attach("mol/book2/book2.view.css", "[mol_book2] {\n\tdisplay: flex;\n\tflex-flow: row nowrap;\n\talign-items: stretch;\n\tflex: 1 1 auto;\n\talign-self: stretch;\n\tmargin: 0;\n\t/* box-shadow: 0 0 0 1px var(--mol_theme_line); */\n\t/* transform: translateZ(0); */\n\ttransition: none;\n\tscroll-snap-type: x mandatory;\n\t/* padding: 0 1px;\n\tscroll-padding: 0 1px;\n\tgap: 1px; */\n}\n\n[mol_book2] > * {\n/* \tflex: none; */\n\tscroll-snap-stop: always;\n\tscroll-snap-align: end;\n\tposition: relative;\n\tmin-height: 100%;\n\tmax-height: 100%;\n\tmax-width: 100%;\n\tflex-shrink: 0;\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_field);\n}\n\n[mol_book2] > *:not(:first-of-type):before,\n[mol_book2] > *:not(:last-of-type)::after {\n\tcontent: '';\n\tposition: absolute;\n\ttop: 1.5rem;\n\twidth: 3px;\n\theight: 1rem;\n\tbackground: linear-gradient(\n\t\tto bottom,\n\t\tvar(--mol_theme_special) 0%,\n\t\tvar(--mol_theme_special) 14%,\n\t\ttransparent 15%,\n\t\ttransparent 42%,\n\t\tvar(--mol_theme_special) 43%,\n\t\tvar(--mol_theme_special) 57%,\n\t\ttransparent 58%,\n\t\ttransparent 85%,\n\t\tvar(--mol_theme_special) 86%,\n\t\tvar(--mol_theme_special) 100%\n\t);\n\topacity: .5;\n\tz-index: var(--mol_layer_speck);\n}\n[mol_book2] > *:not(:first-of-type):before {\n\tleft: -3px;\n}\n[mol_book2] > *:not(:last-of-type)::after {\n\tright: -3px;\n}\n\n:where([mol_book2]) > * {\n\tbackground-color: var(--mol_theme_card);\n\t/* box-shadow: 0 0 0 1px var(--mol_theme_back); */\n}\n\n[mol_book2] > [mol_book2] {\n\tdisplay: contents;\n}\n\n[mol_book2] > *:first-child {\n\tscroll-snap-align: start;\n}\n\n[mol_book2] > [mol_view] {\n\ttransform: none; /* prevent content clipping */\n}\n\n[mol_book2_placeholder] {\n\tflex: 1 1 0;\n\tbackground: none;\n}\n\n[mol_book2_gap] {\n\tbackground: none;\n\tflex-grow: 1;\n\tscroll-snap-align: none;\n\tmargin-right: -1px;\n\tbox-shadow: none;\n}\n\n[mol_book2_gap]::before,\n[mol_book2_gap]::after {\n\tdisplay: none;\n}\n");
 })($ || ($ = {}));
 
 ;
@@ -11020,821 +10538,6 @@ var $;
 var $;
 (function ($) {
     $mol_style_attach("mol/string/string.view.css", "[mol_string] {\n\tbox-sizing: border-box;\n\toutline-offset: 0;\n\tborder: none;\n\tborder-radius: var(--mol_gap_round);\n\twhite-space: pre-line;\n\toverflow: hidden;\n\ttext-overflow: ellipsis;\n\tpadding: var(--mol_gap_text);\n\ttext-align: left;\n\tposition: relative;\n\tfont: inherit;\n\tflex: 1 1 auto;\n\tbackground: transparent;\n\tmin-width: 0;\n\tcolor: inherit;\n\tbackground: var(--mol_theme_field);\n}\n\n[mol_string]:disabled:not(:placeholder-shown) {\n\tbackground-color: transparent;\n\tcolor: var(--mol_theme_text);\n}\n\n[mol_string]:where(:not(:disabled)) {\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_line);\n}\n\n[mol_string]:where(:not(:disabled)):hover {\n\tbox-shadow: inset 0 0 0 2px var(--mol_theme_line);\n\tz-index: var(--mol_layer_hover);\n}\n\n[mol_string]:focus {\n\toutline: none;\n\tz-index: var(--mol_layer_focus);\n\tcolor: var(--mol_theme_text);\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_focus);\n}\n\n[mol_string]::placeholder {\n\tcolor: var(--mol_theme_shade);\n}\n\n[mol_string]::-ms-clear {\n\tdisplay: none;\n}\n");
-})($ || ($ = {}));
-
-;
-	($.$mol_icon_close) = class $mol_icon_close extends ($.$mol_icon) {
-		path(){
-			return "M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z";
-		}
-	};
-
-
-;
-"use strict";
-
-;
-	($.$mol_search) = class $mol_search extends ($.$mol_pop) {
-		clear(next){
-			if(next !== undefined) return next;
-			return null;
-		}
-		Hotkey(){
-			const obj = new this.$.$mol_hotkey();
-			(obj.key) = () => ({"escape": (next) => (this.clear(next))});
-			return obj;
-		}
-		nav_components(){
-			return [];
-		}
-		nav_focused(next){
-			if(next !== undefined) return next;
-			return null;
-		}
-		Nav(){
-			const obj = new this.$.$mol_nav();
-			(obj.keys_y) = () => ((this.nav_components()));
-			(obj.current_y) = (next) => ((this.nav_focused(next)));
-			return obj;
-		}
-		suggests_showed(next){
-			if(next !== undefined) return next;
-			return false;
-		}
-		query(next){
-			if(next !== undefined) return next;
-			return "";
-		}
-		hint(){
-			return (this.$.$mol_locale.text("$mol_search_hint"));
-		}
-		submit(next){
-			if(next !== undefined) return next;
-			return null;
-		}
-		enabled(){
-			return true;
-		}
-		keyboard(){
-			return "search";
-		}
-		enter(){
-			return "search";
-		}
-		bring(){
-			return (this.Query().bring());
-		}
-		Query(){
-			const obj = new this.$.$mol_string();
-			(obj.value) = (next) => ((this.query(next)));
-			(obj.hint) = () => ((this.hint()));
-			(obj.submit) = (next) => ((this.submit(next)));
-			(obj.enabled) = () => ((this.enabled()));
-			(obj.keyboard) = () => ((this.keyboard()));
-			(obj.enter) = () => ((this.enter()));
-			return obj;
-		}
-		Clear_icon(){
-			const obj = new this.$.$mol_icon_close();
-			return obj;
-		}
-		Clear(){
-			const obj = new this.$.$mol_button_minor();
-			(obj.hint) = () => ((this.$.$mol_locale.text("$mol_search_Clear_hint")));
-			(obj.enabled) = () => ((this.enabled()));
-			(obj.click) = (next) => ((this.clear(next)));
-			(obj.sub) = () => ([(this.Clear_icon())]);
-			return obj;
-		}
-		anchor_content(){
-			return [(this.Query()), (this.Clear())];
-		}
-		menu_items(){
-			return [];
-		}
-		Menu(){
-			const obj = new this.$.$mol_list();
-			(obj.rows) = () => ((this.menu_items()));
-			return obj;
-		}
-		Bubble_pane(){
-			const obj = new this.$.$mol_scroll();
-			(obj.sub) = () => ([(this.Menu())]);
-			return obj;
-		}
-		suggest_select(id, next){
-			if(next !== undefined) return next;
-			return null;
-		}
-		suggest_label(id){
-			return "";
-		}
-		Suggest_label(id){
-			const obj = new this.$.$mol_dimmer();
-			(obj.haystack) = () => ((this.suggest_label(id)));
-			(obj.needle) = () => ((this.query()));
-			return obj;
-		}
-		suggest_content(id){
-			return [(this.Suggest_label(id))];
-		}
-		suggests(){
-			return [];
-		}
-		plugins(){
-			return [
-				...(super.plugins()), 
-				(this.Hotkey()), 
-				(this.Nav())
-			];
-		}
-		showed(next){
-			return (this.suggests_showed(next));
-		}
-		align_hor(){
-			return "right";
-		}
-		Anchor(){
-			const obj = new this.$.$mol_view();
-			(obj.sub) = () => ((this.anchor_content()));
-			return obj;
-		}
-		bubble_content(){
-			return [(this.Bubble_pane())];
-		}
-		Suggest(id){
-			const obj = new this.$.$mol_button_minor();
-			(obj.click) = (next) => ((this.suggest_select(id, next)));
-			(obj.sub) = () => ((this.suggest_content(id)));
-			return obj;
-		}
-	};
-	($mol_mem(($.$mol_search.prototype), "clear"));
-	($mol_mem(($.$mol_search.prototype), "Hotkey"));
-	($mol_mem(($.$mol_search.prototype), "nav_focused"));
-	($mol_mem(($.$mol_search.prototype), "Nav"));
-	($mol_mem(($.$mol_search.prototype), "suggests_showed"));
-	($mol_mem(($.$mol_search.prototype), "query"));
-	($mol_mem(($.$mol_search.prototype), "submit"));
-	($mol_mem(($.$mol_search.prototype), "Query"));
-	($mol_mem(($.$mol_search.prototype), "Clear_icon"));
-	($mol_mem(($.$mol_search.prototype), "Clear"));
-	($mol_mem(($.$mol_search.prototype), "Menu"));
-	($mol_mem(($.$mol_search.prototype), "Bubble_pane"));
-	($mol_mem_key(($.$mol_search.prototype), "suggest_select"));
-	($mol_mem_key(($.$mol_search.prototype), "Suggest_label"));
-	($mol_mem(($.$mol_search.prototype), "Anchor"));
-	($mol_mem_key(($.$mol_search.prototype), "Suggest"));
-
-
-;
-"use strict";
-
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $mol_search extends $.$mol_search {
-            anchor_content() {
-                return [
-                    this.Query(),
-                    ...this.query() ? [this.Clear()] : [],
-                ];
-            }
-            suggests_showed(next = true) {
-                this.query();
-                if (!this.focused())
-                    return false;
-                return next;
-            }
-            suggest_selected(next) {
-                if (next === undefined)
-                    return;
-                this.query(next);
-                this.Query().focused(true);
-            }
-            nav_components() {
-                return [
-                    this.Query(),
-                    ...this.menu_items(),
-                ];
-            }
-            nav_focused(component) {
-                if (!this.focused())
-                    return null;
-                if (component == null) {
-                    for (let comp of this.nav_components()) {
-                        if (comp && comp.focused())
-                            return comp;
-                    }
-                    return null;
-                }
-                if (this.suggests_showed()) {
-                    this.ensure_visible(component, "center");
-                    component.focused(true);
-                }
-                return component;
-            }
-            suggest_label(key) {
-                return key;
-            }
-            menu_items() {
-                return this.suggests().map((suggest) => this.Suggest(suggest));
-            }
-            suggest_select(id, event) {
-                this.query(id);
-                this.Query().selection([id.length, id.length]);
-                this.Query().focused(true);
-            }
-            clear(event) {
-                this.query('');
-            }
-        }
-        __decorate([
-            $mol_mem
-        ], $mol_search.prototype, "anchor_content", null);
-        __decorate([
-            $mol_mem
-        ], $mol_search.prototype, "suggests_showed", null);
-        __decorate([
-            $mol_mem
-        ], $mol_search.prototype, "nav_focused", null);
-        __decorate([
-            $mol_mem
-        ], $mol_search.prototype, "menu_items", null);
-        $$.$mol_search = $mol_search;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/search/search.view.css", "[mol_search] {\n\talign-self: flex-start;\n\tflex: auto;\n}\n\n[mol_search_anchor] {\n\tflex: 1 1 auto;\n}\n\n[mol_search_query] {\n\tflex-grow: 1;\n}\n\n[mol_search_menu] {\n\tmin-height: .75rem;\n\tdisplay: flex;\n}\n\n[mol_search_suggest] {\n\ttext-align: left;\n}\n\n[mol_search_suggest_label_high] {\n\tcolor: var(--mol_theme_shade);\n\ttext-shadow: none;\n}\n");
-})($ || ($ = {}));
-
-;
-	($.$mol_icon_dots_vertical) = class $mol_icon_dots_vertical extends ($.$mol_icon) {
-		path(){
-			return "M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z";
-		}
-	};
-
-
-;
-"use strict";
-
-;
-	($.$mol_select) = class $mol_select extends ($.$mol_pick) {
-		enabled(){
-			return true;
-		}
-		event_select(id, next){
-			if(next !== undefined) return next;
-			return null;
-		}
-		option_label(id){
-			return "";
-		}
-		filter_pattern(next){
-			if(next !== undefined) return next;
-			return "";
-		}
-		Option_label(id){
-			const obj = new this.$.$mol_dimmer();
-			(obj.haystack) = () => ((this.option_label(id)));
-			(obj.needle) = () => ((this.filter_pattern()));
-			return obj;
-		}
-		option_content(id){
-			return [(this.Option_label(id))];
-		}
-		no_options_message(){
-			return (this.$.$mol_locale.text("$mol_select_no_options_message"));
-		}
-		nav_components(){
-			return [];
-		}
-		option_focused(next){
-			if(next !== undefined) return next;
-			return null;
-		}
-		nav_cycle(next){
-			if(next !== undefined) return next;
-			return true;
-		}
-		Nav(){
-			const obj = new this.$.$mol_nav();
-			(obj.keys_y) = () => ((this.nav_components()));
-			(obj.current_y) = (next) => ((this.option_focused(next)));
-			(obj.cycle) = (next) => ((this.nav_cycle(next)));
-			return obj;
-		}
-		menu_content(){
-			return [];
-		}
-		Menu(){
-			const obj = new this.$.$mol_list();
-			(obj.rows) = () => ((this.menu_content()));
-			return obj;
-		}
-		Bubble_pane(){
-			const obj = new this.$.$mol_scroll();
-			(obj.sub) = () => ([(this.Menu())]);
-			return obj;
-		}
-		filter_hint(){
-			return (this.$.$mol_locale.text("$mol_select_filter_hint"));
-		}
-		submit(next){
-			if(next !== undefined) return next;
-			return null;
-		}
-		dictionary(next){
-			if(next !== undefined) return next;
-			return {};
-		}
-		options(){
-			return [];
-		}
-		value(next){
-			if(next !== undefined) return next;
-			return "";
-		}
-		option_label_default(){
-			return "";
-		}
-		Option_row(id){
-			const obj = new this.$.$mol_button_minor();
-			(obj.enabled) = () => ((this.enabled()));
-			(obj.event_click) = (next) => ((this.event_select(id, next)));
-			(obj.sub) = () => ((this.option_content(id)));
-			return obj;
-		}
-		No_options(){
-			const obj = new this.$.$mol_view();
-			(obj.sub) = () => ([(this.no_options_message())]);
-			return obj;
-		}
-		plugins(){
-			return [...(super.plugins()), (this.Nav())];
-		}
-		hint(){
-			return (this.$.$mol_locale.text("$mol_select_hint"));
-		}
-		bubble_content(){
-			return [(this.Filter()), (this.Bubble_pane())];
-		}
-		Filter(){
-			const obj = new this.$.$mol_search();
-			(obj.query) = (next) => ((this.filter_pattern(next)));
-			(obj.hint) = () => ((this.filter_hint()));
-			(obj.submit) = (next) => ((this.submit(next)));
-			(obj.enabled) = () => ((this.enabled()));
-			return obj;
-		}
-		Trigger_icon(){
-			const obj = new this.$.$mol_icon_dots_vertical();
-			return obj;
-		}
-		trigger_enabled(){
-			return (this.enabled());
-		}
-	};
-	($mol_mem_key(($.$mol_select.prototype), "event_select"));
-	($mol_mem(($.$mol_select.prototype), "filter_pattern"));
-	($mol_mem_key(($.$mol_select.prototype), "Option_label"));
-	($mol_mem(($.$mol_select.prototype), "option_focused"));
-	($mol_mem(($.$mol_select.prototype), "nav_cycle"));
-	($mol_mem(($.$mol_select.prototype), "Nav"));
-	($mol_mem(($.$mol_select.prototype), "Menu"));
-	($mol_mem(($.$mol_select.prototype), "Bubble_pane"));
-	($mol_mem(($.$mol_select.prototype), "submit"));
-	($mol_mem(($.$mol_select.prototype), "dictionary"));
-	($mol_mem(($.$mol_select.prototype), "value"));
-	($mol_mem_key(($.$mol_select.prototype), "Option_row"));
-	($mol_mem(($.$mol_select.prototype), "No_options"));
-	($mol_mem(($.$mol_select.prototype), "Filter"));
-	($mol_mem(($.$mol_select.prototype), "Trigger_icon"));
-
-
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_match_text(query, values) {
-        const tags = query.toLowerCase().trim().split(/\s+/).filter(tag => tag);
-        if (tags.length === 0)
-            return () => true;
-        return (variant) => {
-            const vals = values(variant);
-            return tags.every(tag => vals.some(val => val.toLowerCase().indexOf(tag) >= 0));
-        };
-    }
-    $.$mol_match_text = $mol_match_text;
-})($ || ($ = {}));
-
-;
-"use strict";
-
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $mol_select extends $.$mol_select {
-            filter_pattern(next) {
-                this.focused();
-                return next || '';
-            }
-            open() {
-                this.showed(true);
-            }
-            options() {
-                return Object.keys(this.dictionary());
-            }
-            options_filtered() {
-                let options = this.options();
-                options = options.filter($mol_match_text(this.filter_pattern(), (id) => [this.option_label(id)]));
-                const index = options.indexOf(this.value());
-                if (index >= 0)
-                    options = [...options.slice(0, index), ...options.slice(index + 1)];
-                return options;
-            }
-            option_label(id) {
-                const value = this.dictionary()[id];
-                return (value == null ? id : value) || this.option_label_default();
-            }
-            option_rows() {
-                return this.options_filtered().map((option) => this.Option_row(option));
-            }
-            option_focused(component) {
-                if (component == null) {
-                    for (let comp of this.nav_components()) {
-                        if (comp && comp.focused())
-                            return comp;
-                    }
-                    return null;
-                }
-                if (this.showed()) {
-                    component.focused(true);
-                }
-                return component;
-            }
-            event_select(id, event) {
-                this.value(id);
-                this.showed(false);
-                event?.preventDefault();
-            }
-            nav_components() {
-                if (this.options().length > 1 && this.Filter()) {
-                    return [this.Filter(), ...this.option_rows()];
-                }
-                else {
-                    return this.option_rows();
-                }
-            }
-            trigger_content() {
-                return [
-                    ...this.option_content(this.value()),
-                    ...this.trigger_enabled() ? [this.Trigger_icon()] : [],
-                ];
-            }
-            menu_content() {
-                return [
-                    ...this.option_rows(),
-                    ...(this.options_filtered().length === 0) ? [this.No_options()] : []
-                ];
-            }
-        }
-        __decorate([
-            $mol_mem
-        ], $mol_select.prototype, "filter_pattern", null);
-        __decorate([
-            $mol_mem
-        ], $mol_select.prototype, "options", null);
-        __decorate([
-            $mol_mem
-        ], $mol_select.prototype, "options_filtered", null);
-        __decorate([
-            $mol_mem
-        ], $mol_select.prototype, "option_focused", null);
-        $$.$mol_select = $mol_select;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/select/select.view.css", "[mol_select] {\n\tdisplay: flex;\n\tword-break: normal;\n\talign-self: flex-start;\n}\n\n[mol_select_option_row] {\n\tmin-width: 100%;\n\tpadding: 0;\n\tjustify-content: flex-start;\n}\n\n[mol_select_filter] {\n\tflex: 1 0 auto;\n\talign-self: stretch;\n}\n\n[mol_select_option_label] {\n\tpadding: var(--mol_gap_text);\n\ttext-align: left;\n\tmin-height: 1.5em;\n\tdisplay: block;\n\twhite-space: nowrap;\n}\n\n[mol_select_clear_option_content] {\n\tpadding: .5em 1rem .5rem 0;\n\ttext-align: left;\n\tbox-shadow: var(--mol_theme_line);\n\tflex: 1 0 auto;\n}\n\n[mol_select_no_options] {\n\tpadding: var(--mol_gap_text);\n\ttext-align: left;\n\tdisplay: block;\n\tcolor: var(--mol_theme_shade);\n}\n\n[mol_select_trigger] {\n\tpadding: 0;\n\tflex: 1 1 auto;\n\tdisplay: flex;\n}\n\n[mol_select_trigger] > * {\n\tmargin-right: -1rem;\n}\n\n[mol_select_trigger] > *:last-child {\n\tmargin-right: 0;\n}\n\n[mol_select_menu] {\n\tdisplay: flex;\n\tflex-direction: column;\n}\n\n");
-})($ || ($ = {}));
-
-;
-	($.$eve_app_page_components_surface) = class $eve_app_page_components_surface extends ($.$eve_app_page_sb_page) {
-		Hint(){
-			const obj = new this.$.$mol_text();
-			(obj.text) = () => ("TODO: сделать по-другому селект этот, а то он путает...");
-			return obj;
-		}
-		variants(){
-			return {
-				"soft": "Soft", 
-				"solid": "Solid", 
-				"outline": "Outline", 
-				"ghost": "Ghost"
-			};
-		}
-		Variant_select_value(next){
-			if(next !== undefined) return next;
-			return "soft";
-		}
-		Variant_select(){
-			const obj = new this.$.$mol_select();
-			(obj.dictionary) = () => ((this.variants()));
-			(obj.value) = (next) => ((this.Variant_select_value(next)));
-			return obj;
-		}
-		grid_cells(){
-			return [];
-		}
-		Showcase_grid(){
-			const obj = new this.$.$eve_surface();
-			(obj.sub) = () => ((this.grid_cells()));
-			return obj;
-		}
-		Card(){
-			const obj = new this.$.$eve_flex();
-			(obj.align_items) = () => ("center");
-			(obj.justify_content) = () => ("center");
-			(obj.sub) = () => ([(this.Showcase_grid())]);
-			return obj;
-		}
-		grid_header_text(id){
-			return "";
-		}
-		grid_row_text(id){
-			return "";
-		}
-		grid_cell_color(id){
-			return "";
-		}
-		grid_cell_state(id){
-			return "";
-		}
-		title(){
-			return "Surface";
-		}
-		body(){
-			return [
-				(this.Hint()), 
-				(this.Variant_select()), 
-				(this.Card())
-			];
-		}
-		Grid_empty(){
-			const obj = new this.$.$eve_surface();
-			return obj;
-		}
-		Grid_column_header(id){
-			const obj = new this.$.$mol_paragraph();
-			(obj.title) = () => ((this.grid_header_text(id)));
-			return obj;
-		}
-		Grid_row_header(id){
-			const obj = new this.$.$mol_paragraph();
-			(obj.title) = () => ((this.grid_row_text(id)));
-			return obj;
-		}
-		Grid_cell(id){
-			const obj = new this.$.$eve_surface();
-			(obj.variant) = () => ((this.Variant_select_value()));
-			(obj.colors) = () => ((this.grid_cell_color(id)));
-			(obj.state) = () => ((this.grid_cell_state(id)));
-			return obj;
-		}
-	};
-	($mol_mem(($.$eve_app_page_components_surface.prototype), "Hint"));
-	($mol_mem(($.$eve_app_page_components_surface.prototype), "Variant_select_value"));
-	($mol_mem(($.$eve_app_page_components_surface.prototype), "Variant_select"));
-	($mol_mem(($.$eve_app_page_components_surface.prototype), "Showcase_grid"));
-	($mol_mem(($.$eve_app_page_components_surface.prototype), "Card"));
-	($mol_mem(($.$eve_app_page_components_surface.prototype), "Grid_empty"));
-	($mol_mem_key(($.$eve_app_page_components_surface.prototype), "Grid_column_header"));
-	($mol_mem_key(($.$eve_app_page_components_surface.prototype), "Grid_row_header"));
-	($mol_mem_key(($.$eve_app_page_components_surface.prototype), "Grid_cell"));
-
-
-;
-"use strict";
-
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $eve_app_page_components_surface extends $.$eve_app_page_components_surface {
-            grid_cells() {
-                const cells = [];
-                cells.push(this.Grid_empty());
-                $eve_surface.STATE_MODIFIERS.forEach(state => {
-                    cells.push(this.Grid_column_header(state));
-                });
-                $eve_surface.COLORS.forEach(color => {
-                    cells.push(this.Grid_row_header(color));
-                    $eve_surface.STATE_MODIFIERS.forEach(state => {
-                        cells.push(this.Grid_cell(`${color}__${state}`));
-                    });
-                });
-                return cells;
-            }
-            grid_header_text(state) {
-                return state.toUpperCase();
-            }
-            grid_row_text(color) {
-                return color.toUpperCase();
-            }
-            grid_cell_color(id) {
-                const [color, state] = id.split('__');
-                return color;
-            }
-            grid_cell_state(id) {
-                const [color, state] = id.split('__');
-                return state;
-            }
-        }
-        __decorate([
-            $mol_mem
-        ], $eve_app_page_components_surface.prototype, "grid_cells", null);
-        __decorate([
-            $mol_mem_key
-        ], $eve_app_page_components_surface.prototype, "grid_header_text", null);
-        __decorate([
-            $mol_mem_key
-        ], $eve_app_page_components_surface.prototype, "grid_row_text", null);
-        __decorate([
-            $mol_mem_key
-        ], $eve_app_page_components_surface.prototype, "grid_cell_color", null);
-        __decorate([
-            $mol_mem_key
-        ], $eve_app_page_components_surface.prototype, "grid_cell_state", null);
-        $$.$eve_app_page_components_surface = $eve_app_page_components_surface;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        const { rem, px } = $mol_style_unit;
-        $mol_style_define($eve_app_page_components_surface, {
-            Showcase_grid: {
-                display: 'grid',
-                gridTemplateColumns: `120px repeat(${$eve_surface.STATE_MODIFIERS.length}, 1fr)`,
-                gap: px(8),
-                padding: px(1),
-            },
-            Grid_empty: {
-                background: { color: $mol_theme.card },
-            },
-            Grid_column_header: {
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: $mol_gap.block,
-            },
-            Grid_row_header: {
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: $mol_gap.block,
-            },
-            Grid_cell: {
-                minHeight: rem(8),
-            },
-        });
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-
-;
-	($.$mol_book2) = class $mol_book2 extends ($.$mol_scroll) {
-		pages_deep(){
-			return [];
-		}
-		pages(){
-			return (this.pages_deep());
-		}
-		Placeholder(){
-			const obj = new this.$.$mol_view();
-			return obj;
-		}
-		placeholders(){
-			return [(this.Placeholder())];
-		}
-		menu_title(){
-			return "";
-		}
-		sub(){
-			return [...(this.pages()), ...(this.placeholders())];
-		}
-		minimal_width(){
-			return 0;
-		}
-		Gap(id){
-			const obj = new this.$.$mol_view();
-			(obj.title) = () => ("");
-			return obj;
-		}
-	};
-	($mol_mem(($.$mol_book2.prototype), "Placeholder"));
-	($mol_mem_key(($.$mol_book2.prototype), "Gap"));
-
-
-;
-"use strict";
-
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $mol_book2 extends $.$mol_book2 {
-            pages_deep() {
-                let result = [];
-                for (const subpage of this.pages()) {
-                    if (subpage instanceof $mol_book2)
-                        result = [...result, ...subpage.pages_deep()];
-                    else
-                        result.push(subpage);
-                }
-                return result;
-            }
-            title() {
-                return this.pages_deep().map(page => {
-                    try {
-                        return page?.title();
-                    }
-                    catch (error) {
-                        $mol_fail_log(error);
-                    }
-                }).reverse().filter(Boolean).join(' | ');
-            }
-            menu_title() {
-                return this.pages_deep()[0]?.title() || this.title();
-            }
-            sub() {
-                const placeholders = this.placeholders();
-                const next = this.pages_deep().filter(Boolean);
-                const prev = $mol_mem_cached(() => this.sub())?.filter(page => !placeholders.includes(page)) ?? [];
-                for (let i = 1; i; ++i) {
-                    const p = prev[prev.length - i];
-                    const n = next[next.length - i];
-                    if (!n)
-                        break;
-                    if (p === n)
-                        continue;
-                    new this.$.$mol_after_tick(() => {
-                        const b = this.dom_node();
-                        const p = n.dom_node();
-                        b.scroll({
-                            left: p.offsetLeft + p.offsetWidth - b.offsetWidth,
-                            behavior: 'smooth',
-                        });
-                    });
-                    break;
-                }
-                return [...next, ...placeholders];
-            }
-            bring() {
-                const pages = this.pages_deep();
-                if (pages.length)
-                    pages[pages.length - 1].bring();
-                else
-                    super.bring();
-            }
-        }
-        __decorate([
-            $mol_mem
-        ], $mol_book2.prototype, "pages_deep", null);
-        __decorate([
-            $mol_mem
-        ], $mol_book2.prototype, "sub", null);
-        $$.$mol_book2 = $mol_book2;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/book2/book2.view.css", "[mol_book2] {\n\tdisplay: flex;\n\tflex-flow: row nowrap;\n\talign-items: stretch;\n\tflex: 1 1 auto;\n\talign-self: stretch;\n\tmargin: 0;\n\t/* box-shadow: 0 0 0 1px var(--mol_theme_line); */\n\t/* transform: translateZ(0); */\n\ttransition: none;\n\tscroll-snap-type: x mandatory;\n\t/* padding: 0 1px;\n\tscroll-padding: 0 1px;\n\tgap: 1px; */\n}\n\n[mol_book2] > * {\n/* \tflex: none; */\n\tscroll-snap-stop: always;\n\tscroll-snap-align: end;\n\tposition: relative;\n\tmin-height: 100%;\n\tmax-height: 100%;\n\tmax-width: 100%;\n\tflex-shrink: 0;\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_field);\n}\n\n[mol_book2] > *:not(:first-of-type):before,\n[mol_book2] > *:not(:last-of-type)::after {\n\tcontent: '';\n\tposition: absolute;\n\ttop: 1.5rem;\n\twidth: 3px;\n\theight: 1rem;\n\tbackground: linear-gradient(\n\t\tto bottom,\n\t\tvar(--mol_theme_special) 0%,\n\t\tvar(--mol_theme_special) 14%,\n\t\ttransparent 15%,\n\t\ttransparent 42%,\n\t\tvar(--mol_theme_special) 43%,\n\t\tvar(--mol_theme_special) 57%,\n\t\ttransparent 58%,\n\t\ttransparent 85%,\n\t\tvar(--mol_theme_special) 86%,\n\t\tvar(--mol_theme_special) 100%\n\t);\n\topacity: .5;\n\tz-index: var(--mol_layer_speck);\n}\n[mol_book2] > *:not(:first-of-type):before {\n\tleft: -3px;\n}\n[mol_book2] > *:not(:last-of-type)::after {\n\tright: -3px;\n}\n\n:where([mol_book2]) > * {\n\tbackground-color: var(--mol_theme_card);\n\t/* box-shadow: 0 0 0 1px var(--mol_theme_back); */\n}\n\n[mol_book2] > [mol_book2] {\n\tdisplay: contents;\n}\n\n[mol_book2] > *:first-child {\n\tscroll-snap-align: start;\n}\n\n[mol_book2] > [mol_view] {\n\ttransform: none; /* prevent content clipping */\n}\n\n[mol_book2_placeholder] {\n\tflex: 1 1 0;\n\tbackground: none;\n}\n\n[mol_book2_gap] {\n\tbackground: none;\n\tflex-grow: 1;\n\tscroll-snap-align: none;\n\tmargin-right: -1px;\n\tbox-shadow: none;\n}\n\n[mol_book2_gap]::before,\n[mol_book2_gap]::after {\n\tdisplay: none;\n}\n");
 })($ || ($ = {}));
 
 ;
@@ -12541,6 +11244,433 @@ var $;
 
 ;
 "use strict";
+
+;
+	($.$mol_ghost) = class $mol_ghost extends ($.$mol_view) {
+		Sub(){
+			const obj = new this.$.$mol_view();
+			return obj;
+		}
+	};
+	($mol_mem(($.$mol_ghost.prototype), "Sub"));
+
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_ghost extends $.$mol_ghost {
+            dom_node_external(next) {
+                return this.Sub().dom_node(next);
+            }
+            dom_node_actual() {
+                this.dom_node();
+                const node = this.Sub().dom_node_actual();
+                const attr = this.attr();
+                const style = this.style();
+                const fields = this.field();
+                $mol_dom_render_attributes(node, attr);
+                $mol_dom_render_styles(node, style);
+                $mol_dom_render_fields(node, fields);
+                return node;
+            }
+            dom_tree() {
+                const Sub = this.Sub();
+                const node = Sub.dom_tree();
+                try {
+                    this.dom_node_actual();
+                    this.auto();
+                }
+                catch (error) {
+                    $mol_fail_log(error);
+                }
+                return node;
+            }
+            title() {
+                return this.Sub().title();
+            }
+            minimal_width() {
+                return this.Sub().minimal_width();
+            }
+            minimal_height() {
+                return this.Sub().minimal_height();
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_ghost.prototype, "dom_node_actual", null);
+        $$.$mol_ghost = $mol_ghost;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+	($.$mol_follower) = class $mol_follower extends ($.$mol_ghost) {
+		transform(){
+			return "";
+		}
+		Anchor(){
+			const obj = new this.$.$mol_view();
+			return obj;
+		}
+		align(){
+			return [-.5, -.5];
+		}
+		offset(){
+			return [0, 0];
+		}
+		style(){
+			return {...(super.style()), "transform": (this.transform())};
+		}
+	};
+	($mol_mem(($.$mol_follower.prototype), "Anchor"));
+
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_follower extends $.$mol_follower {
+            pos() {
+                const self_rect = this.view_rect();
+                const prev = $mol_wire_probe(() => this.pos());
+                const anchor_rect = this.Anchor()?.view_rect();
+                if (!anchor_rect)
+                    return null;
+                const offset = this.offset();
+                const align = this.align();
+                const left = Math.floor((prev?.left ?? 0)
+                    - (self_rect?.left ?? 0)
+                    + (self_rect?.width ?? 0) * align[0]
+                    + (anchor_rect?.left ?? 0)
+                    + offset[0] * (anchor_rect?.width ?? 0));
+                const top = Math.floor((prev?.top ?? 0)
+                    - (self_rect?.top ?? 0)
+                    + (self_rect?.height ?? 0) * align[1]
+                    + (anchor_rect?.top ?? 0)
+                    + offset[1] * (anchor_rect?.height ?? 0));
+                return { left, top };
+            }
+            transform() {
+                const pos = this.pos();
+                if (!pos)
+                    return 'scale(0)';
+                const { left, top } = pos;
+                return `translate( ${left}px, ${top}px )`;
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_follower.prototype, "pos", null);
+        __decorate([
+            $mol_mem
+        ], $mol_follower.prototype, "transform", null);
+        $$.$mol_follower = $mol_follower;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/follower/follower.view.css", "[mol_follower] {\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n\ttransition: none;\n}\n");
+})($ || ($ = {}));
+
+;
+	($.$mol_pop) = class $mol_pop extends ($.$mol_view) {
+		bubble(){
+			return null;
+		}
+		Anchor(){
+			return null;
+		}
+		bubble_offset(){
+			return [0, 1];
+		}
+		bubble_align(){
+			return [0, 0];
+		}
+		bubble_content(){
+			return [];
+		}
+		height_max(){
+			return 9999;
+		}
+		Bubble(){
+			const obj = new this.$.$mol_pop_bubble();
+			(obj.content) = () => ((this.bubble_content()));
+			(obj.height_max) = () => ((this.height_max()));
+			return obj;
+		}
+		Follower(){
+			const obj = new this.$.$mol_follower();
+			(obj.offset) = () => ((this.bubble_offset()));
+			(obj.align) = () => ((this.bubble_align()));
+			(obj.Anchor) = () => ((this.Anchor()));
+			(obj.Sub) = () => ((this.Bubble()));
+			return obj;
+		}
+		showed(next){
+			if(next !== undefined) return next;
+			return false;
+		}
+		align_vert(){
+			return "";
+		}
+		align_hor(){
+			return "";
+		}
+		align(){
+			return "bottom_center";
+		}
+		prefer(){
+			return "vert";
+		}
+		auto(){
+			return [(this.bubble())];
+		}
+		sub(){
+			return [(this.Anchor())];
+		}
+		sub_visible(){
+			return [(this.Anchor()), (this.Follower())];
+		}
+	};
+	($mol_mem(($.$mol_pop.prototype), "Bubble"));
+	($mol_mem(($.$mol_pop.prototype), "Follower"));
+	($mol_mem(($.$mol_pop.prototype), "showed"));
+	($.$mol_pop_bubble) = class $mol_pop_bubble extends ($.$mol_view) {
+		content(){
+			return [];
+		}
+		height_max(){
+			return 9999;
+		}
+		sub(){
+			return (this.content());
+		}
+		style(){
+			return {...(super.style()), "maxHeight": (this.height_max())};
+		}
+		attr(){
+			return {
+				...(super.attr()), 
+				"tabindex": 0, 
+				"popover": "manual"
+			};
+		}
+	};
+
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_pop extends $.$mol_pop {
+            showed(next = false) {
+                this.focused();
+                return next;
+            }
+            sub_visible() {
+                return [
+                    this.Anchor(),
+                    ...this.showed() ? [this.Follower()] : [],
+                ];
+            }
+            height_max() {
+                const viewport = this.$.$mol_window.size();
+                const rect_bubble = this.view_rect();
+                const align = this.align_vert();
+                if (align === 'bottom')
+                    return (viewport.height - rect_bubble.bottom);
+                if (align === 'top')
+                    return rect_bubble.top;
+                return 0;
+            }
+            align() {
+                switch (this.prefer()) {
+                    case 'hor': return `${this.align_hor()}_${this.align_vert()}`;
+                    case 'vert': return `${this.align_vert()}_${this.align_hor()}`;
+                    default: return this.prefer();
+                }
+            }
+            align_vert() {
+                const rect_pop = this.view_rect();
+                if (!rect_pop)
+                    return 'suspense';
+                const viewport = this.$.$mol_window.size();
+                return rect_pop.top > viewport.height / 2 ? 'top' : 'bottom';
+            }
+            align_hor() {
+                const rect_pop = this.view_rect();
+                if (!rect_pop)
+                    return 'suspense';
+                const viewport = this.$.$mol_window.size();
+                return rect_pop.left > viewport.width / 2 ? 'left' : 'right';
+            }
+            bubble_offset() {
+                const tags = new Set(this.align().split('_'));
+                if (tags.has('suspense'))
+                    return [0, 0];
+                const hor = tags.has('right') ? 'right' : tags.has('left') ? 'left' : 'center';
+                const vert = tags.has('bottom') ? 'bottom' : tags.has('top') ? 'top' : 'center';
+                if ([...tags][0] === hor) {
+                    return [
+                        { left: 0, center: .5, right: 1 }[hor],
+                        { top: 1, center: .5, bottom: 0 }[vert],
+                    ];
+                }
+                else {
+                    return [
+                        { left: 1, center: .5, right: 0 }[hor],
+                        { top: 0, center: .5, bottom: 1 }[vert],
+                    ];
+                }
+            }
+            bubble_align() {
+                const tags = new Set(this.align().split('_'));
+                if (tags.has('suspense'))
+                    return [-.5, -.5];
+                const hor = tags.has('right') ? 'right' : tags.has('left') ? 'left' : 'center';
+                const vert = tags.has('bottom') ? 'bottom' : tags.has('top') ? 'top' : 'center';
+                return [
+                    { left: -1, center: -.5, right: 0, suspense: -.5 }[hor],
+                    { top: -1, center: -.5, bottom: 0, suspense: -.5 }[vert],
+                ];
+            }
+            bubble() {
+                if (!this.showed())
+                    return;
+                this.Bubble().dom_node().showPopover?.();
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_pop.prototype, "showed", null);
+        __decorate([
+            $mol_mem
+        ], $mol_pop.prototype, "sub_visible", null);
+        __decorate([
+            $mol_mem
+        ], $mol_pop.prototype, "height_max", null);
+        __decorate([
+            $mol_mem
+        ], $mol_pop.prototype, "align", null);
+        __decorate([
+            $mol_mem
+        ], $mol_pop.prototype, "align_vert", null);
+        __decorate([
+            $mol_mem
+        ], $mol_pop.prototype, "align_hor", null);
+        __decorate([
+            $mol_mem
+        ], $mol_pop.prototype, "bubble_offset", null);
+        __decorate([
+            $mol_mem
+        ], $mol_pop.prototype, "bubble_align", null);
+        __decorate([
+            $mol_mem
+        ], $mol_pop.prototype, "bubble", null);
+        $$.$mol_pop = $mol_pop;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/pop/pop.view.css", "@keyframes mol_pop_show {\n\tfrom {\n\t\topacity: 0;\n\t}\n}\n\n[mol_pop] {\n\tposition: relative;\n\tdisplay: inline-flex;\n}\n\n[mol_pop_bubble] {\n\tborder: none;\n\tpadding: 0;\n\tcolor: var(--mol_theme_text);\n\tbox-shadow: 0 0 1rem hsla(0,0%,0%,.5);\n\tborder-radius: var(--mol_gap_round);\n\tposition: fixed;\n\tz-index: var(--mol_layer_popup);\n\tbackground: var(--mol_theme_back);\n\tmax-width: none;\n\tmax-height: none;\n\t/* overflow: hidden;\n\toverflow-y: scroll;\n\toverflow-y: overlay; */\n\tword-break: normal;\n\twidth: max-content;\n\t/* height: max-content; */\n\tflex-direction: column;\n\tmax-width: calc( 100vw - var(--mol_gap_page) );\n\tmax-height: 80vw;\n\tcontain: paint;\n\ttransition-property: opacity;\n\t/* Safari ios layer fix, https://t.me/mam_mol/170017 */\n\ttransform: translateZ(0);\n\tanimation: mol_pop_show .1s ease-in;\n}\n\n:where( [mol_pop_bubble] > * ) {\n\tbackground: var(--mol_theme_card);\n}\n\n[mol_pop_bubble][mol_scroll] {\n\tbackground: var(--mol_theme_back);\n}\n\n[mol_pop_bubble]:focus {\n\toutline: none;\n}\n");
+})($ || ($ = {}));
+
+;
+	($.$mol_pick) = class $mol_pick extends ($.$mol_pop) {
+		keydown(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		trigger_enabled(){
+			return true;
+		}
+		clicks(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		trigger_content(){
+			return [(this.title())];
+		}
+		hint(){
+			return "";
+		}
+		Trigger(){
+			const obj = new this.$.$mol_check();
+			(obj.minimal_width) = () => (40);
+			(obj.minimal_height) = () => (40);
+			(obj.enabled) = () => ((this.trigger_enabled()));
+			(obj.checked) = (next) => ((this.showed(next)));
+			(obj.clicks) = (next) => ((this.clicks(next)));
+			(obj.sub) = () => ((this.trigger_content()));
+			(obj.hint) = () => ((this.hint()));
+			return obj;
+		}
+		event(){
+			return {...(super.event()), "keydown": (next) => (this.keydown(next))};
+		}
+		Anchor(){
+			return (this.Trigger());
+		}
+	};
+	($mol_mem(($.$mol_pick.prototype), "keydown"));
+	($mol_mem(($.$mol_pick.prototype), "clicks"));
+	($mol_mem(($.$mol_pick.prototype), "Trigger"));
+
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_pick extends $.$mol_pick {
+            keydown(event) {
+                if (!this.trigger_enabled())
+                    return;
+                if (event.defaultPrevented)
+                    return;
+                if (event.keyCode === $mol_keyboard_code.escape) {
+                    if (!this.showed())
+                        return;
+                    event.preventDefault();
+                    this.showed(false);
+                }
+            }
+        }
+        $$.$mol_pick = $mol_pick;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/pick/pick.view.css", "[mol_pick_trigger] {\n\talign-items: center;\n\tflex-grow: 1;\n}\n");
+})($ || ($ = {}));
 
 ;
 	($.$hyoo_tree_edit) = class $hyoo_tree_edit extends ($.$mol_list) {
@@ -14591,27 +13721,70 @@ var $;
 })($ || ($ = {}));
 
 ;
-	($.$eve_app_page_components_flex) = class $eve_app_page_components_flex extends ($.$eve_app_page_sb_page) {
-		Playground(){
-			const obj = new this.$.$eve_app_page_sb_playground();
-			(obj.component_name) = () => ("Live_flex");
-			(obj.default_source) = () => ("Live_flex $eve_flex\n\t- Edit values of Flex component\n\tjustify_content \\center\n\talign_items \\center\n\t- TODO: узнать как стилизовать .view.css.ts для этого компонента\n\tstyle *\n\t\twidth \\30%\n\t\theight \\30%\n\t\tposition \\relative\n\twrap \\wrap\n\tsub /\n\t\t<= Demo_item $eve_surface\n\t\t\tcolors \\medium\n\t\t\tstyle *\n\t\t\t\twidth \\10%\n\t\t\t\theight \\10%\n\t\t\t\tposition \\absolute\n");
-			return obj;
+	($.$mol_nav) = class $mol_nav extends ($.$mol_plugin) {
+		event_key(next){
+			if(next !== undefined) return next;
+			return null;
 		}
-		title(){
-			return "Flex";
+		cycle(next){
+			if(next !== undefined) return next;
+			return false;
 		}
-		body(){
-			return [(this.Playground())];
+		mod_ctrl(){
+			return false;
 		}
-		Showcase_cell(id){
-			const obj = new this.$.$eve_surface();
-			(obj.colors) = () => ("lowest");
-			return obj;
+		mod_shift(){
+			return false;
+		}
+		mod_alt(){
+			return false;
+		}
+		keys_x(next){
+			if(next !== undefined) return next;
+			return [];
+		}
+		keys_y(next){
+			if(next !== undefined) return next;
+			return [];
+		}
+		current_x(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		current_y(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		event_up(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		event_down(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		event_left(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		event_right(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		event(){
+			return {...(super.event()), "keydown": (next) => (this.event_key(next))};
 		}
 	};
-	($mol_mem(($.$eve_app_page_components_flex.prototype), "Playground"));
-	($mol_mem_key(($.$eve_app_page_components_flex.prototype), "Showcase_cell"));
+	($mol_mem(($.$mol_nav.prototype), "event_key"));
+	($mol_mem(($.$mol_nav.prototype), "cycle"));
+	($mol_mem(($.$mol_nav.prototype), "keys_x"));
+	($mol_mem(($.$mol_nav.prototype), "keys_y"));
+	($mol_mem(($.$mol_nav.prototype), "current_x"));
+	($mol_mem(($.$mol_nav.prototype), "current_y"));
+	($mol_mem(($.$mol_nav.prototype), "event_up"));
+	($mol_mem(($.$mol_nav.prototype), "event_down"));
+	($mol_mem(($.$mol_nav.prototype), "event_left"));
+	($mol_mem(($.$mol_nav.prototype), "event_right"));
 
 
 ;
@@ -14623,11 +13796,267 @@ var $;
 (function ($) {
     var $$;
     (function ($$) {
-        class $eve_app_page_components_flex extends $.$eve_app_page_components_flex {
+        class $mol_nav extends $.$mol_nav {
+            event_key(event) {
+                if (!event)
+                    return event;
+                if (event.defaultPrevented)
+                    return;
+                if (this.mod_ctrl() && !event.ctrlKey)
+                    return;
+                if (this.mod_shift() && !event.shiftKey)
+                    return;
+                if (this.mod_alt() && !event.altKey)
+                    return;
+                switch (event.keyCode) {
+                    case $mol_keyboard_code.up: return this.event_up(event);
+                    case $mol_keyboard_code.down: return this.event_down(event);
+                    case $mol_keyboard_code.left: return this.event_left(event);
+                    case $mol_keyboard_code.right: return this.event_right(event);
+                    case $mol_keyboard_code.pageUp: return this.event_up(event);
+                    case $mol_keyboard_code.pageDown: return this.event_down(event);
+                }
+            }
+            event_up(event) {
+                if (!event)
+                    return event;
+                const keys = this.keys_y();
+                if (keys.length < 1)
+                    return;
+                const index_y = this.index_y();
+                const index_old = index_y === null ? 0 : index_y;
+                const index_new = (index_old + keys.length - 1) % keys.length;
+                event.preventDefault();
+                if (index_old === 0 && !this.cycle())
+                    return;
+                this.current_y(this.keys_y()[index_new]);
+            }
+            event_down(event) {
+                if (!event)
+                    return event;
+                const keys = this.keys_y();
+                if (keys.length < 1)
+                    return;
+                const index_y = this.index_y();
+                const index_old = index_y === null ? keys.length - 1 : index_y;
+                const index_new = (index_old + 1) % keys.length;
+                event.preventDefault();
+                if (index_new === 0 && !this.cycle())
+                    return;
+                this.current_y(this.keys_y()[index_new]);
+            }
+            event_left(event) {
+                if (!event)
+                    return event;
+                const keys = this.keys_x();
+                if (keys.length < 1)
+                    return;
+                const index_x = this.index_x();
+                const index_old = index_x === null ? 0 : index_x;
+                const index_new = (index_old + keys.length - 1) % keys.length;
+                event.preventDefault();
+                if (index_old === 0 && !this.cycle())
+                    return;
+                this.current_x(this.keys_x()[index_new]);
+            }
+            event_right(event) {
+                if (!event)
+                    return event;
+                const keys = this.keys_x();
+                if (keys.length < 1)
+                    return;
+                const index_x = this.index_x();
+                const index_old = index_x === null ? keys.length - 1 : index_x;
+                const index_new = (index_old + 1) % keys.length;
+                event.preventDefault();
+                if (index_new === 0 && !this.cycle())
+                    return;
+                this.current_x(this.keys_x()[index_new]);
+            }
+            index_y() {
+                let index = this.keys_y().indexOf(this.current_y());
+                if (index < 0)
+                    return null;
+                return index;
+            }
+            index_x() {
+                let index = this.keys_x().indexOf(this.current_x());
+                if (index < 0)
+                    return null;
+                return index;
+            }
         }
-        $$.$eve_app_page_components_flex = $eve_app_page_components_flex;
+        $$.$mol_nav = $mol_nav;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
+
+;
+	($.$mol_icon_close) = class $mol_icon_close extends ($.$mol_icon) {
+		path(){
+			return "M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z";
+		}
+	};
+
+
+;
+"use strict";
+
+;
+	($.$mol_search) = class $mol_search extends ($.$mol_pop) {
+		clear(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		Hotkey(){
+			const obj = new this.$.$mol_hotkey();
+			(obj.key) = () => ({"escape": (next) => (this.clear(next))});
+			return obj;
+		}
+		nav_components(){
+			return [];
+		}
+		nav_focused(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		Nav(){
+			const obj = new this.$.$mol_nav();
+			(obj.keys_y) = () => ((this.nav_components()));
+			(obj.current_y) = (next) => ((this.nav_focused(next)));
+			return obj;
+		}
+		suggests_showed(next){
+			if(next !== undefined) return next;
+			return false;
+		}
+		query(next){
+			if(next !== undefined) return next;
+			return "";
+		}
+		hint(){
+			return (this.$.$mol_locale.text("$mol_search_hint"));
+		}
+		submit(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		enabled(){
+			return true;
+		}
+		keyboard(){
+			return "search";
+		}
+		enter(){
+			return "search";
+		}
+		bring(){
+			return (this.Query().bring());
+		}
+		Query(){
+			const obj = new this.$.$mol_string();
+			(obj.value) = (next) => ((this.query(next)));
+			(obj.hint) = () => ((this.hint()));
+			(obj.submit) = (next) => ((this.submit(next)));
+			(obj.enabled) = () => ((this.enabled()));
+			(obj.keyboard) = () => ((this.keyboard()));
+			(obj.enter) = () => ((this.enter()));
+			return obj;
+		}
+		Clear_icon(){
+			const obj = new this.$.$mol_icon_close();
+			return obj;
+		}
+		Clear(){
+			const obj = new this.$.$mol_button_minor();
+			(obj.hint) = () => ((this.$.$mol_locale.text("$mol_search_Clear_hint")));
+			(obj.enabled) = () => ((this.enabled()));
+			(obj.click) = (next) => ((this.clear(next)));
+			(obj.sub) = () => ([(this.Clear_icon())]);
+			return obj;
+		}
+		anchor_content(){
+			return [(this.Query()), (this.Clear())];
+		}
+		menu_items(){
+			return [];
+		}
+		Menu(){
+			const obj = new this.$.$mol_list();
+			(obj.rows) = () => ((this.menu_items()));
+			return obj;
+		}
+		Bubble_pane(){
+			const obj = new this.$.$mol_scroll();
+			(obj.sub) = () => ([(this.Menu())]);
+			return obj;
+		}
+		suggest_select(id, next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		suggest_label(id){
+			return "";
+		}
+		Suggest_label(id){
+			const obj = new this.$.$mol_dimmer();
+			(obj.haystack) = () => ((this.suggest_label(id)));
+			(obj.needle) = () => ((this.query()));
+			return obj;
+		}
+		suggest_content(id){
+			return [(this.Suggest_label(id))];
+		}
+		suggests(){
+			return [];
+		}
+		plugins(){
+			return [
+				...(super.plugins()), 
+				(this.Hotkey()), 
+				(this.Nav())
+			];
+		}
+		showed(next){
+			return (this.suggests_showed(next));
+		}
+		align_hor(){
+			return "right";
+		}
+		Anchor(){
+			const obj = new this.$.$mol_view();
+			(obj.sub) = () => ((this.anchor_content()));
+			return obj;
+		}
+		bubble_content(){
+			return [(this.Bubble_pane())];
+		}
+		Suggest(id){
+			const obj = new this.$.$mol_button_minor();
+			(obj.click) = (next) => ((this.suggest_select(id, next)));
+			(obj.sub) = () => ((this.suggest_content(id)));
+			return obj;
+		}
+	};
+	($mol_mem(($.$mol_search.prototype), "clear"));
+	($mol_mem(($.$mol_search.prototype), "Hotkey"));
+	($mol_mem(($.$mol_search.prototype), "nav_focused"));
+	($mol_mem(($.$mol_search.prototype), "Nav"));
+	($mol_mem(($.$mol_search.prototype), "suggests_showed"));
+	($mol_mem(($.$mol_search.prototype), "query"));
+	($mol_mem(($.$mol_search.prototype), "submit"));
+	($mol_mem(($.$mol_search.prototype), "Query"));
+	($mol_mem(($.$mol_search.prototype), "Clear_icon"));
+	($mol_mem(($.$mol_search.prototype), "Clear"));
+	($mol_mem(($.$mol_search.prototype), "Menu"));
+	($mol_mem(($.$mol_search.prototype), "Bubble_pane"));
+	($mol_mem_key(($.$mol_search.prototype), "suggest_select"));
+	($mol_mem_key(($.$mol_search.prototype), "Suggest_label"));
+	($mol_mem(($.$mol_search.prototype), "Anchor"));
+	($mol_mem_key(($.$mol_search.prototype), "Suggest"));
+
+
+;
+"use strict";
 
 ;
 "use strict";
@@ -14635,21 +14064,342 @@ var $;
 (function ($) {
     var $$;
     (function ($$) {
-        const { vh } = $mol_style_unit;
-        $mol_style_define($eve_app_page_components_flex, {});
+        class $mol_search extends $.$mol_search {
+            anchor_content() {
+                return [
+                    this.Query(),
+                    ...this.query() ? [this.Clear()] : [],
+                ];
+            }
+            suggests_showed(next = true) {
+                this.query();
+                if (!this.focused())
+                    return false;
+                return next;
+            }
+            suggest_selected(next) {
+                if (next === undefined)
+                    return;
+                this.query(next);
+                this.Query().focused(true);
+            }
+            nav_components() {
+                return [
+                    this.Query(),
+                    ...this.menu_items(),
+                ];
+            }
+            nav_focused(component) {
+                if (!this.focused())
+                    return null;
+                if (component == null) {
+                    for (let comp of this.nav_components()) {
+                        if (comp && comp.focused())
+                            return comp;
+                    }
+                    return null;
+                }
+                if (this.suggests_showed()) {
+                    this.ensure_visible(component, "center");
+                    component.focused(true);
+                }
+                return component;
+            }
+            suggest_label(key) {
+                return key;
+            }
+            menu_items() {
+                return this.suggests().map((suggest) => this.Suggest(suggest));
+            }
+            suggest_select(id, event) {
+                this.query(id);
+                this.Query().selection([id.length, id.length]);
+                this.Query().focused(true);
+            }
+            clear(event) {
+                this.query('');
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_search.prototype, "anchor_content", null);
+        __decorate([
+            $mol_mem
+        ], $mol_search.prototype, "suggests_showed", null);
+        __decorate([
+            $mol_mem
+        ], $mol_search.prototype, "nav_focused", null);
+        __decorate([
+            $mol_mem
+        ], $mol_search.prototype, "menu_items", null);
+        $$.$mol_search = $mol_search;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
 
 ;
-	($.$mol_icon_karate) = class $mol_icon_karate extends ($.$mol_icon) {
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/search/search.view.css", "[mol_search] {\n\talign-self: flex-start;\n\tflex: auto;\n}\n\n[mol_search_anchor] {\n\tflex: 1 1 auto;\n}\n\n[mol_search_query] {\n\tflex-grow: 1;\n}\n\n[mol_search_menu] {\n\tmin-height: .75rem;\n\tdisplay: flex;\n}\n\n[mol_search_suggest] {\n\ttext-align: left;\n}\n\n[mol_search_suggest_label_high] {\n\tcolor: var(--mol_theme_shade);\n\ttext-shadow: none;\n}\n");
+})($ || ($ = {}));
+
+;
+	($.$mol_icon_dots_vertical) = class $mol_icon_dots_vertical extends ($.$mol_icon) {
 		path(){
-			return "M19.8 2L11.6 8.7L10.39 7.66L14 5.58L9.41 1L8 2.41L10.74 5.15L5 8.46L3.81 12.75L6.27 17L8 16L5.97 12.5L6.32 11.18L9.5 13L10 22H12L12.5 12L21 3.4L19.8 2M5 3C6.11 3 7 3.9 7 5S6.11 7 5 7 3 6.11 3 5 3.9 3 5 3Z";
+			return "M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z";
 		}
 	};
 
 
 ;
 "use strict";
+
+;
+	($.$mol_select) = class $mol_select extends ($.$mol_pick) {
+		enabled(){
+			return true;
+		}
+		event_select(id, next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		option_label(id){
+			return "";
+		}
+		filter_pattern(next){
+			if(next !== undefined) return next;
+			return "";
+		}
+		Option_label(id){
+			const obj = new this.$.$mol_dimmer();
+			(obj.haystack) = () => ((this.option_label(id)));
+			(obj.needle) = () => ((this.filter_pattern()));
+			return obj;
+		}
+		option_content(id){
+			return [(this.Option_label(id))];
+		}
+		no_options_message(){
+			return (this.$.$mol_locale.text("$mol_select_no_options_message"));
+		}
+		nav_components(){
+			return [];
+		}
+		option_focused(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		nav_cycle(next){
+			if(next !== undefined) return next;
+			return true;
+		}
+		Nav(){
+			const obj = new this.$.$mol_nav();
+			(obj.keys_y) = () => ((this.nav_components()));
+			(obj.current_y) = (next) => ((this.option_focused(next)));
+			(obj.cycle) = (next) => ((this.nav_cycle(next)));
+			return obj;
+		}
+		menu_content(){
+			return [];
+		}
+		Menu(){
+			const obj = new this.$.$mol_list();
+			(obj.rows) = () => ((this.menu_content()));
+			return obj;
+		}
+		Bubble_pane(){
+			const obj = new this.$.$mol_scroll();
+			(obj.sub) = () => ([(this.Menu())]);
+			return obj;
+		}
+		filter_hint(){
+			return (this.$.$mol_locale.text("$mol_select_filter_hint"));
+		}
+		submit(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		dictionary(next){
+			if(next !== undefined) return next;
+			return {};
+		}
+		options(){
+			return [];
+		}
+		value(next){
+			if(next !== undefined) return next;
+			return "";
+		}
+		option_label_default(){
+			return "";
+		}
+		Option_row(id){
+			const obj = new this.$.$mol_button_minor();
+			(obj.enabled) = () => ((this.enabled()));
+			(obj.event_click) = (next) => ((this.event_select(id, next)));
+			(obj.sub) = () => ((this.option_content(id)));
+			return obj;
+		}
+		No_options(){
+			const obj = new this.$.$mol_view();
+			(obj.sub) = () => ([(this.no_options_message())]);
+			return obj;
+		}
+		plugins(){
+			return [...(super.plugins()), (this.Nav())];
+		}
+		hint(){
+			return (this.$.$mol_locale.text("$mol_select_hint"));
+		}
+		bubble_content(){
+			return [(this.Filter()), (this.Bubble_pane())];
+		}
+		Filter(){
+			const obj = new this.$.$mol_search();
+			(obj.query) = (next) => ((this.filter_pattern(next)));
+			(obj.hint) = () => ((this.filter_hint()));
+			(obj.submit) = (next) => ((this.submit(next)));
+			(obj.enabled) = () => ((this.enabled()));
+			return obj;
+		}
+		Trigger_icon(){
+			const obj = new this.$.$mol_icon_dots_vertical();
+			return obj;
+		}
+		trigger_enabled(){
+			return (this.enabled());
+		}
+	};
+	($mol_mem_key(($.$mol_select.prototype), "event_select"));
+	($mol_mem(($.$mol_select.prototype), "filter_pattern"));
+	($mol_mem_key(($.$mol_select.prototype), "Option_label"));
+	($mol_mem(($.$mol_select.prototype), "option_focused"));
+	($mol_mem(($.$mol_select.prototype), "nav_cycle"));
+	($mol_mem(($.$mol_select.prototype), "Nav"));
+	($mol_mem(($.$mol_select.prototype), "Menu"));
+	($mol_mem(($.$mol_select.prototype), "Bubble_pane"));
+	($mol_mem(($.$mol_select.prototype), "submit"));
+	($mol_mem(($.$mol_select.prototype), "dictionary"));
+	($mol_mem(($.$mol_select.prototype), "value"));
+	($mol_mem_key(($.$mol_select.prototype), "Option_row"));
+	($mol_mem(($.$mol_select.prototype), "No_options"));
+	($mol_mem(($.$mol_select.prototype), "Filter"));
+	($mol_mem(($.$mol_select.prototype), "Trigger_icon"));
+
+
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_match_text(query, values) {
+        const tags = query.toLowerCase().trim().split(/\s+/).filter(tag => tag);
+        if (tags.length === 0)
+            return () => true;
+        return (variant) => {
+            const vals = values(variant);
+            return tags.every(tag => vals.some(val => val.toLowerCase().indexOf(tag) >= 0));
+        };
+    }
+    $.$mol_match_text = $mol_match_text;
+})($ || ($ = {}));
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_select extends $.$mol_select {
+            filter_pattern(next) {
+                this.focused();
+                return next || '';
+            }
+            open() {
+                this.showed(true);
+            }
+            options() {
+                return Object.keys(this.dictionary());
+            }
+            options_filtered() {
+                let options = this.options();
+                options = options.filter($mol_match_text(this.filter_pattern(), (id) => [this.option_label(id)]));
+                const index = options.indexOf(this.value());
+                if (index >= 0)
+                    options = [...options.slice(0, index), ...options.slice(index + 1)];
+                return options;
+            }
+            option_label(id) {
+                const value = this.dictionary()[id];
+                return (value == null ? id : value) || this.option_label_default();
+            }
+            option_rows() {
+                return this.options_filtered().map((option) => this.Option_row(option));
+            }
+            option_focused(component) {
+                if (component == null) {
+                    for (let comp of this.nav_components()) {
+                        if (comp && comp.focused())
+                            return comp;
+                    }
+                    return null;
+                }
+                if (this.showed()) {
+                    component.focused(true);
+                }
+                return component;
+            }
+            event_select(id, event) {
+                this.value(id);
+                this.showed(false);
+                event?.preventDefault();
+            }
+            nav_components() {
+                if (this.options().length > 1 && this.Filter()) {
+                    return [this.Filter(), ...this.option_rows()];
+                }
+                else {
+                    return this.option_rows();
+                }
+            }
+            trigger_content() {
+                return [
+                    ...this.option_content(this.value()),
+                    ...this.trigger_enabled() ? [this.Trigger_icon()] : [],
+                ];
+            }
+            menu_content() {
+                return [
+                    ...this.option_rows(),
+                    ...(this.options_filtered().length === 0) ? [this.No_options()] : []
+                ];
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_select.prototype, "filter_pattern", null);
+        __decorate([
+            $mol_mem
+        ], $mol_select.prototype, "options", null);
+        __decorate([
+            $mol_mem
+        ], $mol_select.prototype, "options_filtered", null);
+        __decorate([
+            $mol_mem
+        ], $mol_select.prototype, "option_focused", null);
+        $$.$mol_select = $mol_select;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/select/select.view.css", "[mol_select] {\n\tdisplay: flex;\n\tword-break: normal;\n\talign-self: flex-start;\n}\n\n[mol_select_option_row] {\n\tmin-width: 100%;\n\tpadding: 0;\n\tjustify-content: flex-start;\n}\n\n[mol_select_filter] {\n\tflex: 1 0 auto;\n\talign-self: stretch;\n}\n\n[mol_select_option_label] {\n\tpadding: var(--mol_gap_text);\n\ttext-align: left;\n\tmin-height: 1.5em;\n\tdisplay: block;\n\twhite-space: nowrap;\n}\n\n[mol_select_clear_option_content] {\n\tpadding: .5em 1rem .5rem 0;\n\ttext-align: left;\n\tbox-shadow: var(--mol_theme_line);\n\tflex: 1 0 auto;\n}\n\n[mol_select_no_options] {\n\tpadding: var(--mol_gap_text);\n\ttext-align: left;\n\tdisplay: block;\n\tcolor: var(--mol_theme_shade);\n}\n\n[mol_select_trigger] {\n\tpadding: 0;\n\tflex: 1 1 auto;\n\tdisplay: flex;\n}\n\n[mol_select_trigger] > * {\n\tmargin-right: -1rem;\n}\n\n[mol_select_trigger] > *:last-child {\n\tmargin-right: 0;\n}\n\n[mol_select_menu] {\n\tdisplay: flex;\n\tflex-direction: column;\n}\n\n");
+})($ || ($ = {}));
 
 ;
 	($.$mol_book2_catalog) = class $mol_book2_catalog extends ($.$mol_book2) {
@@ -14979,6 +14729,859 @@ var $;
 })($ || ($ = {}));
 
 ;
+	($.$eve_app_page_components_surface) = class $eve_app_page_components_surface extends ($.$eve_app_page_sb_page) {
+		Playground_live(){
+			const obj = new this.$.$eve_app_page_sb_playground();
+			(obj.component_name) = () => ("Live_surface");
+			(obj.default_source) = () => ("Live_surface $eve_surface\n\tcolors \\primary\n\tvariant \\solid\n\tsize \\m\n\tstate? null\n\tinteractive? null\n\tsub /\n\t\t<= Live_label $mol_text\n\t\t\ttext \\Surface\n");
+			return obj;
+		}
+		Playground_page(){
+			const obj = new this.$.$eve_app_page_sb_page();
+			(obj.title) = () => ("Playground");
+			(obj.body) = () => ([(this.Playground_live())]);
+			return obj;
+		}
+		Hint(){
+			const obj = new this.$.$mol_text();
+			(obj.text) = () => ("TODO: сделать по-другому селект этот, а то он путает...");
+			return obj;
+		}
+		variants(){
+			return {
+				"soft": "Soft", 
+				"solid": "Solid", 
+				"outline": "Outline", 
+				"ghost": "Ghost"
+			};
+		}
+		Variant_select_value(next){
+			if(next !== undefined) return next;
+			return "soft";
+		}
+		Variant_select(){
+			const obj = new this.$.$mol_select();
+			(obj.dictionary) = () => ((this.variants()));
+			(obj.value) = (next) => ((this.Variant_select_value(next)));
+			return obj;
+		}
+		grid_cells(){
+			return [];
+		}
+		Showcase_grid(){
+			const obj = new this.$.$eve_surface();
+			(obj.sub) = () => ((this.grid_cells()));
+			return obj;
+		}
+		Card(){
+			const obj = new this.$.$eve_flex();
+			(obj.align_items) = () => ("center");
+			(obj.justify_content) = () => ("center");
+			(obj.sub) = () => ([(this.Showcase_grid())]);
+			return obj;
+		}
+		Showcase_page(){
+			const obj = new this.$.$eve_app_page_sb_page();
+			(obj.title) = () => ("Showcase");
+			(obj.body) = () => ([
+				(this.Hint()), 
+				(this.Variant_select()), 
+				(this.Card())
+			]);
+			return obj;
+		}
+		Surface_catalog(){
+			const obj = new this.$.$eve_app_page_sb_catalog();
+			(obj.param) = () => ("surface");
+			(obj.spreads) = () => ({"playground": (this.Playground_page()), "showcase": (this.Showcase_page())});
+			return obj;
+		}
+		grid_header_text(id){
+			return "";
+		}
+		grid_row_text(id){
+			return "";
+		}
+		grid_cell_color(id){
+			return "";
+		}
+		grid_cell_state(id){
+			return "";
+		}
+		title(){
+			return "Surface";
+		}
+		Head(){
+			return null;
+		}
+		body(){
+			return [(this.Surface_catalog())];
+		}
+		Grid_empty(){
+			const obj = new this.$.$eve_surface();
+			return obj;
+		}
+		Grid_column_header(id){
+			const obj = new this.$.$mol_paragraph();
+			(obj.title) = () => ((this.grid_header_text(id)));
+			return obj;
+		}
+		Grid_row_header(id){
+			const obj = new this.$.$mol_paragraph();
+			(obj.title) = () => ((this.grid_row_text(id)));
+			return obj;
+		}
+		Grid_cell(id){
+			const obj = new this.$.$eve_surface();
+			(obj.variant) = () => ((this.Variant_select_value()));
+			(obj.colors) = () => ((this.grid_cell_color(id)));
+			(obj.state) = () => ((this.grid_cell_state(id)));
+			return obj;
+		}
+	};
+	($mol_mem(($.$eve_app_page_components_surface.prototype), "Playground_live"));
+	($mol_mem(($.$eve_app_page_components_surface.prototype), "Playground_page"));
+	($mol_mem(($.$eve_app_page_components_surface.prototype), "Hint"));
+	($mol_mem(($.$eve_app_page_components_surface.prototype), "Variant_select_value"));
+	($mol_mem(($.$eve_app_page_components_surface.prototype), "Variant_select"));
+	($mol_mem(($.$eve_app_page_components_surface.prototype), "Showcase_grid"));
+	($mol_mem(($.$eve_app_page_components_surface.prototype), "Card"));
+	($mol_mem(($.$eve_app_page_components_surface.prototype), "Showcase_page"));
+	($mol_mem(($.$eve_app_page_components_surface.prototype), "Surface_catalog"));
+	($mol_mem(($.$eve_app_page_components_surface.prototype), "Grid_empty"));
+	($mol_mem_key(($.$eve_app_page_components_surface.prototype), "Grid_column_header"));
+	($mol_mem_key(($.$eve_app_page_components_surface.prototype), "Grid_row_header"));
+	($mol_mem_key(($.$eve_app_page_components_surface.prototype), "Grid_cell"));
+
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $eve_app_page_components_surface extends $.$eve_app_page_components_surface {
+            grid_cells() {
+                const cells = [];
+                cells.push(this.Grid_empty());
+                $eve_surface.STATE_MODIFIERS.forEach(state => {
+                    cells.push(this.Grid_column_header(state));
+                });
+                $eve_surface.COLORS.forEach(color => {
+                    cells.push(this.Grid_row_header(color));
+                    $eve_surface.STATE_MODIFIERS.forEach(state => {
+                        cells.push(this.Grid_cell(`${color}__${state}`));
+                    });
+                });
+                return cells;
+            }
+            grid_header_text(state) {
+                return state.toUpperCase();
+            }
+            grid_row_text(color) {
+                return color.toUpperCase();
+            }
+            grid_cell_color(id) {
+                const [color, state] = id.split('__');
+                return color;
+            }
+            grid_cell_state(id) {
+                const [color, state] = id.split('__');
+                return state;
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $eve_app_page_components_surface.prototype, "grid_cells", null);
+        __decorate([
+            $mol_mem_key
+        ], $eve_app_page_components_surface.prototype, "grid_header_text", null);
+        __decorate([
+            $mol_mem_key
+        ], $eve_app_page_components_surface.prototype, "grid_row_text", null);
+        __decorate([
+            $mol_mem_key
+        ], $eve_app_page_components_surface.prototype, "grid_cell_color", null);
+        __decorate([
+            $mol_mem_key
+        ], $eve_app_page_components_surface.prototype, "grid_cell_state", null);
+        $$.$eve_app_page_components_surface = $eve_app_page_components_surface;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        const { rem, px } = $mol_style_unit;
+        $mol_style_define($eve_app_page_components_surface, {
+            Showcase_grid: {
+                display: 'grid',
+                gridTemplateColumns: `120px repeat(${$eve_surface.STATE_MODIFIERS.length}, 1fr)`,
+                gap: px(8),
+                padding: px(1),
+            },
+            Grid_empty: {
+                background: { color: $mol_theme.card },
+            },
+            Grid_column_header: {
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: $mol_gap.block,
+            },
+            Grid_row_header: {
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: $mol_gap.block,
+            },
+            Grid_cell: {
+                minHeight: rem(8),
+            },
+        });
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+	($.$eve_text) = class $eve_text extends ($.$eve_surface) {
+		content(){
+			return "";
+		}
+		Body(){
+			const obj = new this.$.$mol_text();
+			(obj.text) = () => ((this.content()));
+			return obj;
+		}
+		variant(){
+			return "text";
+		}
+		colors(next){
+			if(next !== undefined) return next;
+			return "medium";
+		}
+		interactive(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		text_variant(){
+			return "bodyMd";
+		}
+		text_align(){
+			return "start";
+		}
+		font_weight_override(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		variable_font(){
+			return false;
+		}
+		modifiers(){
+			return [];
+		}
+		sub(){
+			return [(this.Body())];
+		}
+	};
+	($mol_mem(($.$eve_text.prototype), "Body"));
+	($mol_mem(($.$eve_text.prototype), "colors"));
+	($mol_mem(($.$eve_text.prototype), "interactive"));
+	($mol_mem(($.$eve_text.prototype), "font_weight_override"));
+
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $eve_text extends $.$eve_text {
+            static TEXT_VARIANTS = [
+                'headingXs',
+                'headingSm',
+                'headingMd',
+                'headingLg',
+                'headingXl',
+                'heading2xl',
+                'heading3xl',
+                'bodyXs',
+                'bodySm',
+                'bodyMd',
+                'bodyLg',
+            ];
+            static TEXT_ALIGNS = ['start', 'center', 'end', 'justify'];
+            static FONT_WEIGHT_OVERRIDES = ['regular', 'medium', 'semibold', 'bold'];
+            static MODIFIERS = ['uppercase', 'strikethrough', 'underline'];
+            text_variant(next) {
+                return next ?? 'bodyMd';
+            }
+            text_align(next) {
+                return next ?? 'start';
+            }
+            font_weight_override(next) {
+                return next ?? null;
+            }
+            variable_font(next) {
+                return next ?? false;
+            }
+            modifiers_normalized() {
+                const allow = new Set($eve_text.MODIFIERS);
+                const out = [];
+                const seen = new Set();
+                for (const m of this.modifiers()) {
+                    if (!allow.has(m) || seen.has(m))
+                        continue;
+                    seen.add(m);
+                    out.push(m);
+                }
+                return out;
+            }
+            content() {
+                return '';
+            }
+            attr() {
+                const base = super.attr();
+                const fw = this.font_weight_override();
+                const mods = this.modifiers_normalized();
+                return {
+                    ...base,
+                    eve_text_variant: this.text_variant(),
+                    eve_text_align: this.text_align(),
+                    ...(fw ? { eve_text_font_weight: fw } : {}),
+                    ...(this.variable_font() ? { eve_text_variable: true } : {}),
+                    ...(mods.length ? { eve_text_modifiers: mods.join(' ') } : {}),
+                };
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $eve_text.prototype, "text_variant", null);
+        __decorate([
+            $mol_mem
+        ], $eve_text.prototype, "text_align", null);
+        __decorate([
+            $mol_mem
+        ], $eve_text.prototype, "font_weight_override", null);
+        __decorate([
+            $mol_mem
+        ], $eve_text.prototype, "variable_font", null);
+        __decorate([
+            $mol_mem
+        ], $eve_text.prototype, "content", null);
+        $$.$eve_text = $eve_text;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        const { rem } = $mol_style_unit;
+        const w = (size, wght, line) => ({
+            fontSize: rem(size),
+            lineHeight: String(line),
+            fontWeight: String(wght),
+            '--eve_text_wght': String(wght),
+        });
+        $mol_style_define($eve_text, {
+            margin: 0,
+            Body: {
+                margin: 0,
+                display: 'block',
+            },
+            '@': {
+                eve_text_align: {
+                    start: { textAlign: 'start' },
+                    center: { textAlign: 'center' },
+                    end: { textAlign: 'end' },
+                    justify: { textAlign: 'justify' },
+                },
+                eve_text_font_weight: {
+                    regular: { Body: { fontWeight: '400', '--eve_text_wght': '400' } },
+                    medium: { Body: { fontWeight: '500', '--eve_text_wght': '500' } },
+                    semibold: { Body: { fontWeight: '600', '--eve_text_wght': '600' } },
+                    bold: { Body: { fontWeight: '700', '--eve_text_wght': '700' } },
+                },
+                eve_text_variant: {
+                    headingXs: { Body: w(0.75, 600, 1.25) },
+                    headingSm: { Body: w(0.875, 600, 1.25) },
+                    headingMd: { Body: w(1, 600, 1.3) },
+                    headingLg: { Body: w(1.125, 700, 1.3) },
+                    headingXl: { Body: w(1.25, 700, 1.3) },
+                    heading2xl: { Body: w(1.5, 700, 1.25) },
+                    heading3xl: { Body: w(1.875, 700, 1.2) },
+                    bodyXs: { Body: w(0.6875, 400, 1.4) },
+                    bodySm: { Body: w(0.75, 400, 1.45) },
+                    bodyMd: { Body: w(0.875, 400, 1.5) },
+                    bodyLg: { Body: w(1, 400, 1.5) },
+                },
+                eve_text_variable: {
+                    true: {
+                        Body: {
+                            fontWeight: 'normal',
+                            fontVariationSettings: '"wght" var(--eve_text_wght)',
+                        },
+                    },
+                },
+            },
+        });
+        $mol_style_attach('eve/text/text.variable.css', `[eve_text_variable] [mol_text] {
+	-webkit-font-smoothing: antialiased;
+	text-rendering: geometricPrecision;
+}
+`);
+        $mol_style_attach('eve/text/text.modifiers.css', `[eve_text_modifiers~="uppercase"] [mol_text] {
+	text-transform: uppercase;
+}
+[eve_text_modifiers~="underline"]:not([eve_text_modifiers~="strikethrough"]) [mol_text] {
+	text-decoration: underline;
+	text-underline-offset: ${rem(0.125)};
+}
+[eve_text_modifiers~="strikethrough"]:not([eve_text_modifiers~="underline"]) [mol_text] {
+	text-decoration: line-through;
+}
+[eve_text_modifiers~="underline"][eve_text_modifiers~="strikethrough"] [mol_text] {
+	text-decoration: underline line-through;
+	text-underline-offset: ${rem(0.125)};
+}
+`);
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+	($.$eve_link) = class $eve_link extends ($.$eve_text) {
+		variant(){
+			return "text";
+		}
+		colors(){
+			return "primary";
+		}
+		interactive(){
+			return true;
+		}
+		text_variant(){
+			return "bodyMd";
+		}
+		modifiers(){
+			return [underline];
+		}
+	};
+
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $eve_link extends $.$eve_link {
+        }
+        $$.$eve_link = $eve_link;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+	($.$eve_button_inline) = class $eve_button_inline extends ($.$eve_button) {
+		variant(){
+			return "ghost";
+		}
+		colors(){
+			return "primary";
+		}
+		size(){
+			return "s";
+		}
+		label(){
+			return "";
+		}
+	};
+
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $eve_button_inline extends $.$eve_button_inline {
+        }
+        $$.$eve_button_inline = $eve_button_inline;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        const { rem } = $mol_style_unit;
+        $mol_style_define($eve_button_inline, {
+            display: 'inline-flex',
+            verticalAlign: 'baseline',
+            padding: {
+                left: rem(0.375),
+                right: rem(0.375),
+                top: rem(0.125),
+                bottom: rem(0.125),
+            },
+            borderRadius: rem(0.25),
+            minHeight: 0,
+        });
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+	($.$eve_app_page_components_text) = class $eve_app_page_components_text extends ($.$eve_app_page_sb_page) {
+		Playground_live(){
+			const obj = new this.$.$eve_app_page_sb_playground();
+			(obj.component_name) = () => ("Live_text");
+			(obj.default_source) = () => ("Live_text $eve_text\n\tcolors \\medium\n\ttext_variant \\bodyMd\n\ttext_align \\start\n\tfont_weight_override? null\n\tvariable_font false\n\tmodifiers /\n\t\tunderline\n\tcontent \\The quick brown fox jumps over the lazy dog.\n");
+			return obj;
+		}
+		Playground_page(){
+			const obj = new this.$.$eve_app_page_sb_page();
+			(obj.title) = () => ("Playground");
+			(obj.body) = () => ([(this.Playground_live())]);
+			return obj;
+		}
+		H1(){
+			const obj = new this.$.$eve_text();
+			(obj.colors) = () => ("primary");
+			(obj.text_variant) = () => ("heading3xl");
+			(obj.content) = () => ("Heading 3xl");
+			return obj;
+		}
+		H2(){
+			const obj = new this.$.$eve_text();
+			(obj.text_variant) = () => ("heading2xl");
+			(obj.content) = () => ("Heading 2xl");
+			return obj;
+		}
+		H3(){
+			const obj = new this.$.$eve_text();
+			(obj.text_variant) = () => ("headingXl");
+			(obj.content) = () => ("Heading xl");
+			return obj;
+		}
+		H_stack(){
+			const obj = new this.$.$eve_flex();
+			(obj.direction) = () => ("row");
+			(obj.gap) = () => ("1.5rem");
+			(obj.wrap) = () => ("wrap");
+			(obj.align_items) = () => ("flex-start");
+			(obj.sub) = () => ([
+				(this.H1()), 
+				(this.H2()), 
+				(this.H3())
+			]);
+			return obj;
+		}
+		B_lg(){
+			const obj = new this.$.$eve_text();
+			(obj.text_variant) = () => ("bodyLg");
+			(obj.content) = () => ("Body large — quick brown fox");
+			return obj;
+		}
+		B_md(){
+			const obj = new this.$.$eve_text();
+			(obj.text_variant) = () => ("bodyMd");
+			(obj.content) = () => ("Body medium — quick brown fox");
+			return obj;
+		}
+		B_sm(){
+			const obj = new this.$.$eve_text();
+			(obj.text_variant) = () => ("bodySm");
+			(obj.content) = () => ("Body small — quick brown fox");
+			return obj;
+		}
+		Body_stack(){
+			const obj = new this.$.$eve_flex();
+			(obj.direction) = () => ("column");
+			(obj.gap) = () => ("0.5rem");
+			(obj.sub) = () => ([
+				(this.B_lg()), 
+				(this.B_md()), 
+				(this.B_sm())
+			]);
+			return obj;
+		}
+		Align_demo(){
+			const obj = new this.$.$eve_text();
+			(obj.colors) = () => ("high");
+			(obj.text_variant) = () => ("bodyMd");
+			(obj.text_align) = () => ("center");
+			(obj.content) = () => ("Centered body (text_align)");
+			return obj;
+		}
+		Weight_demo(){
+			const obj = new this.$.$eve_text();
+			(obj.text_variant) = () => ("bodyMd");
+			(obj.font_weight_override) = () => ("bold");
+			(obj.content) = () => ("Bold override on bodyMd");
+			return obj;
+		}
+		Variable_hint(){
+			const obj = new this.$.$eve_text();
+			(obj.colors) = () => ("low");
+			(obj.text_variant) = () => ("bodySm");
+			(obj.content) = () => ("Toggle variable_font in Playground for variable fonts (wght axis); static fonts ignore it.");
+			return obj;
+		}
+		Mod_upper(){
+			const obj = new this.$.$eve_text();
+			(obj.text_variant) = () => ("bodyMd");
+			(obj.modifiers) = () => ([uppercase]);
+			(obj.content) = () => ("uppercase");
+			return obj;
+		}
+		Mod_strike(){
+			const obj = new this.$.$eve_text();
+			(obj.text_variant) = () => ("bodyMd");
+			(obj.modifiers) = () => ([strikethrough]);
+			(obj.content) = () => ("strikethrough");
+			return obj;
+		}
+		Mod_under(){
+			const obj = new this.$.$eve_text();
+			(obj.text_variant) = () => ("bodyMd");
+			(obj.modifiers) = () => ([underline]);
+			(obj.content) = () => ("underline");
+			return obj;
+		}
+		Mod_combo(){
+			const obj = new this.$.$eve_text();
+			(obj.text_variant) = () => ("bodyMd");
+			(obj.modifiers) = () => ([underline, strikethrough]);
+			(obj.content) = () => ("underline + strikethrough");
+			return obj;
+		}
+		Modifiers_row(){
+			const obj = new this.$.$eve_flex();
+			(obj.direction) = () => ("row");
+			(obj.gap) = () => ("1rem");
+			(obj.align_items) = () => ("center");
+			(obj.wrap) = () => ("wrap");
+			(obj.sub) = () => ([
+				(this.Mod_upper()), 
+				(this.Mod_strike()), 
+				(this.Mod_under()), 
+				(this.Mod_combo())
+			]);
+			return obj;
+		}
+		Demo_link(){
+			const obj = new this.$.$eve_link();
+			(obj.content) = () => ("Eve link (see Components → Link)");
+			return obj;
+		}
+		Demo_btn(){
+			const obj = new this.$.$eve_button_inline();
+			(obj.label) = () => ("Button inline");
+			return obj;
+		}
+		Interactive_row(){
+			const obj = new this.$.$eve_flex();
+			(obj.direction) = () => ("row");
+			(obj.gap) = () => ("1rem");
+			(obj.align_items) = () => ("center");
+			(obj.wrap) = () => ("wrap");
+			(obj.sub) = () => ([(this.Demo_link()), (this.Demo_btn())]);
+			return obj;
+		}
+		Samples(){
+			const obj = new this.$.$eve_flex();
+			(obj.direction) = () => ("column");
+			(obj.gap) = () => ("1rem");
+			(obj.sub) = () => ([
+				(this.H_stack()), 
+				(this.Body_stack()), 
+				(this.Align_demo()), 
+				(this.Weight_demo()), 
+				(this.Variable_hint()), 
+				(this.Modifiers_row()), 
+				(this.Interactive_row())
+			]);
+			return obj;
+		}
+		Samples_page(){
+			const obj = new this.$.$eve_app_page_sb_page();
+			(obj.title) = () => ("Samples");
+			(obj.body) = () => ([(this.Samples())]);
+			return obj;
+		}
+		Text_catalog(){
+			const obj = new this.$.$eve_app_page_sb_catalog();
+			(obj.param) = () => ("text");
+			(obj.spreads) = () => ({"playground": (this.Playground_page()), "samples": (this.Samples_page())});
+			return obj;
+		}
+		title(){
+			return "Text";
+		}
+		Head(){
+			return null;
+		}
+		body(){
+			return [(this.Text_catalog())];
+		}
+	};
+	($mol_mem(($.$eve_app_page_components_text.prototype), "Playground_live"));
+	($mol_mem(($.$eve_app_page_components_text.prototype), "Playground_page"));
+	($mol_mem(($.$eve_app_page_components_text.prototype), "H1"));
+	($mol_mem(($.$eve_app_page_components_text.prototype), "H2"));
+	($mol_mem(($.$eve_app_page_components_text.prototype), "H3"));
+	($mol_mem(($.$eve_app_page_components_text.prototype), "H_stack"));
+	($mol_mem(($.$eve_app_page_components_text.prototype), "B_lg"));
+	($mol_mem(($.$eve_app_page_components_text.prototype), "B_md"));
+	($mol_mem(($.$eve_app_page_components_text.prototype), "B_sm"));
+	($mol_mem(($.$eve_app_page_components_text.prototype), "Body_stack"));
+	($mol_mem(($.$eve_app_page_components_text.prototype), "Align_demo"));
+	($mol_mem(($.$eve_app_page_components_text.prototype), "Weight_demo"));
+	($mol_mem(($.$eve_app_page_components_text.prototype), "Variable_hint"));
+	($mol_mem(($.$eve_app_page_components_text.prototype), "Mod_upper"));
+	($mol_mem(($.$eve_app_page_components_text.prototype), "Mod_strike"));
+	($mol_mem(($.$eve_app_page_components_text.prototype), "Mod_under"));
+	($mol_mem(($.$eve_app_page_components_text.prototype), "Mod_combo"));
+	($mol_mem(($.$eve_app_page_components_text.prototype), "Modifiers_row"));
+	($mol_mem(($.$eve_app_page_components_text.prototype), "Demo_link"));
+	($mol_mem(($.$eve_app_page_components_text.prototype), "Demo_btn"));
+	($mol_mem(($.$eve_app_page_components_text.prototype), "Interactive_row"));
+	($mol_mem(($.$eve_app_page_components_text.prototype), "Samples"));
+	($mol_mem(($.$eve_app_page_components_text.prototype), "Samples_page"));
+	($mol_mem(($.$eve_app_page_components_text.prototype), "Text_catalog"));
+
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $eve_app_page_components_text extends $.$eve_app_page_components_text {
+        }
+        $$.$eve_app_page_components_text = $eve_app_page_components_text;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+	($.$eve_app_page_components_link) = class $eve_app_page_components_link extends ($.$eve_app_page_sb_page) {
+		Playground_live(){
+			const obj = new this.$.$eve_app_page_sb_playground();
+			(obj.component_name) = () => ("Live_link");
+			(obj.default_source) = () => ("Live_link $eve_link\n\tcontent \\Follow link\n\ttext_align \\start\n\tfont_weight_override? null\n\tvariable_font false\n");
+			return obj;
+		}
+		title(){
+			return "Link";
+		}
+		Head(){
+			return null;
+		}
+		body(){
+			return [(this.Playground_live())];
+		}
+	};
+	($mol_mem(($.$eve_app_page_components_link.prototype), "Playground_live"));
+
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $eve_app_page_components_link extends $.$eve_app_page_components_link {
+        }
+        $$.$eve_app_page_components_link = $eve_app_page_components_link;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+	($.$eve_app_page_components_flex) = class $eve_app_page_components_flex extends ($.$eve_app_page_sb_page) {
+		Playground(){
+			const obj = new this.$.$eve_app_page_sb_playground();
+			(obj.component_name) = () => ("Live_flex");
+			(obj.default_source) = () => ("Live_flex $eve_flex\n\t- Edit values of Flex component\n\tjustify_content \\center\n\talign_items \\center\n\t- TODO: узнать как стилизовать .view.css.ts для этого компонента\n\tstyle *\n\t\twidth \\30%\n\t\theight \\30%\n\t\tposition \\relative\n\twrap \\wrap\n\tsub /\n\t\t<= Demo_item $eve_surface\n\t\t\tcolors \\medium\n\t\t\tstyle *\n\t\t\t\twidth \\10%\n\t\t\t\theight \\10%\n\t\t\t\tposition \\absolute\n");
+			return obj;
+		}
+		title(){
+			return "Flex";
+		}
+		body(){
+			return [(this.Playground())];
+		}
+		Showcase_cell(id){
+			const obj = new this.$.$eve_surface();
+			(obj.colors) = () => ("lowest");
+			return obj;
+		}
+	};
+	($mol_mem(($.$eve_app_page_components_flex.prototype), "Playground"));
+	($mol_mem_key(($.$eve_app_page_components_flex.prototype), "Showcase_cell"));
+
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $eve_app_page_components_flex extends $.$eve_app_page_components_flex {
+        }
+        $$.$eve_app_page_components_flex = $eve_app_page_components_flex;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        const { vh } = $mol_style_unit;
+        $mol_style_define($eve_app_page_components_flex, {});
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+	($.$mol_icon_karate) = class $mol_icon_karate extends ($.$mol_icon) {
+		path(){
+			return "M19.8 2L11.6 8.7L10.39 7.66L14 5.58L9.41 1L8 2.41L10.74 5.15L5 8.46L3.81 12.75L6.27 17L8 16L5.97 12.5L6.32 11.18L9.5 13L10 22H12L12.5 12L21 3.4L19.8 2M5 3C6.11 3 7 3.9 7 5S6.11 7 5 7 3 6.11 3 5 3.9 3 5 3Z";
+		}
+	};
+
+
+;
+"use strict";
+
+;
 	($.$eve_app_page_components_button) = class $eve_app_page_components_button extends ($.$eve_app_page_sb_page) {
 		Playground(){
 			const obj = new this.$.$eve_app_page_sb_playground();
@@ -14991,10 +15594,22 @@ var $;
 			(obj.body) = () => ([(this.Playground())]);
 			return obj;
 		}
+		Inline_playground(){
+			const obj = new this.$.$eve_app_page_sb_playground();
+			(obj.component_name) = () => ("Live_button_inline");
+			(obj.default_source) = () => ("Live_button_inline $eve_button_inline\n\tcolors \\primary\n\tvariant \\ghost\n\tsize \\s\n\tlabel \\Action\n\tsub /\n\t^\n");
+			return obj;
+		}
+		Inline_page(){
+			const obj = new this.$.$eve_app_page_sb_page();
+			(obj.title) = () => ("Inline");
+			(obj.body) = () => ([(this.Inline_playground())]);
+			return obj;
+		}
 		Button_catalog(){
 			const obj = new this.$.$eve_app_page_sb_catalog();
 			(obj.param) = () => ("button");
-			(obj.spreads) = () => ({"overview": (this.Overview_page())});
+			(obj.spreads) = () => ({"overview": (this.Overview_page()), "inline": (this.Inline_page())});
 			return obj;
 		}
 		title(){
@@ -15009,6 +15624,8 @@ var $;
 	};
 	($mol_mem(($.$eve_app_page_components_button.prototype), "Playground"));
 	($mol_mem(($.$eve_app_page_components_button.prototype), "Overview_page"));
+	($mol_mem(($.$eve_app_page_components_button.prototype), "Inline_playground"));
+	($mol_mem(($.$eve_app_page_components_button.prototype), "Inline_page"));
 	($mol_mem(($.$eve_app_page_components_button.prototype), "Button_catalog"));
 
 
@@ -15602,6 +16219,13 @@ var $;
     var $$;
     (function ($$) {
         const { rem } = $mol_style_unit;
+        $mol_style_attach('eve/avatar/avatar.view.css', `[eve_avatar] > [mol_image] {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+`);
         $mol_style_define($eve_avatar, {
             display: 'inline-flex',
             alignItems: 'center',
@@ -15729,7 +16353,7 @@ var $;
 }
 [eve_avatar_group] > [eve_avatar] {
 	position: relative;
-	box-shadow: 0 0 0 ${rem(0.125)} var(--mol_theme_back);
+	border: ${rem(0.125)} solid var(--mol_theme_back);
 }
 `);
     })($$ = $.$$ || ($.$$ = {}));
@@ -18523,6 +19147,14 @@ var $;
 			const obj = new this.$.$eve_app_page_components_surface();
 			return obj;
 		}
+		Text(){
+			const obj = new this.$.$eve_app_page_components_text();
+			return obj;
+		}
+		Link(){
+			const obj = new this.$.$eve_app_page_components_link();
+			return obj;
+		}
 		Flex(){
 			const obj = new this.$.$eve_app_page_components_flex();
 			return obj;
@@ -18589,6 +19221,8 @@ var $;
 			(obj.menu_filter_enabled) = () => (true);
 			(obj.spreads) = () => ({
 				"surfaces": (this.Surfaces()), 
+				"text": (this.Text()), 
+				"link": (this.Link()), 
 				"flex": (this.Flex()), 
 				"button": (this.Button()), 
 				"alert": (this.Alert()), 
@@ -18618,6 +19252,8 @@ var $;
 		}
 	};
 	($mol_mem(($.$eve_app_page_components.prototype), "Surfaces"));
+	($mol_mem(($.$eve_app_page_components.prototype), "Text"));
+	($mol_mem(($.$eve_app_page_components.prototype), "Link"));
 	($mol_mem(($.$eve_app_page_components.prototype), "Flex"));
 	($mol_mem(($.$eve_app_page_components.prototype), "Button"));
 	($mol_mem(($.$eve_app_page_components.prototype), "Alert"));

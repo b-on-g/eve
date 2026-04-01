@@ -90,4 +90,7 @@
 	include \/mol/view/tree2/to/js/test
 \/eve/app
 	include \/mol/offline/install
+	include \/eve/link/link
+	include \/eve/button/inline/inline
+	include \/eve/app/page/components/link/link
 	deploy \/eve/assets/*

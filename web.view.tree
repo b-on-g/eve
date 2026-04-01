@@ -597,89 +597,14 @@ $eve_app_page_sb_page $eve_page
 	- слева в нав меню уже есть индикатор активной страницы. Повторять заголовок излишне
 	- Head null
 
-$mol_ghost $mol_view
-	Sub $mol_view
-
-$mol_follower $mol_ghost
-	Anchor $mol_view
-	align /number
-		-.5
-		-.5
-	offset /number
-		0
-		0
-	style *
-		^
-		transform <= transform \
-
-$mol_pop $mol_view
-	showed? false
-	align_vert \
-	align_hor \
-	align \bottom_center
-	prefer \vert
-	auto /
-		<= bubble null
-	sub /
-		<= Anchor null
-	sub_visible /
-		<= Anchor
-		<= Follower $mol_follower
-			offset <= bubble_offset /number
-				0
-				1
-			align <= bubble_align /number
-				0
-				0
-			Anchor <= Anchor
-			Sub <= Bubble $mol_pop_bubble
-				content <= bubble_content /$mol_view_content
-				height_max <= height_max 9999
-
-$mol_pop_bubble $mol_view
-	sub <= content /$mol_view_content
-	style *
-		^
-		maxHeight <= height_max 9999
-	attr *
-		^
-		tabindex 0
-		popover \manual
-
-$mol_pick $mol_pop
-	event *
-		^
-		keydown?event <=> keydown?event null
-	Anchor <= Trigger $mol_check
-		minimal_width 40
-		minimal_height 40
-		enabled <= trigger_enabled true
-		checked? <=> showed?
-		clicks? <=> clicks? null
-		sub <= trigger_content /$mol_view_content
-			<= title
-		hint <= hint \
-
-$mol_nav $mol_plugin
-	cycle? false
-	-
-	mod_ctrl false
-	mod_shift false
-	mod_alt false
-	-
-	keys_x? /
-	keys_y? /
-	-
-	current_x? null
-	current_y? null
-	-
-	event_up?event null
-	event_down?event null
-	event_left?event null
-	event_right?event null
-	event *
-		^
-		keydown?event <=> event_key?event null
+$mol_book2 $mol_scroll
+	menu_title \
+	sub /$mol_view
+		^ pages <= pages_deep /$mol_view
+		^ placeholders /$mol_view
+			<= Placeholder $mol_view
+	minimal_width 0
+	Gap* $mol_view title \
 
 $mol_hotkey $mol_plugin
 	event *
@@ -723,123 +648,6 @@ $mol_string $mol_view
 		<= Submit $mol_hotkey
 			mod_ctrl <= submit_with_ctrl false
 			key * enter?event <=> submit?event null
-
-$mol_icon_close $mol_icon path \M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z
-
-$mol_search $mol_pop
-	query? \
-	suggests /string
-	plugins /$mol_plugin
-		^
-		<= Hotkey $mol_hotkey
-			key * escape? <=> clear? null
-		<= Nav $mol_nav
-			keys_y <= nav_components /$mol_view
-			current_y?component <=> nav_focused?component null
-	showed? <=> suggests_showed? false
-	align_hor \right
-	Anchor $mol_view
-		sub <= anchor_content /
-			<= Query $mol_string
-				value? <=> query? \
-				hint <= hint @ \Search...
-				submit?event <=> submit?event null
-				enabled <= enabled true
-				keyboard <= keyboard \search
-				enter <= enter \search
-				bring => bring
-			<= Clear $mol_button_minor
-				hint @ \Clear
-				enabled <= enabled true
-				click?event <=> clear?event null
-				sub /
-					<= Clear_icon $mol_icon_close
-	bubble_content /$mol_view_content
-		<= Bubble_pane $mol_scroll
-			sub /
-				<= Menu $mol_list
-					rows <= menu_items /$mol_view
-	Suggest* $mol_button_minor
-		click?event <=> suggest_select*?event null
-		sub <= suggest_content* /$mol_view_content
-			<= Suggest_label* $mol_dimmer
-				haystack <= suggest_label* \
-				needle <= query? \
-
-$mol_icon_dots_vertical $mol_icon path \M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z
-
-$mol_select $mol_pick
-	dictionary? *
-	options /string
-	value? \
-	option_label_default \
-	Option_row* $mol_button_minor
-		enabled <= enabled true
-		event_click?event <=> event_select*?event null
-		sub <= option_content* /
-			<= Option_label* $mol_dimmer
-				haystack <= option_label* \
-				needle <= filter_pattern? \
-	No_options $mol_view
-		sub /
-			<= no_options_message @ \No options
-	plugins /
-		^
-		<= Nav $mol_nav
-			keys_y <= nav_components /$mol_view
-			current_y?component <=> option_focused?component null
-			cycle? <=> nav_cycle? true
-	hint @ \Pick..
-	bubble_content /
-		<= Filter
-		<= Bubble_pane $mol_scroll
-			sub /
-				<= Menu $mol_list
-					rows <= menu_content /$mol_view
-	Filter $mol_search
-		query? <=> filter_pattern? \
-		hint <= filter_hint @ \Filter..
-		submit?event <=> submit?event null
-		enabled <= enabled true
-	Trigger_icon $mol_icon_dots_vertical
-	trigger_enabled <= enabled
-
-$eve_app_page_components_surface $eve_app_page_sb_page
-	title \Surface
-	body /
-		<= Hint $mol_text
-			text \TODO: сделать по-другому селект этот, а то он путает...
-		<= Variant_select $mol_select
-			dictionary <= variants *
-				soft \Soft
-				solid \Solid
-				outline \Outline
-				ghost \Ghost
-			value? <=> Variant_select_value? \soft
-		<= Card $eve_flex
-			align_items \center
-			justify_content \center
-			sub /
-				<= Showcase_grid $eve_surface
-					sub <= grid_cells /
-	Grid_empty $eve_surface
-	Grid_column_header* $mol_paragraph
-		title <= grid_header_text* \
-	Grid_row_header* $mol_paragraph
-		title <= grid_row_text* \
-	Grid_cell* $eve_surface
-		variant <= Variant_select_value
-		colors <= grid_cell_color* \
-		state <= grid_cell_state* \
-
-$mol_book2 $mol_scroll
-	menu_title \
-	sub /$mol_view
-		^ pages <= pages_deep /$mol_view
-		^ placeholders /$mol_view
-			<= Placeholder $mol_view
-	minimal_width 0
-	Gap* $mol_view title \
 
 $mol_textarea $mol_stack
 	attr *
@@ -925,6 +733,69 @@ $mol_icon_plus $mol_icon path \M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z
 $mol_icon_delete $mol_icon path \M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z
 
 $mol_icon_delete_outline $mol_icon path \M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19M8,9H16V19H8V9M15.5,4L14.5,3H9.5L8.5,4H5V6H19V4H15.5Z
+
+$mol_ghost $mol_view
+	Sub $mol_view
+
+$mol_follower $mol_ghost
+	Anchor $mol_view
+	align /number
+		-.5
+		-.5
+	offset /number
+		0
+		0
+	style *
+		^
+		transform <= transform \
+
+$mol_pop $mol_view
+	showed? false
+	align_vert \
+	align_hor \
+	align \bottom_center
+	prefer \vert
+	auto /
+		<= bubble null
+	sub /
+		<= Anchor null
+	sub_visible /
+		<= Anchor
+		<= Follower $mol_follower
+			offset <= bubble_offset /number
+				0
+				1
+			align <= bubble_align /number
+				0
+				0
+			Anchor <= Anchor
+			Sub <= Bubble $mol_pop_bubble
+				content <= bubble_content /$mol_view_content
+				height_max <= height_max 9999
+
+$mol_pop_bubble $mol_view
+	sub <= content /$mol_view_content
+	style *
+		^
+		maxHeight <= height_max 9999
+	attr *
+		^
+		tabindex 0
+		popover \manual
+
+$mol_pick $mol_pop
+	event *
+		^
+		keydown?event <=> keydown?event null
+	Anchor <= Trigger $mol_check
+		minimal_width 40
+		minimal_height 40
+		enabled <= trigger_enabled true
+		checked? <=> showed?
+		clicks? <=> clicks? null
+		sub <= trigger_content /$mol_view_content
+			<= title
+		hint <= hint \
 
 $hyoo_tree_edit $mol_list
 	value? $mol_tree2
@@ -1095,34 +966,106 @@ $eve_app_page_sb_playground $mol_book2
 								<= Props_placeholder $mol_paragraph
 									title \Properties panel - coming soon
 
-$eve_app_page_components_flex $eve_app_page_sb_page
-	title \Flex
-	body /
-		<= Playground $eve_app_page_sb_playground
-			component_name \Live_flex
-			default_source \
-				\Live_flex $eve_flex
-				\	- Edit values of Flex component
-				\	justify_content \center
-				\	align_items \center
-				\	- TODO: узнать как стилизовать .view.css.ts для этого компонента
-				\	style *
-				\		width \30%
-				\		height \30%
-				\		position \relative
-				\	wrap \wrap
-				\	sub /
-				\		<= Demo_item $eve_surface
-				\			colors \medium
-				\			style *
-				\				width \10%
-				\				height \10%
-				\				position \absolute
-				\
-	Showcase_cell* $eve_surface
-		colors \lowest
+$mol_nav $mol_plugin
+	cycle? false
+	-
+	mod_ctrl false
+	mod_shift false
+	mod_alt false
+	-
+	keys_x? /
+	keys_y? /
+	-
+	current_x? null
+	current_y? null
+	-
+	event_up?event null
+	event_down?event null
+	event_left?event null
+	event_right?event null
+	event *
+		^
+		keydown?event <=> event_key?event null
 
-$mol_icon_karate $mol_icon path \M19.8 2L11.6 8.7L10.39 7.66L14 5.58L9.41 1L8 2.41L10.74 5.15L5 8.46L3.81 12.75L6.27 17L8 16L5.97 12.5L6.32 11.18L9.5 13L10 22H12L12.5 12L21 3.4L19.8 2M5 3C6.11 3 7 3.9 7 5S6.11 7 5 7 3 6.11 3 5 3.9 3 5 3Z
+$mol_icon_close $mol_icon path \M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z
+
+$mol_search $mol_pop
+	query? \
+	suggests /string
+	plugins /$mol_plugin
+		^
+		<= Hotkey $mol_hotkey
+			key * escape? <=> clear? null
+		<= Nav $mol_nav
+			keys_y <= nav_components /$mol_view
+			current_y?component <=> nav_focused?component null
+	showed? <=> suggests_showed? false
+	align_hor \right
+	Anchor $mol_view
+		sub <= anchor_content /
+			<= Query $mol_string
+				value? <=> query? \
+				hint <= hint @ \Search...
+				submit?event <=> submit?event null
+				enabled <= enabled true
+				keyboard <= keyboard \search
+				enter <= enter \search
+				bring => bring
+			<= Clear $mol_button_minor
+				hint @ \Clear
+				enabled <= enabled true
+				click?event <=> clear?event null
+				sub /
+					<= Clear_icon $mol_icon_close
+	bubble_content /$mol_view_content
+		<= Bubble_pane $mol_scroll
+			sub /
+				<= Menu $mol_list
+					rows <= menu_items /$mol_view
+	Suggest* $mol_button_minor
+		click?event <=> suggest_select*?event null
+		sub <= suggest_content* /$mol_view_content
+			<= Suggest_label* $mol_dimmer
+				haystack <= suggest_label* \
+				needle <= query? \
+
+$mol_icon_dots_vertical $mol_icon path \M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z
+
+$mol_select $mol_pick
+	dictionary? *
+	options /string
+	value? \
+	option_label_default \
+	Option_row* $mol_button_minor
+		enabled <= enabled true
+		event_click?event <=> event_select*?event null
+		sub <= option_content* /
+			<= Option_label* $mol_dimmer
+				haystack <= option_label* \
+				needle <= filter_pattern? \
+	No_options $mol_view
+		sub /
+			<= no_options_message @ \No options
+	plugins /
+		^
+		<= Nav $mol_nav
+			keys_y <= nav_components /$mol_view
+			current_y?component <=> option_focused?component null
+			cycle? <=> nav_cycle? true
+	hint @ \Pick..
+	bubble_content /
+		<= Filter
+		<= Bubble_pane $mol_scroll
+			sub /
+				<= Menu $mol_list
+					rows <= menu_content /$mol_view
+	Filter $mol_search
+		query? <=> filter_pattern? \
+		hint <= filter_hint @ \Filter..
+		submit?event <=> submit?event null
+		enabled <= enabled true
+	Trigger_icon $mol_icon_dots_vertical
+	trigger_enabled <= enabled
 
 $mol_book2_catalog $mol_book2
 	param \
@@ -1173,6 +1116,238 @@ $eve_app_page_sb_catalog $mol_book2_catalog
 	- без понятия опять же, что это за компонент Placeholder и зачем он там нужен - 0 шансов и желания разбираться
 	Placeholder null
 
+$eve_app_page_components_surface $eve_app_page_sb_page
+	title \Surface
+	Head null
+	body /
+		<= Surface_catalog $eve_app_page_sb_catalog
+			param \surface
+			spreads *
+				playground <= Playground_page $eve_app_page_sb_page
+					title \Playground
+					body /
+						<= Playground_live $eve_app_page_sb_playground
+							component_name \Live_surface
+							default_source \
+								\Live_surface $eve_surface
+								\	colors \primary
+								\	variant \solid
+								\	size \m
+								\	state? null
+								\	interactive? null
+								\	sub /
+								\		<= Live_label $mol_text
+								\			text \Surface
+								\
+				showcase <= Showcase_page $eve_app_page_sb_page
+					title \Showcase
+					body /
+						<= Hint $mol_text
+							text \TODO: сделать по-другому селект этот, а то он путает...
+						<= Variant_select $mol_select
+							dictionary <= variants *
+								soft \Soft
+								solid \Solid
+								outline \Outline
+								ghost \Ghost
+							value? <=> Variant_select_value? \soft
+						<= Card $eve_flex
+							align_items \center
+							justify_content \center
+							sub /
+								<= Showcase_grid $eve_surface
+									sub <= grid_cells /
+	Grid_empty $eve_surface
+	Grid_column_header* $mol_paragraph
+		title <= grid_header_text* \
+	Grid_row_header* $mol_paragraph
+		title <= grid_row_text* \
+	Grid_cell* $eve_surface
+		variant <= Variant_select_value
+		colors <= grid_cell_color* \
+		state <= grid_cell_state* \
+
+$eve_text $eve_surface
+	variant \text
+	colors? \medium
+	interactive? null
+	text_variant \bodyMd
+	text_align \start
+	font_weight_override? null
+	variable_font false
+	modifiers /string
+	content \
+	sub /
+		<= Body $mol_text
+			text <= content \
+
+$eve_link $eve_text
+	variant \text
+	colors \primary
+	interactive true
+	text_variant \bodyMd
+	modifiers /
+		underline
+
+$eve_button_inline $eve_button
+	variant \ghost
+	colors \primary
+	size \s
+	label \
+
+$eve_app_page_components_text $eve_app_page_sb_page
+	title \Text
+	Head null
+	body /
+		<= Text_catalog $eve_app_page_sb_catalog
+			param \text
+			spreads *
+				playground <= Playground_page $eve_app_page_sb_page
+					title \Playground
+					body /
+						<= Playground_live $eve_app_page_sb_playground
+							component_name \Live_text
+							default_source \
+								\Live_text $eve_text
+								\	colors \medium
+								\	text_variant \bodyMd
+								\	text_align \start
+								\	font_weight_override? null
+								\	variable_font false
+								\	modifiers /
+								\		underline
+								\	content \The quick brown fox jumps over the lazy dog.
+								\
+				samples <= Samples_page $eve_app_page_sb_page
+					title \Samples
+					body /
+						<= Samples $eve_flex
+							direction \column
+							gap \1rem
+							sub /
+								<= H_stack $eve_flex
+									direction \row
+									gap \1.5rem
+									wrap \wrap
+									align_items \flex-start
+									sub /
+										<= H1 $eve_text
+											colors \primary
+											text_variant \heading3xl
+											content \Heading 3xl
+										<= H2 $eve_text
+											text_variant \heading2xl
+											content \Heading 2xl
+										<= H3 $eve_text
+											text_variant \headingXl
+											content \Heading xl
+								<= Body_stack $eve_flex
+									direction \column
+									gap \0.5rem
+									sub /
+										<= B_lg $eve_text
+											text_variant \bodyLg
+											content \Body large — quick brown fox
+										<= B_md $eve_text
+											text_variant \bodyMd
+											content \Body medium — quick brown fox
+										<= B_sm $eve_text
+											text_variant \bodySm
+											content \Body small — quick brown fox
+								<= Align_demo $eve_text
+									colors \high
+									text_variant \bodyMd
+									text_align \center
+									content \Centered body (text_align)
+								<= Weight_demo $eve_text
+									text_variant \bodyMd
+									font_weight_override \bold
+									content \Bold override on bodyMd
+								<= Variable_hint $eve_text
+									colors \low
+									text_variant \bodySm
+									content \Toggle variable_font in Playground for variable fonts (wght axis); static fonts ignore it.
+								<= Modifiers_row $eve_flex
+									direction \row
+									gap \1rem
+									align_items \center
+									wrap \wrap
+									sub /
+										<= Mod_upper $eve_text
+											text_variant \bodyMd
+											modifiers /
+												uppercase
+											content \uppercase
+										<= Mod_strike $eve_text
+											text_variant \bodyMd
+											modifiers /
+												strikethrough
+											content \strikethrough
+										<= Mod_under $eve_text
+											text_variant \bodyMd
+											modifiers /
+												underline
+											content \underline
+										<= Mod_combo $eve_text
+											text_variant \bodyMd
+											modifiers /
+												underline
+												strikethrough
+											content \underline + strikethrough
+								<= Interactive_row $eve_flex
+									direction \row
+									gap \1rem
+									align_items \center
+									wrap \wrap
+									sub /
+										<= Demo_link $eve_link
+											content \Eve link (see Components → Link)
+										<= Demo_btn $eve_button_inline
+											label \Button inline
+
+$eve_app_page_components_link $eve_app_page_sb_page
+	title \Link
+	Head null
+	body /
+		<= Playground_live $eve_app_page_sb_playground
+			component_name \Live_link
+			default_source \
+				\Live_link $eve_link
+				\	content \Follow link
+				\	text_align \start
+				\	font_weight_override? null
+				\	variable_font false
+				\
+
+$eve_app_page_components_flex $eve_app_page_sb_page
+	title \Flex
+	body /
+		<= Playground $eve_app_page_sb_playground
+			component_name \Live_flex
+			default_source \
+				\Live_flex $eve_flex
+				\	- Edit values of Flex component
+				\	justify_content \center
+				\	align_items \center
+				\	- TODO: узнать как стилизовать .view.css.ts для этого компонента
+				\	style *
+				\		width \30%
+				\		height \30%
+				\		position \relative
+				\	wrap \wrap
+				\	sub /
+				\		<= Demo_item $eve_surface
+				\			colors \medium
+				\			style *
+				\				width \10%
+				\				height \10%
+				\				position \absolute
+				\
+	Showcase_cell* $eve_surface
+		colors \lowest
+
+$mol_icon_karate $mol_icon path \M19.8 2L11.6 8.7L10.39 7.66L14 5.58L9.41 1L8 2.41L10.74 5.15L5 8.46L3.81 12.75L6.27 17L8 16L5.97 12.5L6.32 11.18L9.5 13L10 22H12L12.5 12L21 3.4L19.8 2M5 3C6.11 3 7 3.9 7 5S6.11 7 5 7 3 6.11 3 5 3.9 3 5 3Z
+
 $eve_app_page_components_button $eve_app_page_sb_page
 	title \Button
 	Head null
@@ -1194,6 +1369,20 @@ $eve_app_page_components_button $eve_app_page_sb_page
 								\	sub /
 								\		<= Icon $mol_icon_karate
 								\		^
+								\
+				inline <= Inline_page $eve_app_page_sb_page
+					title \Inline
+					body /
+						<= Inline_playground $eve_app_page_sb_playground
+							component_name \Live_button_inline
+							default_source \
+								\Live_button_inline $eve_button_inline
+								\	colors \primary
+								\	variant \ghost
+								\	size \s
+								\	label \Action
+								\	sub /
+								\	^
 								\
 				- variants <= Variants $eve_app_page_components_button_variants
 				- colors <= Colors $eve_app_page_components_button_colors
@@ -1960,6 +2149,8 @@ $eve_app_page_components $eve_page
 			menu_filter_enabled true
 			spreads *
 				surfaces <= Surfaces $eve_app_page_components_surface
+				text <= Text $eve_app_page_components_text
+				link <= Link $eve_app_page_components_link
 				flex <= Flex $eve_app_page_components_flex
 				button <= Button $eve_app_page_components_button
 				alert <= Alert $eve_app_page_components_alert
