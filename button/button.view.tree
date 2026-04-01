@@ -8,8 +8,11 @@ $eve_button $eve_flex
 	align_items \center
 	
 	sub /
-		<= Label $mol_text
-			text <= label \
+		<= Label $eve_text
+			variant \text
+			colors? null
+			text_variant \bodyMd
+			content <= label \
 	- mol_button
 	enabled true
 	click?event null

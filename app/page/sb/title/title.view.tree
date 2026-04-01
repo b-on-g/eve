@@ -1,1 +1,3 @@
-$eve_app_page_sb_title $mol_text
+$eve_app_page_sb_title $eve_text
+	text_variant \headingSm
+	content <= title \

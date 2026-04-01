@@ -9,8 +9,11 @@ $eve_chip $eve_flex
 		^
 		role \group
 	sub /
-		<= Label $mol_text
-			text <= label \
+		<= Label $eve_text
+			variant \text
+			colors? null
+			text_variant \bodyMd
+			content <= label \
 		<= Remove $eve_button
 			variant \ghost
 			colors? \lowest

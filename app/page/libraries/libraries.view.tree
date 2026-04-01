@@ -6,7 +6,8 @@ $eve_app_page_libraries $eve_page
 			direction \column
 			gap \1.25rem
 			sub /
-				<= How_title $mol_text
-					text <= how_to_title \
-				<= How_body $mol_text
-					text <= how_to_body \
+				<= How_title $eve_text
+					text_variant \headingSm
+					content <= how_to_title \
+				<= How_body $eve_text
+					content <= how_to_body \

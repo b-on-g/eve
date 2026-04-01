@@ -18,14 +18,17 @@ $eve_app_page_components_surface $eve_app_page_sb_page
 								\	state? null
 								\	interactive? null
 								\	sub /
-								\		<= Live_label $mol_text
-								\			text \Surface
+								\		<= Live_label $eve_text
+								\			content \Surface
 								\
 				showcase <= Showcase_page $eve_app_page_sb_page
 					title \Showcase
 					body /
-						<= Hint $mol_text
-							text \TODO: сделать по-другому селект этот, а то он путает...
+						<= Hint $eve_text
+							variant \text
+							colors \low
+							text_variant \bodyMd
+							content \TODO: сделать по-другому селект этот, а то он путает...
 						<= Variant_select $mol_select
 							dictionary <= variants *
 								soft \Soft

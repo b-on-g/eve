@@ -2,5 +2,5 @@ $eve_app_page_design $eve_page
 	title \Design
 	Head null
 	body /
-		<= Content $mol_text
-			text \Design page - Coming soon...
+		<= Content $eve_text
+			content \Design page - Coming soon...

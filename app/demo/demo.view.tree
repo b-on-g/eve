@@ -13,8 +13,8 @@ $eve_app_demo $eve_page
 						<= Welcome_title $mol_view
 							sub / <= Welcome_title_text $mol_dimmer
 								haystack \Welcome to Theme Editor
-						<= Welcome_text $mol_text
-							text \
+						<= Welcome_text $eve_text
+							content \
 								\This is a complete preview of your theme. 
 								\All components are rendered with your custom colors.
 								\Try changing the colors in the editor to see live updates!
@@ -29,20 +29,20 @@ $eve_app_demo $eve_page
 									sub /
 										<= Card1_title $mol_dimmer
 											haystack \Card 1
-										<= Card1_text $mol_text
-											text \This is a sample card with some text content.
+										<= Card1_text $eve_text
+											content \This is a sample card with some text content.
 								<= Card2 $mol_view
 									sub /
 										<= Card2_title $mol_dimmer
 											haystack \Card 2
-										<= Card2_text $mol_text
-											text \Another card to show how themes apply.
+										<= Card2_text $eve_text
+											content \Another card to show how themes apply.
 								<= Card3 $mol_view
 									sub /
 										<= Card3_title $mol_dimmer
 											haystack \Card 3
-										<= Card3_text $mol_text
-											text \Cards can have different content and styles.
+										<= Card3_text $eve_text
+											content \Cards can have different content and styles.
 				<= Forms_section $mol_list
 					rows /
 						<= Forms_title $mol_view
@@ -96,16 +96,16 @@ $eve_app_demo $eve_page
 										<= Header3 $mol_dimmer haystack \Value
 								<= Table_row1 $mol_row
 									sub /
-										<= Row1_col1 $mol_view sub / <= Row1_col1_text $mol_text text \Item 1
-										<= Row1_col2 $mol_view sub / <= Row1_col2_text $mol_text text \Active
-										<= Row1_col3 $mol_view sub / <= Row1_col3_text $mol_text text \100
+										<= Row1_col1 $mol_view sub / <= Row1_col1_text $eve_text content \Item 1
+										<= Row1_col2 $mol_view sub / <= Row1_col2_text $eve_text content \Active
+										<= Row1_col3 $mol_view sub / <= Row1_col3_text $eve_text content \100
 								<= Table_row2 $mol_row
 									sub /
-										<= Row2_col1 $mol_view sub / <= Row2_col1_text $mol_text text \Item 2
-										<= Row2_col2 $mol_view sub / <= Row2_col2_text $mol_text text \Pending
-										<= Row2_col3 $mol_view sub / <= Row2_col3_text $mol_text text \250
+										<= Row2_col1 $mol_view sub / <= Row2_col1_text $eve_text content \Item 2
+										<= Row2_col2 $mol_view sub / <= Row2_col2_text $eve_text content \Pending
+										<= Row2_col3 $mol_view sub / <= Row2_col3_text $eve_text content \250
 								<= Table_row3 $mol_row
 									sub /
-										<= Row3_col1 $mol_view sub / <= Row3_col1_text $mol_text text \Item 3
-										<= Row3_col2 $mol_view sub / <= Row3_col2_text $mol_text text \Complete
-										<= Row3_col3 $mol_view sub / <= Row3_col3_text $mol_text text \500
+										<= Row3_col1 $mol_view sub / <= Row3_col1_text $eve_text content \Item 3
+										<= Row3_col2 $mol_view sub / <= Row3_col2_text $eve_text content \Complete
+										<= Row3_col3 $mol_view sub / <= Row3_col3_text $eve_text content \500

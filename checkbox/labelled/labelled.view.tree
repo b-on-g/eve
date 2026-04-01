@@ -7,6 +7,9 @@ $eve_checkbox_labelled $eve_button
 			checked? <=> checked? false
 			disabled? <=> disabled? false
 			indeterminate? <=> indeterminate? false
-		<= Label $mol_text
-			text <= label \
+		<= Label $eve_text
+			variant \text
+			colors? null
+			text_variant \bodyMd
+			content <= label \
 

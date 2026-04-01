@@ -6,5 +6,8 @@ $eve_checkbox_group_labelled $eve_checkbox_labelled
 			disabled? <=> disabled? false
 			indeterminate? <=> indeterminate? false
 			event_click?event <=> option_click?event null
-		<= Label $mol_text
-			text <= label \
+		<= Label $eve_text
+			variant \text
+			colors? null
+			text_variant \bodyMd
+			content <= label \

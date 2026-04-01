@@ -32,7 +32,7 @@ $eve_app_page_components_button $eve_app_page_sb_page
 								\	size \s
 								\	label \Action
 								\	sub /
-								\	^
+								\		^
 								\
 				- variants <= Variants $eve_app_page_components_button_variants
 				- colors <= Colors $eve_app_page_components_button_colors
