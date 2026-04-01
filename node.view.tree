@@ -547,15 +547,6 @@ $mol_text_span $mol_paragraph
 		^
 		mol_text_type <= type \
 
-$eve_flex $eve_surface
-	direction \row
-	justify_content \flex-start
-	align_items \stretch
-	wrap \nowrap
-	- потом подумать про спейсинги отдельно, 
-	- чтобы можно было прокинуть переменную типа или var(--SPx4) или shortcut типа SPx4
-	gap null
-
 $mol_text_list $mol_text
 	auto_scroll null
 	attr *
@@ -570,6 +561,37 @@ $mol_text_list_item $mol_paragraph
 		^
 		mol_text_list_item_index <= index 0
 
+$eve_text $eve_surface
+	variant \text
+	colors? \medium
+	interactive? null
+	text_variant \bodyMd
+	text_align \start
+	font_weight_override? null
+	variable_font false
+	modifiers /string
+	content \
+	sub /
+		<= Body $mol_text
+			text <= content \
+
+$eve_flex $eve_surface
+	direction \row
+	justify_content \flex-start
+	align_items \stretch
+	wrap \nowrap
+	- потом подумать про спейсинги отдельно, 
+	- чтобы можно было прокинуть переменную типа или var(--SPx4) или shortcut типа SPx4
+	gap null
+
+$eve_link $eve_text
+	variant \text
+	colors \primary
+	interactive true
+	text_variant \bodyMd
+	modifiers /
+		underline
+
 $eve_app_page_libraries $eve_page
 	title \Libraries
 	Head null
@@ -578,10 +600,11 @@ $eve_app_page_libraries $eve_page
 			direction \column
 			gap \1.25rem
 			sub /
-				<= How_title $mol_text
-					text <= how_to_title \
-				<= How_body $mol_text
-					text <= how_to_body \
+				<= How_title $eve_text
+					text_variant \headingSm
+					content <= how_to_title \
+				<= How_body $eve_text
+					content <= how_to_body \
 
 $mol_icon_github $mol_icon path \M12,2A10,10 0 0,0 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12A10,10 0 0,0 12,2Z
 
@@ -848,8 +871,11 @@ $eve_button $eve_flex
 	align_items \center
 	
 	sub /
-		<= Label $mol_text
-			text <= label \
+		<= Label $eve_text
+			variant \text
+			colors? null
+			text_variant \bodyMd
+			content <= label \
 	- mol_button
 	enabled true
 	click?event null
@@ -1136,14 +1162,17 @@ $eve_app_page_components_surface $eve_app_page_sb_page
 								\	state? null
 								\	interactive? null
 								\	sub /
-								\		<= Live_label $mol_text
-								\			text \Surface
+								\		<= Live_label $eve_text
+								\			content \Surface
 								\
 				showcase <= Showcase_page $eve_app_page_sb_page
 					title \Showcase
 					body /
-						<= Hint $mol_text
-							text \TODO: сделать по-другому селект этот, а то он путает...
+						<= Hint $eve_text
+							variant \text
+							colors \low
+							text_variant \bodyMd
+							content \TODO: сделать по-другому селект этот, а то он путает...
 						<= Variant_select $mol_select
 							dictionary <= variants *
 								soft \Soft
@@ -1166,28 +1195,6 @@ $eve_app_page_components_surface $eve_app_page_sb_page
 		variant <= Variant_select_value
 		colors <= grid_cell_color* \
 		state <= grid_cell_state* \
-
-$eve_text $eve_surface
-	variant \text
-	colors? \medium
-	interactive? null
-	text_variant \bodyMd
-	text_align \start
-	font_weight_override? null
-	variable_font false
-	modifiers /string
-	content \
-	sub /
-		<= Body $mol_text
-			text <= content \
-
-$eve_link $eve_text
-	variant \text
-	colors \primary
-	interactive true
-	text_variant \bodyMd
-	modifiers /
-		underline
 
 $eve_button_inline $eve_button
 	variant \ghost
@@ -1382,7 +1389,7 @@ $eve_app_page_components_button $eve_app_page_sb_page
 								\	size \s
 								\	label \Action
 								\	sub /
-								\	^
+								\		^
 								\
 				- variants <= Variants $eve_app_page_components_button_variants
 				- colors <= Colors $eve_app_page_components_button_colors
@@ -1566,8 +1573,11 @@ $eve_badge $eve_surface
 		^
 		role \status
 	sub /
-		<= Text $mol_text
-			text <= value \
+		<= Text $eve_text
+			variant \text
+			colors? null
+			text_variant \bodyMd
+			content <= value \
 
 $eve_app_page_components_badge $eve_app_page_sb_page
 	title \Badge
@@ -1627,8 +1637,11 @@ $eve_chip $eve_flex
 		^
 		role \group
 	sub /
-		<= Label $mol_text
-			text <= label \
+		<= Label $eve_text
+			variant \text
+			colors? null
+			text_variant \bodyMd
+			content <= label \
 		<= Remove $eve_button
 			variant \ghost
 			colors? \lowest
@@ -1733,8 +1746,11 @@ $eve_slider $eve_flex
 	value_str \
 	value_text \
 	sub /
-		<= Label $mol_text
-			text <= label \
+		<= Label $eve_text
+			variant \text
+			colors? null
+			text_variant \bodyMd
+			content <= label \
 		<= Input $mol_view
 			dom_name \input
 			attr *
@@ -1808,8 +1824,11 @@ $eve_radio_labelled $eve_button
 			value <= value \
 			checked? <=> checked? false
 			disabled? <=> disabled? false
-		<= Label $mol_text
-			text <= label
+		<= Label $eve_text
+			variant \text
+			colors? null
+			text_variant \bodyMd
+			content <= label \
 
 $eve_radio_group $eve_selection_single
 	name <= group_name \
@@ -1898,8 +1917,11 @@ $eve_checkbox_labelled $eve_button
 			checked? <=> checked? false
 			disabled? <=> disabled? false
 			indeterminate? <=> indeterminate? false
-		<= Label $mol_text
-			text <= label \
+		<= Label $eve_text
+			variant \text
+			colors? null
+			text_variant \bodyMd
+			content <= label \
 
 
 $eve_selection_multiple $eve_surface
@@ -1920,8 +1942,11 @@ $eve_checkbox_group_labelled $eve_checkbox_labelled
 			disabled? <=> disabled? false
 			indeterminate? <=> indeterminate? false
 			event_click?event <=> option_click?event null
-		<= Label $mol_text
-			text <= label \
+		<= Label $eve_text
+			variant \text
+			colors? null
+			text_variant \bodyMd
+			content <= label \
 
 $eve_checkbox_group $eve_selection_multiple
 	attr *
@@ -2172,8 +2197,8 @@ $eve_app_page_design $eve_page
 	title \Design
 	Head null
 	body /
-		<= Content $mol_text
-			text \Design page - Coming soon...
+		<= Content $eve_text
+			content \Design page - Coming soon...
 
 $mol_row $mol_view
 
@@ -2235,8 +2260,8 @@ $eve_app_demo $eve_page
 						<= Welcome_title $mol_view
 							sub / <= Welcome_title_text $mol_dimmer
 								haystack \Welcome to Theme Editor
-						<= Welcome_text $mol_text
-							text \
+						<= Welcome_text $eve_text
+							content \
 								\This is a complete preview of your theme. 
 								\All components are rendered with your custom colors.
 								\Try changing the colors in the editor to see live updates!
@@ -2251,20 +2276,20 @@ $eve_app_demo $eve_page
 									sub /
 										<= Card1_title $mol_dimmer
 											haystack \Card 1
-										<= Card1_text $mol_text
-											text \This is a sample card with some text content.
+										<= Card1_text $eve_text
+											content \This is a sample card with some text content.
 								<= Card2 $mol_view
 									sub /
 										<= Card2_title $mol_dimmer
 											haystack \Card 2
-										<= Card2_text $mol_text
-											text \Another card to show how themes apply.
+										<= Card2_text $eve_text
+											content \Another card to show how themes apply.
 								<= Card3 $mol_view
 									sub /
 										<= Card3_title $mol_dimmer
 											haystack \Card 3
-										<= Card3_text $mol_text
-											text \Cards can have different content and styles.
+										<= Card3_text $eve_text
+											content \Cards can have different content and styles.
 				<= Forms_section $mol_list
 					rows /
 						<= Forms_title $mol_view
@@ -2318,19 +2343,19 @@ $eve_app_demo $eve_page
 										<= Header3 $mol_dimmer haystack \Value
 								<= Table_row1 $mol_row
 									sub /
-										<= Row1_col1 $mol_view sub / <= Row1_col1_text $mol_text text \Item 1
-										<= Row1_col2 $mol_view sub / <= Row1_col2_text $mol_text text \Active
-										<= Row1_col3 $mol_view sub / <= Row1_col3_text $mol_text text \100
+										<= Row1_col1 $mol_view sub / <= Row1_col1_text $eve_text content \Item 1
+										<= Row1_col2 $mol_view sub / <= Row1_col2_text $eve_text content \Active
+										<= Row1_col3 $mol_view sub / <= Row1_col3_text $eve_text content \100
 								<= Table_row2 $mol_row
 									sub /
-										<= Row2_col1 $mol_view sub / <= Row2_col1_text $mol_text text \Item 2
-										<= Row2_col2 $mol_view sub / <= Row2_col2_text $mol_text text \Pending
-										<= Row2_col3 $mol_view sub / <= Row2_col3_text $mol_text text \250
+										<= Row2_col1 $mol_view sub / <= Row2_col1_text $eve_text content \Item 2
+										<= Row2_col2 $mol_view sub / <= Row2_col2_text $eve_text content \Pending
+										<= Row2_col3 $mol_view sub / <= Row2_col3_text $eve_text content \250
 								<= Table_row3 $mol_row
 									sub /
-										<= Row3_col1 $mol_view sub / <= Row3_col1_text $mol_text text \Item 3
-										<= Row3_col2 $mol_view sub / <= Row3_col2_text $mol_text text \Complete
-										<= Row3_col3 $mol_view sub / <= Row3_col3_text $mol_text text \500
+										<= Row3_col1 $mol_view sub / <= Row3_col1_text $eve_text content \Item 3
+										<= Row3_col2 $mol_view sub / <= Row3_col2_text $eve_text content \Complete
+										<= Row3_col3 $mol_view sub / <= Row3_col3_text $eve_text content \500
 
 $mol_status $mol_view
 	status <= title

@@ -3797,6 +3797,89 @@ declare namespace $ {
 }
 
 declare namespace $ {
+}
+
+declare namespace $ {
+
+	type $mol_text_list_item__index_mol_text_list_1 = $mol_type_enforce<
+		ReturnType< $mol_text_list['item_index'] >
+		,
+		ReturnType< $mol_text_list_item['index'] >
+	>
+	type $mol_text_list_item__sub_mol_text_list_2 = $mol_type_enforce<
+		ReturnType< $mol_text_list['block_content'] >
+		,
+		ReturnType< $mol_text_list_item['sub'] >
+	>
+	export class $mol_text_list extends $mol_text {
+		type( ): string
+		auto_scroll( ): any
+		attr( ): ({ 
+			'mol_text_list_type': ReturnType< $mol_text_list['type'] >,
+		})  & ReturnType< $mol_text['attr'] >
+		Paragraph( id: any): $mol_text_list_item
+	}
+	
+	export class $mol_text_list_item extends $mol_paragraph {
+		index( ): number
+		attr( ): ({ 
+			'mol_text_list_item_index': ReturnType< $mol_text_list_item['index'] >,
+		})  & ReturnType< $mol_paragraph['attr'] >
+	}
+	
+}
+
+//# sourceMappingURL=list.view.tree.d.ts.map
+declare namespace $ {
+
+	type $mol_text__text_eve_text_1 = $mol_type_enforce<
+		ReturnType< $eve_text['content'] >
+		,
+		ReturnType< $mol_text['text'] >
+	>
+	export class $eve_text extends $eve_surface {
+		content( ): string
+		Body( ): $mol_text
+		variant( ): string
+		colors( next?: string ): string
+		interactive( next?: any ): any
+		text_variant( ): string
+		text_align( ): string
+		font_weight_override( next?: any ): any
+		variable_font( ): boolean
+		modifiers( ): readonly(string)[]
+		sub( ): readonly(any)[]
+	}
+	
+}
+
+//# sourceMappingURL=text.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $eve_text extends $.$eve_text {
+        static readonly TEXT_VARIANTS: readonly ["headingXs", "headingSm", "headingMd", "headingLg", "headingXl", "heading2xl", "heading3xl", "bodyXs", "bodySm", "bodyMd", "bodyLg"];
+        static readonly TEXT_ALIGNS: readonly ["start", "center", "end", "justify"];
+        static readonly FONT_WEIGHT_OVERRIDES: readonly ["regular", "medium", "semibold", "bold"];
+        static readonly MODIFIERS: readonly ["uppercase", "strikethrough", "underline"];
+        text_variant(next?: typeof $eve_text.TEXT_VARIANTS[number]): "headingXs" | "headingSm" | "headingMd" | "headingLg" | "headingXl" | "heading2xl" | "heading3xl" | "bodyXs" | "bodySm" | "bodyMd" | "bodyLg";
+        text_align(next?: typeof $eve_text.TEXT_ALIGNS[number]): "center" | "end" | "start" | "justify";
+        font_weight_override(next?: typeof $eve_text.FONT_WEIGHT_OVERRIDES[number] | null): "medium" | "bold" | "regular" | "semibold" | null;
+        variable_font(next?: boolean): boolean;
+        modifiers_normalized(): readonly (typeof $eve_text.MODIFIERS[number])[];
+        content(): string;
+        attr(): {
+            eve_text_modifiers?: string | undefined;
+            eve_text_variable?: boolean | undefined;
+            eve_text_font_weight?: "medium" | "bold" | "regular" | "semibold" | undefined;
+            eve_text_variant: "headingXs" | "headingSm" | "headingMd" | "headingLg" | "headingXl" | "heading2xl" | "heading3xl" | "bodyXs" | "bodySm" | "bodyMd" | "bodyLg";
+            eve_text_align: "center" | "end" | "start" | "justify";
+        };
+    }
+}
+
+declare namespace $.$$ {
+}
+
+declare namespace $ {
 
 	export class $eve_flex extends $eve_surface {
 		direction( ): string
@@ -3840,71 +3923,60 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
-}
 
-declare namespace $ {
-
-	type $mol_text_list_item__index_mol_text_list_1 = $mol_type_enforce<
-		ReturnType< $mol_text_list['item_index'] >
-		,
-		ReturnType< $mol_text_list_item['index'] >
-	>
-	type $mol_text_list_item__sub_mol_text_list_2 = $mol_type_enforce<
-		ReturnType< $mol_text_list['block_content'] >
-		,
-		ReturnType< $mol_text_list_item['sub'] >
-	>
-	export class $mol_text_list extends $mol_text {
-		type( ): string
-		auto_scroll( ): any
-		attr( ): ({ 
-			'mol_text_list_type': ReturnType< $mol_text_list['type'] >,
-		})  & ReturnType< $mol_text['attr'] >
-		Paragraph( id: any): $mol_text_list_item
-	}
-	
-	export class $mol_text_list_item extends $mol_paragraph {
-		index( ): number
-		attr( ): ({ 
-			'mol_text_list_item_index': ReturnType< $mol_text_list_item['index'] >,
-		})  & ReturnType< $mol_paragraph['attr'] >
+	export class $eve_link extends $eve_text {
+		variant( ): string
+		colors( ): string
+		interactive( ): boolean
+		text_variant( ): string
+		modifiers( ): readonly(any)[]
 	}
 	
 }
 
-//# sourceMappingURL=list.view.tree.d.ts.map
+//# sourceMappingURL=link.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $eve_link extends $.$eve_link {
+    }
+}
+
 declare namespace $ {
 
-	type $mol_text__text_eve_app_page_libraries_1 = $mol_type_enforce<
+	type $eve_text__text_variant_eve_app_page_libraries_1 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['text_variant'] >
+	>
+	type $eve_text__content_eve_app_page_libraries_2 = $mol_type_enforce<
 		ReturnType< $eve_app_page_libraries['how_to_title'] >
 		,
-		ReturnType< $mol_text['text'] >
+		ReturnType< $eve_text['content'] >
 	>
-	type $mol_text__text_eve_app_page_libraries_2 = $mol_type_enforce<
+	type $eve_text__content_eve_app_page_libraries_3 = $mol_type_enforce<
 		ReturnType< $eve_app_page_libraries['how_to_body'] >
 		,
-		ReturnType< $mol_text['text'] >
+		ReturnType< $eve_text['content'] >
 	>
-	type $eve_flex__direction_eve_app_page_libraries_3 = $mol_type_enforce<
+	type $eve_flex__direction_eve_app_page_libraries_4 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $eve_flex['direction'] >
 	>
-	type $eve_flex__gap_eve_app_page_libraries_4 = $mol_type_enforce<
+	type $eve_flex__gap_eve_app_page_libraries_5 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $eve_flex['gap'] >
 	>
-	type $eve_flex__sub_eve_app_page_libraries_5 = $mol_type_enforce<
+	type $eve_flex__sub_eve_app_page_libraries_6 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $eve_flex['sub'] >
 	>
 	export class $eve_app_page_libraries extends $eve_page {
 		how_to_title( ): string
-		How_title( ): $mol_text
+		How_title( ): $eve_text
 		how_to_body( ): string
-		How_body( ): $mol_text
+		How_body( ): $eve_text
 		Main( ): $eve_flex
 		title( ): string
 		Head( ): any
@@ -4700,19 +4772,34 @@ declare namespace $.$$ {
 
 declare namespace $ {
 
-	type $mol_text__text_eve_button_1 = $mol_type_enforce<
+	type $eve_text__variant_eve_button_1 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['variant'] >
+	>
+	type $eve_text__colors_eve_button_2 = $mol_type_enforce<
+		any
+		,
+		ReturnType< $eve_text['colors'] >
+	>
+	type $eve_text__text_variant_eve_button_3 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['text_variant'] >
+	>
+	type $eve_text__content_eve_button_4 = $mol_type_enforce<
 		ReturnType< $eve_button['label'] >
 		,
-		ReturnType< $mol_text['text'] >
+		ReturnType< $eve_text['content'] >
 	>
-	type $mol_speck__value_eve_button_2 = $mol_type_enforce<
+	type $mol_speck__value_eve_button_5 = $mol_type_enforce<
 		ReturnType< $eve_button['error'] >
 		,
 		ReturnType< $mol_speck['value'] >
 	>
 	export class $eve_button extends $eve_flex {
 		label( ): string
-		Label( ): $mol_text
+		Label( ): $eve_text
 		event_activate( next?: any ): any
 		activate( next?: ReturnType< $eve_button['event_activate'] > ): ReturnType< $eve_button['event_activate'] >
 		clicks( next?: any ): any
@@ -5766,57 +5853,72 @@ declare namespace $ {
 		,
 		ReturnType< $eve_app_page_sb_page['body'] >
 	>
-	type $mol_text__text_eve_app_page_components_surface_5 = $mol_type_enforce<
+	type $eve_text__variant_eve_app_page_components_surface_5 = $mol_type_enforce<
 		string
 		,
-		ReturnType< $mol_text['text'] >
+		ReturnType< $eve_text['variant'] >
 	>
-	type $mol_select__dictionary_eve_app_page_components_surface_6 = $mol_type_enforce<
+	type $eve_text__colors_eve_app_page_components_surface_6 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['colors'] >
+	>
+	type $eve_text__text_variant_eve_app_page_components_surface_7 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['text_variant'] >
+	>
+	type $eve_text__content_eve_app_page_components_surface_8 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['content'] >
+	>
+	type $mol_select__dictionary_eve_app_page_components_surface_9 = $mol_type_enforce<
 		ReturnType< $eve_app_page_components_surface['variants'] >
 		,
 		ReturnType< $mol_select['dictionary'] >
 	>
-	type $mol_select__value_eve_app_page_components_surface_7 = $mol_type_enforce<
+	type $mol_select__value_eve_app_page_components_surface_10 = $mol_type_enforce<
 		ReturnType< $eve_app_page_components_surface['Variant_select_value'] >
 		,
 		ReturnType< $mol_select['value'] >
 	>
-	type $eve_surface__sub_eve_app_page_components_surface_8 = $mol_type_enforce<
+	type $eve_surface__sub_eve_app_page_components_surface_11 = $mol_type_enforce<
 		ReturnType< $eve_app_page_components_surface['grid_cells'] >
 		,
 		ReturnType< $eve_surface['sub'] >
 	>
-	type $eve_flex__align_items_eve_app_page_components_surface_9 = $mol_type_enforce<
+	type $eve_flex__align_items_eve_app_page_components_surface_12 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $eve_flex['align_items'] >
 	>
-	type $eve_flex__justify_content_eve_app_page_components_surface_10 = $mol_type_enforce<
+	type $eve_flex__justify_content_eve_app_page_components_surface_13 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $eve_flex['justify_content'] >
 	>
-	type $eve_flex__sub_eve_app_page_components_surface_11 = $mol_type_enforce<
+	type $eve_flex__sub_eve_app_page_components_surface_14 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $eve_flex['sub'] >
 	>
-	type $eve_app_page_sb_page__title_eve_app_page_components_surface_12 = $mol_type_enforce<
+	type $eve_app_page_sb_page__title_eve_app_page_components_surface_15 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $eve_app_page_sb_page['title'] >
 	>
-	type $eve_app_page_sb_page__body_eve_app_page_components_surface_13 = $mol_type_enforce<
+	type $eve_app_page_sb_page__body_eve_app_page_components_surface_16 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $eve_app_page_sb_page['body'] >
 	>
-	type $eve_app_page_sb_catalog__param_eve_app_page_components_surface_14 = $mol_type_enforce<
+	type $eve_app_page_sb_catalog__param_eve_app_page_components_surface_17 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $eve_app_page_sb_catalog['param'] >
 	>
-	type $eve_app_page_sb_catalog__spreads_eve_app_page_components_surface_15 = $mol_type_enforce<
+	type $eve_app_page_sb_catalog__spreads_eve_app_page_components_surface_18 = $mol_type_enforce<
 		({ 
 			'playground': ReturnType< $eve_app_page_components_surface['Playground_page'] >,
 			'showcase': ReturnType< $eve_app_page_components_surface['Showcase_page'] >,
@@ -5824,27 +5926,27 @@ declare namespace $ {
 		,
 		ReturnType< $eve_app_page_sb_catalog['spreads'] >
 	>
-	type $mol_paragraph__title_eve_app_page_components_surface_16 = $mol_type_enforce<
+	type $mol_paragraph__title_eve_app_page_components_surface_19 = $mol_type_enforce<
 		ReturnType< $eve_app_page_components_surface['grid_header_text'] >
 		,
 		ReturnType< $mol_paragraph['title'] >
 	>
-	type $mol_paragraph__title_eve_app_page_components_surface_17 = $mol_type_enforce<
+	type $mol_paragraph__title_eve_app_page_components_surface_20 = $mol_type_enforce<
 		ReturnType< $eve_app_page_components_surface['grid_row_text'] >
 		,
 		ReturnType< $mol_paragraph['title'] >
 	>
-	type $eve_surface__variant_eve_app_page_components_surface_18 = $mol_type_enforce<
+	type $eve_surface__variant_eve_app_page_components_surface_21 = $mol_type_enforce<
 		ReturnType< $eve_app_page_components_surface['Variant_select_value'] >
 		,
 		ReturnType< $eve_surface['variant'] >
 	>
-	type $eve_surface__colors_eve_app_page_components_surface_19 = $mol_type_enforce<
+	type $eve_surface__colors_eve_app_page_components_surface_22 = $mol_type_enforce<
 		ReturnType< $eve_app_page_components_surface['grid_cell_color'] >
 		,
 		ReturnType< $eve_surface['colors'] >
 	>
-	type $eve_surface__state_eve_app_page_components_surface_20 = $mol_type_enforce<
+	type $eve_surface__state_eve_app_page_components_surface_23 = $mol_type_enforce<
 		ReturnType< $eve_app_page_components_surface['grid_cell_state'] >
 		,
 		ReturnType< $eve_surface['state'] >
@@ -5852,7 +5954,7 @@ declare namespace $ {
 	export class $eve_app_page_components_surface extends $eve_app_page_sb_page {
 		Playground_live( ): $eve_app_page_sb_playground
 		Playground_page( ): $eve_app_page_sb_page
-		Hint( ): $mol_text
+		Hint( ): $eve_text
 		variants( ): ({ 
 			'soft': string,
 			'solid': string,
@@ -5893,73 +5995,6 @@ declare namespace $.$$ {
 }
 
 declare namespace $.$$ {
-}
-
-declare namespace $ {
-
-	type $mol_text__text_eve_text_1 = $mol_type_enforce<
-		ReturnType< $eve_text['content'] >
-		,
-		ReturnType< $mol_text['text'] >
-	>
-	export class $eve_text extends $eve_surface {
-		content( ): string
-		Body( ): $mol_text
-		variant( ): string
-		colors( next?: string ): string
-		interactive( next?: any ): any
-		text_variant( ): string
-		text_align( ): string
-		font_weight_override( next?: any ): any
-		variable_font( ): boolean
-		modifiers( ): readonly(string)[]
-		sub( ): readonly(any)[]
-	}
-	
-}
-
-//# sourceMappingURL=text.view.tree.d.ts.map
-declare namespace $.$$ {
-    class $eve_text extends $.$eve_text {
-        static readonly TEXT_VARIANTS: readonly ["headingXs", "headingSm", "headingMd", "headingLg", "headingXl", "heading2xl", "heading3xl", "bodyXs", "bodySm", "bodyMd", "bodyLg"];
-        static readonly TEXT_ALIGNS: readonly ["start", "center", "end", "justify"];
-        static readonly FONT_WEIGHT_OVERRIDES: readonly ["regular", "medium", "semibold", "bold"];
-        static readonly MODIFIERS: readonly ["uppercase", "strikethrough", "underline"];
-        text_variant(next?: typeof $eve_text.TEXT_VARIANTS[number]): "headingXs" | "headingSm" | "headingMd" | "headingLg" | "headingXl" | "heading2xl" | "heading3xl" | "bodyXs" | "bodySm" | "bodyMd" | "bodyLg";
-        text_align(next?: typeof $eve_text.TEXT_ALIGNS[number]): "center" | "end" | "start" | "justify";
-        font_weight_override(next?: typeof $eve_text.FONT_WEIGHT_OVERRIDES[number] | null): "medium" | "bold" | "regular" | "semibold" | null;
-        variable_font(next?: boolean): boolean;
-        modifiers_normalized(): readonly (typeof $eve_text.MODIFIERS[number])[];
-        content(): string;
-        attr(): {
-            eve_text_modifiers?: string | undefined;
-            eve_text_variable?: boolean | undefined;
-            eve_text_font_weight?: "medium" | "bold" | "regular" | "semibold" | undefined;
-            eve_text_variant: "headingXs" | "headingSm" | "headingMd" | "headingLg" | "headingXl" | "heading2xl" | "heading3xl" | "bodyXs" | "bodySm" | "bodyMd" | "bodyLg";
-            eve_text_align: "center" | "end" | "start" | "justify";
-        };
-    }
-}
-
-declare namespace $.$$ {
-}
-
-declare namespace $ {
-
-	export class $eve_link extends $eve_text {
-		variant( ): string
-		colors( ): string
-		interactive( ): boolean
-		text_variant( ): string
-		modifiers( ): readonly(any)[]
-	}
-	
-}
-
-//# sourceMappingURL=link.view.tree.d.ts.map
-declare namespace $.$$ {
-    class $eve_link extends $.$eve_link {
-    }
 }
 
 declare namespace $ {
@@ -7136,14 +7171,29 @@ declare namespace $.$$ {
 
 declare namespace $ {
 
-	type $mol_text__text_eve_badge_1 = $mol_type_enforce<
+	type $eve_text__variant_eve_badge_1 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['variant'] >
+	>
+	type $eve_text__colors_eve_badge_2 = $mol_type_enforce<
+		any
+		,
+		ReturnType< $eve_text['colors'] >
+	>
+	type $eve_text__text_variant_eve_badge_3 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['text_variant'] >
+	>
+	type $eve_text__content_eve_badge_4 = $mol_type_enforce<
 		ReturnType< $eve_badge['value'] >
 		,
-		ReturnType< $mol_text['text'] >
+		ReturnType< $eve_text['content'] >
 	>
 	export class $eve_badge extends $eve_surface {
 		value( ): string
-		Text( ): $mol_text
+		Text( ): $eve_text
 		variant( ): string
 		colors( ): string
 		size( next?: string ): string
@@ -7275,44 +7325,59 @@ declare namespace $ {
 //# sourceMappingURL=card.view.tree.d.ts.map
 declare namespace $ {
 
-	type $mol_text__text_eve_chip_1 = $mol_type_enforce<
+	type $eve_text__variant_eve_chip_1 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['variant'] >
+	>
+	type $eve_text__colors_eve_chip_2 = $mol_type_enforce<
+		any
+		,
+		ReturnType< $eve_text['colors'] >
+	>
+	type $eve_text__text_variant_eve_chip_3 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['text_variant'] >
+	>
+	type $eve_text__content_eve_chip_4 = $mol_type_enforce<
 		ReturnType< $eve_chip['label'] >
 		,
-		ReturnType< $mol_text['text'] >
+		ReturnType< $eve_text['content'] >
 	>
-	type $eve_button__variant_eve_chip_2 = $mol_type_enforce<
+	type $eve_button__variant_eve_chip_5 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $eve_button['variant'] >
 	>
-	type $eve_button__colors_eve_chip_3 = $mol_type_enforce<
+	type $eve_button__colors_eve_chip_6 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $eve_button['colors'] >
 	>
-	type $eve_button__size_eve_chip_4 = $mol_type_enforce<
+	type $eve_button__size_eve_chip_7 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $eve_button['size'] >
 	>
-	type $eve_button__hint_eve_chip_5 = $mol_type_enforce<
+	type $eve_button__hint_eve_chip_8 = $mol_type_enforce<
 		ReturnType< $eve_chip['remove_hint'] >
 		,
 		ReturnType< $eve_button['hint'] >
 	>
-	type $eve_button__click_eve_chip_6 = $mol_type_enforce<
+	type $eve_button__click_eve_chip_9 = $mol_type_enforce<
 		ReturnType< $eve_chip['remove_click'] >
 		,
 		ReturnType< $eve_button['click'] >
 	>
-	type $eve_button__sub_eve_chip_7 = $mol_type_enforce<
+	type $eve_button__sub_eve_chip_10 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $eve_button['sub'] >
 	>
 	export class $eve_chip extends $eve_flex {
 		label( ): string
-		Label( ): $mol_text
+		Label( ): $eve_text
 		remove_hint( ): string
 		remove_click( next?: any ): any
 		Remove_icon( ): $mol_icon_close
@@ -7553,7 +7618,7 @@ declare namespace $.$$ {
             error(): string;
             hint_safe(): string;
             sub_visible(): any[];
-            Label(): $.$mol_text;
+            Label(): $.$eve_text;
             activate(next?: ReturnType<$.$eve_button["event_activate"]>): ReturnType<$.$eve_button["event_activate"]>;
             clicks(next?: any): any;
             key_press(next?: ReturnType<$.$eve_button["event_key_press"]>): ReturnType<$.$eve_button["event_key_press"]>;
@@ -7647,7 +7712,7 @@ declare namespace $.$$ {
             error(): string;
             hint_safe(): string;
             sub_visible(): any[];
-            Label(): $.$mol_text;
+            Label(): $.$eve_text;
             activate(next?: ReturnType<$.$eve_button["event_activate"]>): ReturnType<$.$eve_button["event_activate"]>;
             clicks(next?: any): any;
             key_press(next?: ReturnType<$.$eve_button["event_key_press"]>): ReturnType<$.$eve_button["event_key_press"]>;
@@ -7741,7 +7806,7 @@ declare namespace $.$$ {
             error(): string;
             hint_safe(): string;
             sub_visible(): any[];
-            Label(): $.$mol_text;
+            Label(): $.$eve_text;
             activate(next?: ReturnType<$.$eve_button["event_activate"]>): ReturnType<$.$eve_button["event_activate"]>;
             clicks(next?: any): any;
             key_press(next?: ReturnType<$.$eve_button["event_key_press"]>): ReturnType<$.$eve_button["event_key_press"]>;
@@ -7835,7 +7900,7 @@ declare namespace $.$$ {
             error(): string;
             hint_safe(): string;
             sub_visible(): any[];
-            Label(): $.$mol_text;
+            Label(): $.$eve_text;
             activate(next?: ReturnType<$.$eve_button["event_activate"]>): ReturnType<$.$eve_button["event_activate"]>;
             clicks(next?: any): any;
             key_press(next?: ReturnType<$.$eve_button["event_key_press"]>): ReturnType<$.$eve_button["event_key_press"]>;
@@ -7928,7 +7993,7 @@ declare namespace $.$$ {
             error(): string;
             hint_safe(): string;
             sub_visible(): any[];
-            Label(): $.$mol_text;
+            Label(): $.$eve_text;
             activate(next?: ReturnType<$.$eve_button["event_activate"]>): ReturnType<$.$eve_button["event_activate"]>;
             clicks(next?: any): any;
             key_press(next?: ReturnType<$.$eve_button["event_key_press"]>): ReturnType<$.$eve_button["event_key_press"]>;
@@ -8021,7 +8086,7 @@ declare namespace $.$$ {
             error(): string;
             hint_safe(): string;
             sub_visible(): any[];
-            Label(): $.$mol_text;
+            Label(): $.$eve_text;
             activate(next?: ReturnType<$.$eve_button["event_activate"]>): ReturnType<$.$eve_button["event_activate"]>;
             clicks(next?: any): any;
             key_press(next?: ReturnType<$.$eve_button["event_key_press"]>): ReturnType<$.$eve_button["event_key_press"]>;
@@ -8148,17 +8213,32 @@ declare namespace $.$$ {
 
 declare namespace $ {
 
-	type $mol_text__text_eve_slider_1 = $mol_type_enforce<
+	type $eve_text__variant_eve_slider_1 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['variant'] >
+	>
+	type $eve_text__colors_eve_slider_2 = $mol_type_enforce<
+		any
+		,
+		ReturnType< $eve_text['colors'] >
+	>
+	type $eve_text__text_variant_eve_slider_3 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['text_variant'] >
+	>
+	type $eve_text__content_eve_slider_4 = $mol_type_enforce<
 		ReturnType< $eve_slider['label'] >
 		,
-		ReturnType< $mol_text['text'] >
+		ReturnType< $eve_text['content'] >
 	>
-	type $mol_view__dom_name_eve_slider_2 = $mol_type_enforce<
+	type $mol_view__dom_name_eve_slider_5 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_view['dom_name'] >
 	>
-	type $mol_view__attr_eve_slider_3 = $mol_type_enforce<
+	type $mol_view__attr_eve_slider_6 = $mol_type_enforce<
 		({ 
 			'type': string,
 			'min': ReturnType< $eve_slider['min_str'] >,
@@ -8169,14 +8249,14 @@ declare namespace $ {
 		,
 		ReturnType< $mol_view['attr'] >
 	>
-	type $mol_view__field_eve_slider_4 = $mol_type_enforce<
+	type $mol_view__field_eve_slider_7 = $mol_type_enforce<
 		({ 
 			'value': ReturnType< $eve_slider['value_str'] >,
 		}) 
 		,
 		ReturnType< $mol_view['field'] >
 	>
-	type $mol_view__event_eve_slider_5 = $mol_type_enforce<
+	type $mol_view__event_eve_slider_8 = $mol_type_enforce<
 		({ 
 			input( next?: ReturnType< $eve_slider['event_input'] > ): ReturnType< $eve_slider['event_input'] >,
 		}) 
@@ -8185,7 +8265,7 @@ declare namespace $ {
 	>
 	export class $eve_slider extends $eve_flex {
 		label( ): string
-		Label( ): $mol_text
+		Label( ): $eve_text
 		event_input( next?: any ): any
 		Input( ): $mol_view
 		direction( ): string
@@ -8354,10 +8434,25 @@ declare namespace $ {
 		,
 		ReturnType< $eve_radio['disabled'] >
 	>
-	type $mol_text__text_eve_radio_labelled_6 = $mol_type_enforce<
+	type $eve_text__variant_eve_radio_labelled_6 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['variant'] >
+	>
+	type $eve_text__colors_eve_radio_labelled_7 = $mol_type_enforce<
+		any
+		,
+		ReturnType< $eve_text['colors'] >
+	>
+	type $eve_text__text_variant_eve_radio_labelled_8 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['text_variant'] >
+	>
+	type $eve_text__content_eve_radio_labelled_9 = $mol_type_enforce<
 		ReturnType< $eve_radio_labelled['label'] >
 		,
-		ReturnType< $mol_text['text'] >
+		ReturnType< $eve_text['content'] >
 	>
 	export class $eve_radio_labelled extends $eve_button {
 		radio_id( ): string
@@ -8366,7 +8461,8 @@ declare namespace $ {
 		checked( next?: boolean ): boolean
 		disabled( next?: boolean ): boolean
 		Radio( ): $eve_radio
-		Label( ): $mol_text
+		label( ): string
+		Label( ): $eve_text
 		variant( ): string
 		size( next?: string ): string
 		justify_content( ): string
@@ -8604,10 +8700,25 @@ declare namespace $ {
 		,
 		ReturnType< $eve_checkbox['indeterminate'] >
 	>
-	type $mol_text__text_eve_checkbox_labelled_4 = $mol_type_enforce<
+	type $eve_text__variant_eve_checkbox_labelled_4 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['variant'] >
+	>
+	type $eve_text__colors_eve_checkbox_labelled_5 = $mol_type_enforce<
+		any
+		,
+		ReturnType< $eve_text['colors'] >
+	>
+	type $eve_text__text_variant_eve_checkbox_labelled_6 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['text_variant'] >
+	>
+	type $eve_text__content_eve_checkbox_labelled_7 = $mol_type_enforce<
 		ReturnType< $eve_checkbox_labelled['label'] >
 		,
-		ReturnType< $mol_text['text'] >
+		ReturnType< $eve_text['content'] >
 	>
 	export class $eve_checkbox_labelled extends $eve_button {
 		checked( next?: boolean ): boolean
@@ -8615,7 +8726,7 @@ declare namespace $ {
 		indeterminate( next?: boolean ): boolean
 		Checkbox( ): $eve_checkbox
 		label( ): string
-		Label( ): $mol_text
+		Label( ): $eve_text
 		variant( ): string
 		size( next?: string ): string
 		justify_content( ): string
@@ -8689,10 +8800,25 @@ declare namespace $ {
 		,
 		ReturnType< $eve_checkbox['event_click'] >
 	>
-	type $mol_text__text_eve_checkbox_group_labelled_6 = $mol_type_enforce<
+	type $eve_text__variant_eve_checkbox_group_labelled_6 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['variant'] >
+	>
+	type $eve_text__colors_eve_checkbox_group_labelled_7 = $mol_type_enforce<
+		any
+		,
+		ReturnType< $eve_text['colors'] >
+	>
+	type $eve_text__text_variant_eve_checkbox_group_labelled_8 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_text['text_variant'] >
+	>
+	type $eve_text__content_eve_checkbox_group_labelled_9 = $mol_type_enforce<
 		ReturnType< $eve_checkbox_group_labelled['label'] >
 		,
-		ReturnType< $mol_text['text'] >
+		ReturnType< $eve_text['content'] >
 	>
 	export class $eve_checkbox_group_labelled extends $eve_checkbox_labelled {
 		checked( next?: boolean ): boolean
@@ -8701,7 +8827,7 @@ declare namespace $ {
 		option_click( next?: any ): any
 		Checkbox( ): $eve_checkbox
 		label( ): string
-		Label( ): $mol_text
+		Label( ): $eve_text
 		sub( ): readonly(any)[]
 	}
 	
@@ -9347,13 +9473,13 @@ declare namespace $.$$ {
 
 declare namespace $ {
 
-	type $mol_text__text_eve_app_page_design_1 = $mol_type_enforce<
+	type $eve_text__content_eve_app_page_design_1 = $mol_type_enforce<
 		string
 		,
-		ReturnType< $mol_text['text'] >
+		ReturnType< $eve_text['content'] >
 	>
 	export class $eve_app_page_design extends $eve_page {
-		Content( ): $mol_text
+		Content( ): $eve_text
 		title( ): string
 		Head( ): any
 		body( ): readonly(any)[]
@@ -9557,10 +9683,10 @@ declare namespace $ {
 		,
 		ReturnType< $mol_view['sub'] >
 	>
-	type $mol_text__text_eve_app_demo_5 = $mol_type_enforce<
+	type $eve_text__content_eve_app_demo_5 = $mol_type_enforce<
 		string
 		,
-		ReturnType< $mol_text['text'] >
+		ReturnType< $eve_text['content'] >
 	>
 	type $mol_view__sub_eve_app_demo_6 = $mol_type_enforce<
 		readonly(any)[]
@@ -9582,10 +9708,10 @@ declare namespace $ {
 		,
 		ReturnType< $mol_dimmer['haystack'] >
 	>
-	type $mol_text__text_eve_app_demo_10 = $mol_type_enforce<
+	type $eve_text__content_eve_app_demo_10 = $mol_type_enforce<
 		string
 		,
-		ReturnType< $mol_text['text'] >
+		ReturnType< $eve_text['content'] >
 	>
 	type $mol_view__sub_eve_app_demo_11 = $mol_type_enforce<
 		readonly(any)[]
@@ -9597,10 +9723,10 @@ declare namespace $ {
 		,
 		ReturnType< $mol_dimmer['haystack'] >
 	>
-	type $mol_text__text_eve_app_demo_13 = $mol_type_enforce<
+	type $eve_text__content_eve_app_demo_13 = $mol_type_enforce<
 		string
 		,
-		ReturnType< $mol_text['text'] >
+		ReturnType< $eve_text['content'] >
 	>
 	type $mol_view__sub_eve_app_demo_14 = $mol_type_enforce<
 		readonly(any)[]
@@ -9612,10 +9738,10 @@ declare namespace $ {
 		,
 		ReturnType< $mol_dimmer['haystack'] >
 	>
-	type $mol_text__text_eve_app_demo_16 = $mol_type_enforce<
+	type $eve_text__content_eve_app_demo_16 = $mol_type_enforce<
 		string
 		,
-		ReturnType< $mol_text['text'] >
+		ReturnType< $eve_text['content'] >
 	>
 	type $mol_view__sub_eve_app_demo_17 = $mol_type_enforce<
 		readonly(any)[]
@@ -9792,30 +9918,30 @@ declare namespace $ {
 		,
 		ReturnType< $mol_row['sub'] >
 	>
-	type $mol_text__text_eve_app_demo_52 = $mol_type_enforce<
+	type $eve_text__content_eve_app_demo_52 = $mol_type_enforce<
 		string
 		,
-		ReturnType< $mol_text['text'] >
+		ReturnType< $eve_text['content'] >
 	>
 	type $mol_view__sub_eve_app_demo_53 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_view['sub'] >
 	>
-	type $mol_text__text_eve_app_demo_54 = $mol_type_enforce<
+	type $eve_text__content_eve_app_demo_54 = $mol_type_enforce<
 		string
 		,
-		ReturnType< $mol_text['text'] >
+		ReturnType< $eve_text['content'] >
 	>
 	type $mol_view__sub_eve_app_demo_55 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_view['sub'] >
 	>
-	type $mol_text__text_eve_app_demo_56 = $mol_type_enforce<
+	type $eve_text__content_eve_app_demo_56 = $mol_type_enforce<
 		string
 		,
-		ReturnType< $mol_text['text'] >
+		ReturnType< $eve_text['content'] >
 	>
 	type $mol_view__sub_eve_app_demo_57 = $mol_type_enforce<
 		readonly(any)[]
@@ -9827,30 +9953,30 @@ declare namespace $ {
 		,
 		ReturnType< $mol_row['sub'] >
 	>
-	type $mol_text__text_eve_app_demo_59 = $mol_type_enforce<
+	type $eve_text__content_eve_app_demo_59 = $mol_type_enforce<
 		string
 		,
-		ReturnType< $mol_text['text'] >
+		ReturnType< $eve_text['content'] >
 	>
 	type $mol_view__sub_eve_app_demo_60 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_view['sub'] >
 	>
-	type $mol_text__text_eve_app_demo_61 = $mol_type_enforce<
+	type $eve_text__content_eve_app_demo_61 = $mol_type_enforce<
 		string
 		,
-		ReturnType< $mol_text['text'] >
+		ReturnType< $eve_text['content'] >
 	>
 	type $mol_view__sub_eve_app_demo_62 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_view['sub'] >
 	>
-	type $mol_text__text_eve_app_demo_63 = $mol_type_enforce<
+	type $eve_text__content_eve_app_demo_63 = $mol_type_enforce<
 		string
 		,
-		ReturnType< $mol_text['text'] >
+		ReturnType< $eve_text['content'] >
 	>
 	type $mol_view__sub_eve_app_demo_64 = $mol_type_enforce<
 		readonly(any)[]
@@ -9862,30 +9988,30 @@ declare namespace $ {
 		,
 		ReturnType< $mol_row['sub'] >
 	>
-	type $mol_text__text_eve_app_demo_66 = $mol_type_enforce<
+	type $eve_text__content_eve_app_demo_66 = $mol_type_enforce<
 		string
 		,
-		ReturnType< $mol_text['text'] >
+		ReturnType< $eve_text['content'] >
 	>
 	type $mol_view__sub_eve_app_demo_67 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_view['sub'] >
 	>
-	type $mol_text__text_eve_app_demo_68 = $mol_type_enforce<
+	type $eve_text__content_eve_app_demo_68 = $mol_type_enforce<
 		string
 		,
-		ReturnType< $mol_text['text'] >
+		ReturnType< $eve_text['content'] >
 	>
 	type $mol_view__sub_eve_app_demo_69 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_view['sub'] >
 	>
-	type $mol_text__text_eve_app_demo_70 = $mol_type_enforce<
+	type $eve_text__content_eve_app_demo_70 = $mol_type_enforce<
 		string
 		,
-		ReturnType< $mol_text['text'] >
+		ReturnType< $eve_text['content'] >
 	>
 	type $mol_view__sub_eve_app_demo_71 = $mol_type_enforce<
 		readonly(any)[]
@@ -9917,18 +10043,18 @@ declare namespace $ {
 		Profile( ): $mol_button_minor
 		Welcome_title_text( ): $mol_dimmer
 		Welcome_title( ): $mol_view
-		Welcome_text( ): $mol_text
+		Welcome_text( ): $eve_text
 		Welcome_section( ): $mol_view
 		Careve_title_text( ): $mol_dimmer
 		Careve_title( ): $mol_view
 		Card1_title( ): $mol_dimmer
-		Card1_text( ): $mol_text
+		Card1_text( ): $eve_text
 		Card1( ): $mol_view
 		Card2_title( ): $mol_dimmer
-		Card2_text( ): $mol_text
+		Card2_text( ): $eve_text
 		Card2( ): $mol_view
 		Card3_title( ): $mol_dimmer
-		Card3_text( ): $mol_text
+		Card3_text( ): $eve_text
 		Card3( ): $mol_view
 		Careve_row( ): $mol_row
 		Careve_section( ): $mol_list
@@ -9961,25 +10087,25 @@ declare namespace $ {
 		Header2( ): $mol_dimmer
 		Header3( ): $mol_dimmer
 		Table_header( ): $mol_row
-		Row1_col1_text( ): $mol_text
+		Row1_col1_text( ): $eve_text
 		Row1_col1( ): $mol_view
-		Row1_col2_text( ): $mol_text
+		Row1_col2_text( ): $eve_text
 		Row1_col2( ): $mol_view
-		Row1_col3_text( ): $mol_text
+		Row1_col3_text( ): $eve_text
 		Row1_col3( ): $mol_view
 		Table_row1( ): $mol_row
-		Row2_col1_text( ): $mol_text
+		Row2_col1_text( ): $eve_text
 		Row2_col1( ): $mol_view
-		Row2_col2_text( ): $mol_text
+		Row2_col2_text( ): $eve_text
 		Row2_col2( ): $mol_view
-		Row2_col3_text( ): $mol_text
+		Row2_col3_text( ): $eve_text
 		Row2_col3( ): $mol_view
 		Table_row2( ): $mol_row
-		Row3_col1_text( ): $mol_text
+		Row3_col1_text( ): $eve_text
 		Row3_col1( ): $mol_view
-		Row3_col2_text( ): $mol_text
+		Row3_col2_text( ): $eve_text
 		Row3_col2( ): $mol_view
-		Row3_col3_text( ): $mol_text
+		Row3_col3_text( ): $eve_text
 		Row3_col3( ): $mol_view
 		Table_row3( ): $mol_row
 		Table_demo( ): $mol_list

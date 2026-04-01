@@ -9742,6 +9742,256 @@ var $;
 })($ || ($ = {}));
 
 ;
+	($.$mol_text_list) = class $mol_text_list extends ($.$mol_text) {
+		type(){
+			return "";
+		}
+		auto_scroll(){
+			return null;
+		}
+		attr(){
+			return {...(super.attr()), "mol_text_list_type": (this.type())};
+		}
+		Paragraph(id){
+			const obj = new this.$.$mol_text_list_item();
+			(obj.index) = () => ((this.item_index(id)));
+			(obj.sub) = () => ((this.block_content(id)));
+			return obj;
+		}
+	};
+	($mol_mem_key(($.$mol_text_list.prototype), "Paragraph"));
+	($.$mol_text_list_item) = class $mol_text_list_item extends ($.$mol_paragraph) {
+		index(){
+			return 0;
+		}
+		attr(){
+			return {...(super.attr()), "mol_text_list_item_index": (this.index())};
+		}
+	};
+
+
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/text/list/list.view.css", "[mol_text_list] {\r\n\tpadding-left: 1.75rem;\r\n}\r\n\r\n[mol_text_list_item] {\r\n\tcontain: none;\r\n\tdisplay: list-item;\r\n}\r\n\r\n[mol_text_list_item]::before {\r\n\tcontent: attr( mol_text_list_item_index ) \".\";\r\n\twidth: 1.25rem;\r\n\tdisplay: inline-block;\r\n\tposition: absolute;\r\n\tmargin-left: -1.75rem;\r\n\ttext-align: end;\r\n}\r\n\r\n[mol_text_list_type=\"-\"] > [mol_text_list_item]::before,\r\n[mol_text_list_type=\"*\"] > [mol_text_list_item]::before {\r\n\tcontent: \"•\";\r\n}\r\n");
+})($ || ($ = {}));
+
+;
+"use strict";
+
+;
+	($.$eve_text) = class $eve_text extends ($.$eve_surface) {
+		content(){
+			return "";
+		}
+		Body(){
+			const obj = new this.$.$mol_text();
+			(obj.text) = () => ((this.content()));
+			return obj;
+		}
+		variant(){
+			return "text";
+		}
+		colors(next){
+			if(next !== undefined) return next;
+			return "medium";
+		}
+		interactive(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		text_variant(){
+			return "bodyMd";
+		}
+		text_align(){
+			return "start";
+		}
+		font_weight_override(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		variable_font(){
+			return false;
+		}
+		modifiers(){
+			return [];
+		}
+		sub(){
+			return [(this.Body())];
+		}
+	};
+	($mol_mem(($.$eve_text.prototype), "Body"));
+	($mol_mem(($.$eve_text.prototype), "colors"));
+	($mol_mem(($.$eve_text.prototype), "interactive"));
+	($mol_mem(($.$eve_text.prototype), "font_weight_override"));
+
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $eve_text extends $.$eve_text {
+            static TEXT_VARIANTS = [
+                'headingXs',
+                'headingSm',
+                'headingMd',
+                'headingLg',
+                'headingXl',
+                'heading2xl',
+                'heading3xl',
+                'bodyXs',
+                'bodySm',
+                'bodyMd',
+                'bodyLg',
+            ];
+            static TEXT_ALIGNS = ['start', 'center', 'end', 'justify'];
+            static FONT_WEIGHT_OVERRIDES = ['regular', 'medium', 'semibold', 'bold'];
+            static MODIFIERS = ['uppercase', 'strikethrough', 'underline'];
+            text_variant(next) {
+                return next ?? 'bodyMd';
+            }
+            text_align(next) {
+                return next ?? 'start';
+            }
+            font_weight_override(next) {
+                return next ?? null;
+            }
+            variable_font(next) {
+                return next ?? false;
+            }
+            modifiers_normalized() {
+                const allow = new Set($eve_text.MODIFIERS);
+                const out = [];
+                const seen = new Set();
+                for (const m of this.modifiers()) {
+                    if (!allow.has(m) || seen.has(m))
+                        continue;
+                    seen.add(m);
+                    out.push(m);
+                }
+                return out;
+            }
+            content() {
+                return '';
+            }
+            attr() {
+                const base = super.attr();
+                const fw = this.font_weight_override();
+                const mods = this.modifiers_normalized();
+                return {
+                    ...base,
+                    eve_text_variant: this.text_variant(),
+                    eve_text_align: this.text_align(),
+                    ...(fw ? { eve_text_font_weight: fw } : {}),
+                    ...(this.variable_font() ? { eve_text_variable: true } : {}),
+                    ...(mods.length ? { eve_text_modifiers: mods.join(' ') } : {}),
+                };
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $eve_text.prototype, "text_variant", null);
+        __decorate([
+            $mol_mem
+        ], $eve_text.prototype, "text_align", null);
+        __decorate([
+            $mol_mem
+        ], $eve_text.prototype, "font_weight_override", null);
+        __decorate([
+            $mol_mem
+        ], $eve_text.prototype, "variable_font", null);
+        __decorate([
+            $mol_mem
+        ], $eve_text.prototype, "content", null);
+        $$.$eve_text = $eve_text;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        const { rem } = $mol_style_unit;
+        const w = (size, wght, line) => ({
+            fontSize: rem(size),
+            lineHeight: String(line),
+            fontWeight: String(wght),
+            '--eve_text_wght': String(wght),
+        });
+        $mol_style_define($eve_text, {
+            margin: 0,
+            Body: {
+                margin: 0,
+                display: 'block',
+            },
+            '@': {
+                eve_text_align: {
+                    start: { textAlign: 'start' },
+                    center: { textAlign: 'center' },
+                    end: { textAlign: 'end' },
+                    justify: { textAlign: 'justify' },
+                },
+                eve_text_font_weight: {
+                    regular: { Body: { fontWeight: '400', '--eve_text_wght': '400' } },
+                    medium: { Body: { fontWeight: '500', '--eve_text_wght': '500' } },
+                    semibold: { Body: { fontWeight: '600', '--eve_text_wght': '600' } },
+                    bold: { Body: { fontWeight: '700', '--eve_text_wght': '700' } },
+                },
+                eve_text_variant: {
+                    headingXs: { Body: w(0.75, 600, 1.25) },
+                    headingSm: { Body: w(0.875, 600, 1.25) },
+                    headingMd: { Body: w(1, 600, 1.3) },
+                    headingLg: { Body: w(1.125, 700, 1.3) },
+                    headingXl: { Body: w(1.25, 700, 1.3) },
+                    heading2xl: { Body: w(1.5, 700, 1.25) },
+                    heading3xl: { Body: w(1.875, 700, 1.2) },
+                    bodyXs: { Body: w(0.6875, 400, 1.4) },
+                    bodySm: { Body: w(0.75, 400, 1.45) },
+                    bodyMd: { Body: w(0.875, 400, 1.5) },
+                    bodyLg: { Body: w(1, 400, 1.5) },
+                },
+                eve_text_variable: {
+                    true: {
+                        Body: {
+                            fontWeight: 'normal',
+                            fontVariationSettings: '"wght" var(--eve_text_wght)',
+                        },
+                    },
+                },
+            },
+        });
+        $mol_style_attach('eve/text/text.variable.css', `[eve_text_variable] [mol_text] {
+	-webkit-font-smoothing: antialiased;
+	text-rendering: geometricPrecision;
+}
+`);
+        $mol_style_attach('eve/text/text.modifiers.css', `[eve_text_modifiers~="uppercase"] [mol_text] {
+	text-transform: uppercase;
+}
+[eve_text_modifiers~="underline"]:not([eve_text_modifiers~="strikethrough"]) [mol_text] {
+	text-decoration: underline;
+	text-underline-offset: ${rem(0.125)};
+}
+[eve_text_modifiers~="strikethrough"]:not([eve_text_modifiers~="underline"]) [mol_text] {
+	text-decoration: line-through;
+}
+[eve_text_modifiers~="underline"][eve_text_modifiers~="strikethrough"] [mol_text] {
+	text-decoration: underline line-through;
+	text-underline-offset: ${rem(0.125)};
+}
+`);
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
 	($.$eve_flex) = class $eve_flex extends ($.$eve_surface) {
 		direction(){
 			return "row";
@@ -9899,43 +10149,39 @@ var $;
 })($ || ($ = {}));
 
 ;
-	($.$mol_text_list) = class $mol_text_list extends ($.$mol_text) {
-		type(){
-			return "";
+	($.$eve_link) = class $eve_link extends ($.$eve_text) {
+		variant(){
+			return "text";
 		}
-		auto_scroll(){
-			return null;
+		colors(){
+			return "primary";
 		}
-		attr(){
-			return {...(super.attr()), "mol_text_list_type": (this.type())};
+		interactive(){
+			return true;
 		}
-		Paragraph(id){
-			const obj = new this.$.$mol_text_list_item();
-			(obj.index) = () => ((this.item_index(id)));
-			(obj.sub) = () => ((this.block_content(id)));
-			return obj;
+		text_variant(){
+			return "bodyMd";
 		}
-	};
-	($mol_mem_key(($.$mol_text_list.prototype), "Paragraph"));
-	($.$mol_text_list_item) = class $mol_text_list_item extends ($.$mol_paragraph) {
-		index(){
-			return 0;
-		}
-		attr(){
-			return {...(super.attr()), "mol_text_list_item_index": (this.index())};
+		modifiers(){
+			return [underline];
 		}
 	};
 
+
+;
+"use strict";
 
 ;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("mol/text/list/list.view.css", "[mol_text_list] {\r\n\tpadding-left: 1.75rem;\r\n}\r\n\r\n[mol_text_list_item] {\r\n\tcontain: none;\r\n\tdisplay: list-item;\r\n}\r\n\r\n[mol_text_list_item]::before {\r\n\tcontent: attr( mol_text_list_item_index ) \".\";\r\n\twidth: 1.25rem;\r\n\tdisplay: inline-block;\r\n\tposition: absolute;\r\n\tmargin-left: -1.75rem;\r\n\ttext-align: end;\r\n}\r\n\r\n[mol_text_list_type=\"-\"] > [mol_text_list_item]::before,\r\n[mol_text_list_type=\"*\"] > [mol_text_list_item]::before {\r\n\tcontent: \"•\";\r\n}\r\n");
+    var $$;
+    (function ($$) {
+        class $eve_link extends $.$eve_link {
+        }
+        $$.$eve_link = $eve_link;
+    })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
-
-;
-"use strict";
 
 ;
 	($.$eve_app_page_libraries) = class $eve_app_page_libraries extends ($.$eve_page) {
@@ -9943,16 +10189,17 @@ var $;
 			return "";
 		}
 		How_title(){
-			const obj = new this.$.$mol_text();
-			(obj.text) = () => ((this.how_to_title()));
+			const obj = new this.$.$eve_text();
+			(obj.text_variant) = () => ("headingSm");
+			(obj.content) = () => ((this.how_to_title()));
 			return obj;
 		}
 		how_to_body(){
 			return "";
 		}
 		How_body(){
-			const obj = new this.$.$mol_text();
-			(obj.text) = () => ((this.how_to_body()));
+			const obj = new this.$.$eve_text();
+			(obj.content) = () => ((this.how_to_body()));
 			return obj;
 		}
 		Main(){
@@ -11954,8 +12201,11 @@ var $;
 			return "";
 		}
 		Label(){
-			const obj = new this.$.$mol_text();
-			(obj.text) = () => ((this.label()));
+			const obj = new this.$.$eve_text();
+			(obj.variant) = () => ("text");
+			(obj.colors) = (next) => (null);
+			(obj.text_variant) = () => ("bodyMd");
+			(obj.content) = () => ((this.label()));
 			return obj;
 		}
 		event_activate(next){
@@ -14733,7 +14983,7 @@ var $;
 		Playground_live(){
 			const obj = new this.$.$eve_app_page_sb_playground();
 			(obj.component_name) = () => ("Live_surface");
-			(obj.default_source) = () => ("Live_surface $eve_surface\n\tcolors \\primary\n\tvariant \\solid\n\tsize \\m\n\tstate? null\n\tinteractive? null\n\tsub /\n\t\t<= Live_label $mol_text\n\t\t\ttext \\Surface\n");
+			(obj.default_source) = () => ("Live_surface $eve_surface\n\tcolors \\primary\n\tvariant \\solid\n\tsize \\m\n\tstate? null\n\tinteractive? null\n\tsub /\n\t\t<= Live_label $eve_text\n\t\t\tcontent \\Surface\n");
 			return obj;
 		}
 		Playground_page(){
@@ -14743,8 +14993,11 @@ var $;
 			return obj;
 		}
 		Hint(){
-			const obj = new this.$.$mol_text();
-			(obj.text) = () => ("TODO: сделать по-другому селект этот, а то он путает...");
+			const obj = new this.$.$eve_text();
+			(obj.variant) = () => ("text");
+			(obj.colors) = () => ("low");
+			(obj.text_variant) = () => ("bodyMd");
+			(obj.content) = () => ("TODO: сделать по-другому селект этот, а то он путает...");
 			return obj;
 		}
 		variants(){
@@ -14949,252 +15202,6 @@ var $;
 })($ || ($ = {}));
 
 ;
-	($.$eve_text) = class $eve_text extends ($.$eve_surface) {
-		content(){
-			return "";
-		}
-		Body(){
-			const obj = new this.$.$mol_text();
-			(obj.text) = () => ((this.content()));
-			return obj;
-		}
-		variant(){
-			return "text";
-		}
-		colors(next){
-			if(next !== undefined) return next;
-			return "medium";
-		}
-		interactive(next){
-			if(next !== undefined) return next;
-			return null;
-		}
-		text_variant(){
-			return "bodyMd";
-		}
-		text_align(){
-			return "start";
-		}
-		font_weight_override(next){
-			if(next !== undefined) return next;
-			return null;
-		}
-		variable_font(){
-			return false;
-		}
-		modifiers(){
-			return [];
-		}
-		sub(){
-			return [(this.Body())];
-		}
-	};
-	($mol_mem(($.$eve_text.prototype), "Body"));
-	($mol_mem(($.$eve_text.prototype), "colors"));
-	($mol_mem(($.$eve_text.prototype), "interactive"));
-	($mol_mem(($.$eve_text.prototype), "font_weight_override"));
-
-
-;
-"use strict";
-
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $eve_text extends $.$eve_text {
-            static TEXT_VARIANTS = [
-                'headingXs',
-                'headingSm',
-                'headingMd',
-                'headingLg',
-                'headingXl',
-                'heading2xl',
-                'heading3xl',
-                'bodyXs',
-                'bodySm',
-                'bodyMd',
-                'bodyLg',
-            ];
-            static TEXT_ALIGNS = ['start', 'center', 'end', 'justify'];
-            static FONT_WEIGHT_OVERRIDES = ['regular', 'medium', 'semibold', 'bold'];
-            static MODIFIERS = ['uppercase', 'strikethrough', 'underline'];
-            text_variant(next) {
-                return next ?? 'bodyMd';
-            }
-            text_align(next) {
-                return next ?? 'start';
-            }
-            font_weight_override(next) {
-                return next ?? null;
-            }
-            variable_font(next) {
-                return next ?? false;
-            }
-            modifiers_normalized() {
-                const allow = new Set($eve_text.MODIFIERS);
-                const out = [];
-                const seen = new Set();
-                for (const m of this.modifiers()) {
-                    if (!allow.has(m) || seen.has(m))
-                        continue;
-                    seen.add(m);
-                    out.push(m);
-                }
-                return out;
-            }
-            content() {
-                return '';
-            }
-            attr() {
-                const base = super.attr();
-                const fw = this.font_weight_override();
-                const mods = this.modifiers_normalized();
-                return {
-                    ...base,
-                    eve_text_variant: this.text_variant(),
-                    eve_text_align: this.text_align(),
-                    ...(fw ? { eve_text_font_weight: fw } : {}),
-                    ...(this.variable_font() ? { eve_text_variable: true } : {}),
-                    ...(mods.length ? { eve_text_modifiers: mods.join(' ') } : {}),
-                };
-            }
-        }
-        __decorate([
-            $mol_mem
-        ], $eve_text.prototype, "text_variant", null);
-        __decorate([
-            $mol_mem
-        ], $eve_text.prototype, "text_align", null);
-        __decorate([
-            $mol_mem
-        ], $eve_text.prototype, "font_weight_override", null);
-        __decorate([
-            $mol_mem
-        ], $eve_text.prototype, "variable_font", null);
-        __decorate([
-            $mol_mem
-        ], $eve_text.prototype, "content", null);
-        $$.$eve_text = $eve_text;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        const { rem } = $mol_style_unit;
-        const w = (size, wght, line) => ({
-            fontSize: rem(size),
-            lineHeight: String(line),
-            fontWeight: String(wght),
-            '--eve_text_wght': String(wght),
-        });
-        $mol_style_define($eve_text, {
-            margin: 0,
-            Body: {
-                margin: 0,
-                display: 'block',
-            },
-            '@': {
-                eve_text_align: {
-                    start: { textAlign: 'start' },
-                    center: { textAlign: 'center' },
-                    end: { textAlign: 'end' },
-                    justify: { textAlign: 'justify' },
-                },
-                eve_text_font_weight: {
-                    regular: { Body: { fontWeight: '400', '--eve_text_wght': '400' } },
-                    medium: { Body: { fontWeight: '500', '--eve_text_wght': '500' } },
-                    semibold: { Body: { fontWeight: '600', '--eve_text_wght': '600' } },
-                    bold: { Body: { fontWeight: '700', '--eve_text_wght': '700' } },
-                },
-                eve_text_variant: {
-                    headingXs: { Body: w(0.75, 600, 1.25) },
-                    headingSm: { Body: w(0.875, 600, 1.25) },
-                    headingMd: { Body: w(1, 600, 1.3) },
-                    headingLg: { Body: w(1.125, 700, 1.3) },
-                    headingXl: { Body: w(1.25, 700, 1.3) },
-                    heading2xl: { Body: w(1.5, 700, 1.25) },
-                    heading3xl: { Body: w(1.875, 700, 1.2) },
-                    bodyXs: { Body: w(0.6875, 400, 1.4) },
-                    bodySm: { Body: w(0.75, 400, 1.45) },
-                    bodyMd: { Body: w(0.875, 400, 1.5) },
-                    bodyLg: { Body: w(1, 400, 1.5) },
-                },
-                eve_text_variable: {
-                    true: {
-                        Body: {
-                            fontWeight: 'normal',
-                            fontVariationSettings: '"wght" var(--eve_text_wght)',
-                        },
-                    },
-                },
-            },
-        });
-        $mol_style_attach('eve/text/text.variable.css', `[eve_text_variable] [mol_text] {
-	-webkit-font-smoothing: antialiased;
-	text-rendering: geometricPrecision;
-}
-`);
-        $mol_style_attach('eve/text/text.modifiers.css', `[eve_text_modifiers~="uppercase"] [mol_text] {
-	text-transform: uppercase;
-}
-[eve_text_modifiers~="underline"]:not([eve_text_modifiers~="strikethrough"]) [mol_text] {
-	text-decoration: underline;
-	text-underline-offset: ${rem(0.125)};
-}
-[eve_text_modifiers~="strikethrough"]:not([eve_text_modifiers~="underline"]) [mol_text] {
-	text-decoration: line-through;
-}
-[eve_text_modifiers~="underline"][eve_text_modifiers~="strikethrough"] [mol_text] {
-	text-decoration: underline line-through;
-	text-underline-offset: ${rem(0.125)};
-}
-`);
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-
-;
-	($.$eve_link) = class $eve_link extends ($.$eve_text) {
-		variant(){
-			return "text";
-		}
-		colors(){
-			return "primary";
-		}
-		interactive(){
-			return true;
-		}
-		text_variant(){
-			return "bodyMd";
-		}
-		modifiers(){
-			return [underline];
-		}
-	};
-
-
-;
-"use strict";
-
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $eve_link extends $.$eve_link {
-        }
-        $$.$eve_link = $eve_link;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-
-;
 	($.$eve_button_inline) = class $eve_button_inline extends ($.$eve_button) {
 		variant(){
 			return "ghost";
@@ -15236,12 +15243,7 @@ var $;
         $mol_style_define($eve_button_inline, {
             display: 'inline-flex',
             verticalAlign: 'baseline',
-            padding: {
-                left: rem(0.375),
-                right: rem(0.375),
-                top: rem(0.125),
-                bottom: rem(0.125),
-            },
+            padding: rem(0),
             borderRadius: rem(0.25),
             minHeight: 0,
         });
@@ -15597,7 +15599,7 @@ var $;
 		Inline_playground(){
 			const obj = new this.$.$eve_app_page_sb_playground();
 			(obj.component_name) = () => ("Live_button_inline");
-			(obj.default_source) = () => ("Live_button_inline $eve_button_inline\n\tcolors \\primary\n\tvariant \\ghost\n\tsize \\s\n\tlabel \\Action\n\tsub /\n\t^\n");
+			(obj.default_source) = () => ("Live_button_inline $eve_button_inline\n\tcolors \\primary\n\tvariant \\ghost\n\tsize \\s\n\tlabel \\Action\n\tsub /\n\t\t^\n");
 			return obj;
 		}
 		Inline_page(){
@@ -16438,8 +16440,11 @@ var $;
 			return "";
 		}
 		Text(){
-			const obj = new this.$.$mol_text();
-			(obj.text) = () => ((this.value()));
+			const obj = new this.$.$eve_text();
+			(obj.variant) = () => ("text");
+			(obj.colors) = (next) => (null);
+			(obj.text_variant) = () => ("bodyMd");
+			(obj.content) = () => ((this.value()));
 			return obj;
 		}
 		variant(){
@@ -16664,8 +16669,11 @@ var $;
 			return "";
 		}
 		Label(){
-			const obj = new this.$.$mol_text();
-			(obj.text) = () => ((this.label()));
+			const obj = new this.$.$eve_text();
+			(obj.variant) = () => ("text");
+			(obj.colors) = (next) => (null);
+			(obj.text_variant) = () => ("bodyMd");
+			(obj.content) = () => ((this.label()));
 			return obj;
 		}
 		remove_hint(){
@@ -17326,8 +17334,11 @@ var $;
 			return "";
 		}
 		Label(){
-			const obj = new this.$.$mol_text();
-			(obj.text) = () => ((this.label()));
+			const obj = new this.$.$eve_text();
+			(obj.variant) = () => ("text");
+			(obj.colors) = (next) => (null);
+			(obj.text_variant) = () => ("bodyMd");
+			(obj.content) = () => ((this.label()));
 			return obj;
 		}
 		event_input(next){
@@ -17737,9 +17748,15 @@ var $;
 			(obj.disabled) = (next) => ((this.disabled(next)));
 			return obj;
 		}
+		label(){
+			return "";
+		}
 		Label(){
-			const obj = new this.$.$mol_text();
-			(obj.text) = () => ((this.label()));
+			const obj = new this.$.$eve_text();
+			(obj.variant) = () => ("text");
+			(obj.colors) = (next) => (null);
+			(obj.text_variant) = () => ("bodyMd");
+			(obj.content) = () => ((this.label()));
 			return obj;
 		}
 		variant(){
@@ -18136,8 +18153,11 @@ var $;
 			return "";
 		}
 		Label(){
-			const obj = new this.$.$mol_text();
-			(obj.text) = () => ((this.label()));
+			const obj = new this.$.$eve_text();
+			(obj.variant) = () => ("text");
+			(obj.colors) = (next) => (null);
+			(obj.text_variant) = () => ("bodyMd");
+			(obj.content) = () => ((this.label()));
 			return obj;
 		}
 		variant(){
@@ -18324,8 +18344,11 @@ var $;
 			return "";
 		}
 		Label(){
-			const obj = new this.$.$mol_text();
-			(obj.text) = () => ((this.label()));
+			const obj = new this.$.$eve_text();
+			(obj.variant) = () => ("text");
+			(obj.colors) = (next) => (null);
+			(obj.text_variant) = () => ("bodyMd");
+			(obj.content) = () => ((this.label()));
 			return obj;
 		}
 		sub(){
@@ -19356,8 +19379,8 @@ var $;
 ;
 	($.$eve_app_page_design) = class $eve_app_page_design extends ($.$eve_page) {
 		Content(){
-			const obj = new this.$.$mol_text();
-			(obj.text) = () => ("Design page - Coming soon...");
+			const obj = new this.$.$eve_text();
+			(obj.content) = () => ("Design page - Coming soon...");
 			return obj;
 		}
 		title(){
@@ -19762,8 +19785,8 @@ var $;
 			return obj;
 		}
 		Welcome_text(){
-			const obj = new this.$.$mol_text();
-			(obj.text) = () => ("This is a complete preview of your theme. \nAll components are rendered with your custom colors.\nTry changing the colors in the editor to see live updates!");
+			const obj = new this.$.$eve_text();
+			(obj.content) = () => ("This is a complete preview of your theme. \nAll components are rendered with your custom colors.\nTry changing the colors in the editor to see live updates!");
 			return obj;
 		}
 		Welcome_section(){
@@ -19787,8 +19810,8 @@ var $;
 			return obj;
 		}
 		Card1_text(){
-			const obj = new this.$.$mol_text();
-			(obj.text) = () => ("This is a sample card with some text content.");
+			const obj = new this.$.$eve_text();
+			(obj.content) = () => ("This is a sample card with some text content.");
 			return obj;
 		}
 		Card1(){
@@ -19802,8 +19825,8 @@ var $;
 			return obj;
 		}
 		Card2_text(){
-			const obj = new this.$.$mol_text();
-			(obj.text) = () => ("Another card to show how themes apply.");
+			const obj = new this.$.$eve_text();
+			(obj.content) = () => ("Another card to show how themes apply.");
 			return obj;
 		}
 		Card2(){
@@ -19817,8 +19840,8 @@ var $;
 			return obj;
 		}
 		Card3_text(){
-			const obj = new this.$.$mol_text();
-			(obj.text) = () => ("Cards can have different content and styles.");
+			const obj = new this.$.$eve_text();
+			(obj.content) = () => ("Cards can have different content and styles.");
 			return obj;
 		}
 		Card3(){
@@ -20003,8 +20026,8 @@ var $;
 			return obj;
 		}
 		Row1_col1_text(){
-			const obj = new this.$.$mol_text();
-			(obj.text) = () => ("Item 1");
+			const obj = new this.$.$eve_text();
+			(obj.content) = () => ("Item 1");
 			return obj;
 		}
 		Row1_col1(){
@@ -20013,8 +20036,8 @@ var $;
 			return obj;
 		}
 		Row1_col2_text(){
-			const obj = new this.$.$mol_text();
-			(obj.text) = () => ("Active");
+			const obj = new this.$.$eve_text();
+			(obj.content) = () => ("Active");
 			return obj;
 		}
 		Row1_col2(){
@@ -20023,8 +20046,8 @@ var $;
 			return obj;
 		}
 		Row1_col3_text(){
-			const obj = new this.$.$mol_text();
-			(obj.text) = () => ("100");
+			const obj = new this.$.$eve_text();
+			(obj.content) = () => ("100");
 			return obj;
 		}
 		Row1_col3(){
@@ -20042,8 +20065,8 @@ var $;
 			return obj;
 		}
 		Row2_col1_text(){
-			const obj = new this.$.$mol_text();
-			(obj.text) = () => ("Item 2");
+			const obj = new this.$.$eve_text();
+			(obj.content) = () => ("Item 2");
 			return obj;
 		}
 		Row2_col1(){
@@ -20052,8 +20075,8 @@ var $;
 			return obj;
 		}
 		Row2_col2_text(){
-			const obj = new this.$.$mol_text();
-			(obj.text) = () => ("Pending");
+			const obj = new this.$.$eve_text();
+			(obj.content) = () => ("Pending");
 			return obj;
 		}
 		Row2_col2(){
@@ -20062,8 +20085,8 @@ var $;
 			return obj;
 		}
 		Row2_col3_text(){
-			const obj = new this.$.$mol_text();
-			(obj.text) = () => ("250");
+			const obj = new this.$.$eve_text();
+			(obj.content) = () => ("250");
 			return obj;
 		}
 		Row2_col3(){
@@ -20081,8 +20104,8 @@ var $;
 			return obj;
 		}
 		Row3_col1_text(){
-			const obj = new this.$.$mol_text();
-			(obj.text) = () => ("Item 3");
+			const obj = new this.$.$eve_text();
+			(obj.content) = () => ("Item 3");
 			return obj;
 		}
 		Row3_col1(){
@@ -20091,8 +20114,8 @@ var $;
 			return obj;
 		}
 		Row3_col2_text(){
-			const obj = new this.$.$mol_text();
-			(obj.text) = () => ("Complete");
+			const obj = new this.$.$eve_text();
+			(obj.content) = () => ("Complete");
 			return obj;
 		}
 		Row3_col2(){
@@ -20101,8 +20124,8 @@ var $;
 			return obj;
 		}
 		Row3_col3_text(){
-			const obj = new this.$.$mol_text();
-			(obj.text) = () => ("500");
+			const obj = new this.$.$eve_text();
+			(obj.content) = () => ("500");
 			return obj;
 		}
 		Row3_col3(){
