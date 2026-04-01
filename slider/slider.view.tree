@@ -1,0 +1,23 @@
+$eve_slider $eve_flex
+	direction \column
+	gap \0.5rem
+	min_str \
+	max_str \
+	step_str \
+	value_str \
+	value_text \
+	sub /
+		<= Label $mol_text
+			text <= label \
+		<= Input $mol_view
+			dom_name \input
+			attr *
+				type \range
+				min <= min_str
+				max <= max_str
+				step <= step_str
+				aria_valuetext <= value_text
+			field *
+				value <= value_str
+			event *
+				input?event <=> event_input?event null

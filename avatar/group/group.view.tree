@@ -1,0 +1,16 @@
+$eve_avatar_group $eve_flex
+	direction \row
+	align_items \center
+	wrap \nowrap
+	gap null
+	avatars *
+	avatar_ids /string
+	avatar_name* \
+	avatar_uri* \
+	attr *
+		role \group
+		aria-label <= group_aria_label \
+	sub <= Avatars /
+		<= Avatar* $eve_avatar
+			name <= avatar_name*
+			uri <= avatar_uri*

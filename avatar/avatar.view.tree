@@ -1,0 +1,6 @@
+$eve_avatar $eve_surface
+	variant \solid
+	colors \medium
+	size? \m
+	name \
+	uri \

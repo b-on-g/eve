@@ -31,4 +31,16 @@ $eve_app_page_components_checkbox $eve_app_page_sb_page
 								\	indeterminate? false
 								\	label \Accept terms and conditions
 								\
+				group <= Group_page $eve_app_page_sb_page
+					title \Checkbox Group
+					body /
+						<= Group_playground $eve_app_page_sb_playground
+							component_name \Live_checkbox_group
+							default_source \
+								\Live_checkbox_group $eve_checkbox_group
+								\	options *
+								\		a \First
+								\		b \Second
+								\		c \Third
+								\
 

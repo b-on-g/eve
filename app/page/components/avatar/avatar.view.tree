@@ -1,0 +1,37 @@
+$eve_app_page_components_avatar $eve_app_page_sb_page
+	title \Avatar
+	Head null
+	body /
+		<= Avatar_catalog $eve_app_page_sb_catalog
+			param \avatar
+			spreads *
+				single <= Single_page $eve_app_page_sb_page
+					title \Single
+					body /
+						<= Row $eve_flex
+							direction \row
+							gap \1rem
+							align_items \center
+							sub /
+								<= Playground_photo $eve_app_page_sb_playground
+									component_name \Live_avatar_photo
+									default_source \
+										\Live_avatar_photo $eve_avatar
+										\	name \W3C
+										\	uri \https://www.w3.org/assets/logos/w3c/w3c-no-bars.svg
+										\
+				group <= Group_page $eve_app_page_sb_page
+					title \Avatar Group
+					body /
+						<= Group_playground $eve_app_page_sb_playground
+							component_name \Live_avatar_group
+							default_source \
+								\Live_avatar_group $eve_avatar_group
+								\	group_aria_label \Team
+								\	avatars *
+								\		a \Alice
+								\		b \Bob
+								\		c \Carol
+								\	avatar_uri*
+								\		a \https://www.w3.org/assets/logos/w3c/w3c-no-bars.svg
+								\

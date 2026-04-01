@@ -1,0 +1,14 @@
+$eve_app_page_components_pagination $eve_app_page_sb_page
+	title \Pagination
+	Head null
+	body /
+		<= Overview_page $eve_app_page_sb_page
+			title null
+			body /
+				<= Playground $eve_app_page_sb_playground
+					component_name \Live_pagination
+					default_source \
+						\Live_pagination $eve_pagination
+						\	page_count 7
+						\	page? 2
+						\

@@ -8,7 +8,7 @@ $eve_app $eve_page
 		<= Tools
 	tools /
 		<= Sources $mol_link_source
-			uri \https://github.com/best-online-games/eve
+			uri \https://github.com/b-on-g/eve
 			style *
 				alignItems \center
 		<= Lights $mol_lights_toggle

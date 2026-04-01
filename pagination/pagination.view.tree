@@ -1,0 +1,8 @@
+$eve_pagination $eve_flex
+	direction \row
+	align_items \center
+	gap \0.25rem
+	flex_wrap \wrap
+	attr *
+		^
+		role \navigation

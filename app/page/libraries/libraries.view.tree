@@ -2,5 +2,11 @@ $eve_app_page_libraries $eve_page
 	title \Libraries
 	Head null
 	body /
-		<= Content $mol_text
-			text \Libraries page - Coming soon...
+		<= Main $eve_flex
+			direction \column
+			gap \1.25rem
+			sub /
+				<= How_title $mol_text
+					text <= how_to_title \
+				<= How_body $mol_text
+					text <= how_to_body \

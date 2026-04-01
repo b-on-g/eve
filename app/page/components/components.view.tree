@@ -10,7 +10,13 @@ $eve_app_page_components $eve_page
 				flex <= Flex $eve_app_page_components_flex
 				button <= Button $eve_app_page_components_button
 				alert <= Alert $eve_app_page_components_alert
+				avatar <= Avatar $eve_app_page_components_avatar
+				badge <= Badge $eve_app_page_components_badge
 				card <= Card $eve_app_page_components_card
+				chip <= Chip $eve_app_page_components_chip
+				empty <= Empty $eve_app_page_components_empty
+				pagination <= Pagination $eve_app_page_components_pagination
+				slider <= Slider $eve_app_page_components_slider
 				- delimiter for input logical (Надо где-то его придумать) 
 				radio <= Radio $eve_app_page_components_radio
 				checkbox <= Checkbox $eve_app_page_components_checkbox

@@ -5,4 +5,5 @@
 * Патч или локальный компонент для каталога, чтобы можно было заголовки делать и визуально группировать
 * Добавить blur (плагином или чем-то ещё) для поверхностей...
 * Вынести в плагины eve_flex и перевести radio_group, segmented и tabs на $eve_selection_single
- 
+* Паритет набора компонентов с **Ant Design** (`references/ant-design`): чеклист в [TODO_COMPONENTS.md](TODO_COMPONENTS.md); `@mo/ui` и design-hypothesis — доп. референсы.
+* Темизация: упростить к модели как у `$mol_theme` — короткие пресеты уровня `wb-classic-dark`, `wb-classic-light`, … без обязательного повторения MO-специфичных провайдеров саббренда (см. [ADR 0001](../../../decisions/0001-colors/README.md), раздел про лишнюю абстракцию).

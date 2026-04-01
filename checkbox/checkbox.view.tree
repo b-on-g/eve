@@ -3,6 +3,7 @@ $eve_checkbox $eve_button
 	disabled? null
 	colors? \primary
 	size null
+	click_toggle? true
 	attr *
 		^
 		mol_check_checked <= checked? false

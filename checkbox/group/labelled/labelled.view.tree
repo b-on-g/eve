@@ -1,12 +1,10 @@
-$eve_checkbox_labelled $eve_button
-	variant \ghost
-	size? \m
-	justify_content \flex-start
+$eve_checkbox_group_labelled $eve_checkbox_labelled
 	sub /
 		<= Checkbox $eve_checkbox
+			click_toggle? false
 			checked? <=> checked? false
 			disabled? <=> disabled? false
 			indeterminate? <=> indeterminate? false
+			event_click?event <=> option_click?event null
 		<= Label $mol_text
 			text <= label \
-

@@ -17,6 +17,14 @@ namespace $.$$ {
 			return next ?? false
 		}
 
+		/**
+		 * When false, click does not toggle `checked` (parent drives state, e.g. checkbox group).
+		 */
+		@$mol_mem
+		click_toggle( next?: boolean ): boolean {
+			return next ?? true
+		}
+
 		override variant(): $eve_surface_variant {
 			return this.checked() ? 'solid' : 'outline'
 		}
@@ -27,7 +35,7 @@ namespace $.$$ {
 				return
 			}
 			if( next?.defaultPrevented ) return
-			this.checked( !this.checked() )
+			if( this.click_toggle() ) this.checked( !this.checked() )
 			if( next ) next.preventDefault()
 		}
 

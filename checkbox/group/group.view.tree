@@ -1,0 +1,14 @@
+$eve_checkbox_group $eve_selection_multiple
+	attr *
+		role \group
+		aria-label <= group_aria_label \Options
+	sub /
+		<= Layout $eve_flex
+			direction \column
+			sub <= Options /
+				<= Option* $eve_checkbox_group_labelled
+					checked? <= option_selected*
+					disabled? <= option_disabled*
+					indeterminate? <= option_indeterminate*
+					label <= option_label*
+					event_click?event <=> option_click*?event

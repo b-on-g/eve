@@ -1,0 +1,10 @@
+$eve_badge $eve_surface
+	variant \solid
+	colors \danger
+	size? \xs
+	attr *
+		^
+		role \status
+	sub /
+		<= Text $mol_text
+			text <= value \
