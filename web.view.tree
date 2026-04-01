@@ -243,7 +243,6 @@ $mol_button_copy $mol_button_minor
 		<= Icon $mol_icon_clipboard_outline
 		<= title \
 
-
 $mol_text_code $mol_stack
 	attr *
 		^
@@ -548,6 +547,15 @@ $mol_text_span $mol_paragraph
 		^
 		mol_text_type <= type \
 
+$eve_flex $eve_surface
+	direction \row
+	justify_content \flex-start
+	align_items \stretch
+	wrap \nowrap
+	- потом подумать про спейсинги отдельно, 
+	- чтобы можно было прокинуть переменную типа или var(--SPx4) или shortcut типа SPx4
+	gap null
+
 $mol_text_list $mol_text
 	auto_scroll null
 	attr *
@@ -566,8 +574,14 @@ $eve_app_page_libraries $eve_page
 	title \Libraries
 	Head null
 	body /
-		<= Content $mol_text
-			text \Libraries page - Coming soon...
+		<= Main $eve_flex
+			direction \column
+			gap \1.25rem
+			sub /
+				<= How_title $mol_text
+					text <= how_to_title \
+				<= How_body $mol_text
+					text <= how_to_body \
 
 $mol_icon_github $mol_icon path \M12,2A10,10 0 0,0 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12A10,10 0 0,0 12,2Z
 
@@ -583,19 +597,44 @@ $eve_app_page_sb_page $eve_page
 	- слева в нав меню уже есть индикатор активной страницы. Повторять заголовок излишне
 	- Head null
 
+$mol_ghost $mol_view
+	Sub $mol_view
+
+$mol_follower $mol_ghost
+	Anchor $mol_view
+	align /number
+		-.5
+		-.5
+	offset /number
+		0
+		0
+	style *
+		^
+		transform <= transform \
+
 $mol_pop $mol_view
 	showed? false
 	align_vert \
 	align_hor \
+	align \bottom_center
 	prefer \vert
+	auto /
+		<= bubble null
 	sub /
 		<= Anchor null
 	sub_visible /
 		<= Anchor
-		<= Bubble $mol_pop_bubble
-			align <= align \bottom_center
-			content <= bubble_content /$mol_view_content
-			height_max <= height_max 9999
+		<= Follower $mol_follower
+			offset <= bubble_offset /number
+				0
+				1
+			align <= bubble_align /number
+				0
+				0
+			Anchor <= Anchor
+			Sub <= Bubble $mol_pop_bubble
+				content <= bubble_content /$mol_view_content
+				height_max <= height_max 9999
 
 $mol_pop_bubble $mol_view
 	sub <= content /$mol_view_content
@@ -604,8 +643,8 @@ $mol_pop_bubble $mol_view
 		maxHeight <= height_max 9999
 	attr *
 		^
-		mol_pop_align <= align \
 		tabindex 0
+		popover \manual
 
 $mol_pick $mol_pop
 	event *
@@ -763,15 +802,7 @@ $mol_select $mol_pick
 		submit?event <=> submit?event null
 		enabled <= enabled true
 	Trigger_icon $mol_icon_dots_vertical
-
-$eve_flex $eve_surface
-	direction \row
-	justify_content \flex-start
-	align_items \stretch
-	wrap \nowrap
-	- потом подумать про спейсинги отдельно, 
-	- чтобы можно было прокинуть переменную типа или var(--SPx4) или shortcut типа SPx4
-	gap null
+	trigger_enabled <= enabled
 
 $eve_app_page_components_surface $eve_app_page_sb_page
 	title \Surface
@@ -1276,6 +1307,94 @@ $eve_app_page_components_alert $eve_app_page_sb_page
 							message / \Alert without close button
 
 
+$eve_avatar $eve_surface
+	variant \solid
+	colors \medium
+	size? \m
+	name \
+	uri \
+
+$eve_avatar_group $eve_flex
+	direction \row
+	align_items \center
+	wrap \nowrap
+	gap null
+	avatars *
+	avatar_ids /string
+	avatar_name* \
+	avatar_uri* \
+	attr *
+		role \group
+		aria-label <= group_aria_label \
+	sub <= Avatars /
+		<= Avatar* $eve_avatar
+			name <= avatar_name*
+			uri <= avatar_uri*
+
+$eve_app_page_components_avatar $eve_app_page_sb_page
+	title \Avatar
+	Head null
+	body /
+		<= Avatar_catalog $eve_app_page_sb_catalog
+			param \avatar
+			spreads *
+				single <= Single_page $eve_app_page_sb_page
+					title \Single
+					body /
+						<= Row $eve_flex
+							direction \row
+							gap \1rem
+							align_items \center
+							sub /
+								<= Playground_photo $eve_app_page_sb_playground
+									component_name \Live_avatar_photo
+									default_source \
+										\Live_avatar_photo $eve_avatar
+										\	name \W3C
+										\	uri \https://www.w3.org/assets/logos/w3c/w3c-no-bars.svg
+										\
+				group <= Group_page $eve_app_page_sb_page
+					title \Avatar Group
+					body /
+						<= Group_playground $eve_app_page_sb_playground
+							component_name \Live_avatar_group
+							default_source \
+								\Live_avatar_group $eve_avatar_group
+								\	group_aria_label \Team
+								\	avatars *
+								\		a \Alice
+								\		b \Bob
+								\		c \Carol
+								\	avatar_uri*
+								\		a \https://www.w3.org/assets/logos/w3c/w3c-no-bars.svg
+								\
+
+$eve_badge $eve_surface
+	variant \solid
+	colors \danger
+	size? \xs
+	attr *
+		^
+		role \status
+	sub /
+		<= Text $mol_text
+			text <= value \
+
+$eve_app_page_components_badge $eve_app_page_sb_page
+	title \Badge
+	Head null
+	body /
+		<= Overview_page $eve_app_page_sb_page
+			title null
+			body /
+				<= Playground $eve_app_page_sb_playground
+					component_name \Live_badge
+					default_source \
+						\Live_badge $eve_badge
+						\	value \7
+						\	colors \danger
+						\
+
 $eve_card $eve_flex
 	direction \column
 	sub /
@@ -1307,6 +1426,156 @@ $eve_app_page_components_card $eve_app_page_sb_page
 				\					title \Action Button
 				\
 
+
+$eve_chip $eve_flex
+	direction \row
+	align_items \center
+	justify_content \flex-start
+	colors? \low
+	variant? \soft
+	size? \s
+	attr *
+		^
+		role \group
+	sub /
+		<= Label $mol_text
+			text <= label \
+		<= Remove $eve_button
+			variant \ghost
+			colors? \lowest
+			size? \xs
+			hint <= remove_hint \Remove
+			click?event <=> remove_click?event null
+			sub /
+				<= Remove_icon $mol_icon_close
+
+$eve_app_page_components_chip $eve_app_page_sb_page
+	title \Chip
+	Head null
+	body /
+		<= Overview_page $eve_app_page_sb_page
+			title null
+			body /
+				<= Playground $eve_app_page_sb_playground
+					component_name \Live_chip
+					default_source \
+						\Live_chip $eve_chip
+						\	label \Filter
+						\
+
+$mol_icon_inbox $mol_icon path \M19,15H15A3,3 0 0,1 12,18A3,3 0 0,1 9,15H5V5H19M19,3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3Z
+
+$eve_empty $eve_flex
+	direction \column
+	align_items \center
+	justify_content \center
+	gap \1rem
+	colors? \low
+	variant? \ghost
+	attr *
+		^
+		role \region
+	sub /
+		<= Icon_wrap $eve_surface
+			variant \ghost
+			colors \lowest
+			sub /
+				<= Icon $mol_icon_inbox
+		<= Title $mol_paragraph
+			title <= title \
+		<= Description $mol_paragraph
+			title <= description \
+		<= Actions $eve_flex
+			direction \row
+			gap \0.5rem
+			sub <= action /
+
+$eve_app_page_components_empty $eve_app_page_sb_page
+	title \Empty
+	Head null
+	body /
+		<= Overview_page $eve_app_page_sb_page
+			title null
+			body /
+				<= Playground $eve_app_page_sb_playground
+					component_name \Live_empty
+					default_source \
+						\Live_empty $eve_empty
+						\	title \No items
+						\	description /
+						\		\Try adjusting filters or add new data.
+						\	action /
+						\		<= Retry $eve_button
+						\			label \Refresh
+						\			colors \primary
+						\			variant \outline
+						\
+
+$eve_pagination $eve_flex
+	direction \row
+	align_items \center
+	gap \0.25rem
+	flex_wrap \wrap
+	attr *
+		^
+		role \navigation
+
+$eve_app_page_components_pagination $eve_app_page_sb_page
+	title \Pagination
+	Head null
+	body /
+		<= Overview_page $eve_app_page_sb_page
+			title null
+			body /
+				<= Playground $eve_app_page_sb_playground
+					component_name \Live_pagination
+					default_source \
+						\Live_pagination $eve_pagination
+						\	page_count 7
+						\	page? 2
+						\
+
+$eve_slider $eve_flex
+	direction \column
+	gap \0.5rem
+	min_str \
+	max_str \
+	step_str \
+	value_str \
+	value_text \
+	sub /
+		<= Label $mol_text
+			text <= label \
+		<= Input $mol_view
+			dom_name \input
+			attr *
+				type \range
+				min <= min_str
+				max <= max_str
+				step <= step_str
+				aria_valuetext <= value_text
+			field *
+				value <= value_str
+			event *
+				input?event <=> event_input?event null
+
+$eve_app_page_components_slider $eve_app_page_sb_page
+	title \Slider
+	Head null
+	body /
+		<= Overview_page $eve_app_page_sb_page
+			title null
+			body /
+				<= Playground $eve_app_page_sb_playground
+					component_name \Live_slider
+					default_source \
+						\Live_slider $eve_slider
+						\	label \Volume
+						\	value? 40
+						\	min 0
+						\	max 100
+						\	step 5
+						\
 
 $eve_radio $eve_button
 	disabled? null
@@ -1418,6 +1687,7 @@ $eve_checkbox $eve_button
 	disabled? null
 	colors? \primary
 	size null
+	click_toggle? true
 	attr *
 		^
 		mol_check_checked <= checked? false
@@ -1439,8 +1709,45 @@ $eve_checkbox_labelled $eve_button
 			checked? <=> checked? false
 			disabled? <=> disabled? false
 			indeterminate? <=> indeterminate? false
-		<= Label
+		<= Label $mol_text
+			text <= label \
 
+
+$eve_selection_multiple $eve_surface
+	options *
+	option_ids /string
+	option_value* \
+	option_label* \
+	option_selected* false
+	option_disabled* false
+	option_indeterminate* false
+	option_click*?event null
+
+$eve_checkbox_group_labelled $eve_checkbox_labelled
+	sub /
+		<= Checkbox $eve_checkbox
+			click_toggle? false
+			checked? <=> checked? false
+			disabled? <=> disabled? false
+			indeterminate? <=> indeterminate? false
+			event_click?event <=> option_click?event null
+		<= Label $mol_text
+			text <= label \
+
+$eve_checkbox_group $eve_selection_multiple
+	attr *
+		role \group
+		aria-label <= group_aria_label \Options
+	sub /
+		<= Layout $eve_flex
+			direction \column
+			sub <= Options /
+				<= Option* $eve_checkbox_group_labelled
+					checked? <= option_selected*
+					disabled? <= option_disabled*
+					indeterminate? <= option_indeterminate*
+					label <= option_label*
+					event_click?event <=> option_click*?event
 
 $eve_app_page_components_checkbox $eve_app_page_sb_page
 	title \Checkbox
@@ -1474,6 +1781,18 @@ $eve_app_page_components_checkbox $eve_app_page_sb_page
 								\	disabled? false
 								\	indeterminate? false
 								\	label \Accept terms and conditions
+								\
+				group <= Group_page $eve_app_page_sb_page
+					title \Checkbox Group
+					body /
+						<= Group_playground $eve_app_page_sb_playground
+							component_name \Live_checkbox_group
+							default_source \
+								\Live_checkbox_group $eve_checkbox_group
+								\	options *
+								\		a \First
+								\		b \Second
+								\		c \Third
 								\
 
 
@@ -1644,7 +1963,13 @@ $eve_app_page_components $eve_page
 				flex <= Flex $eve_app_page_components_flex
 				button <= Button $eve_app_page_components_button
 				alert <= Alert $eve_app_page_components_alert
+				avatar <= Avatar $eve_app_page_components_avatar
+				badge <= Badge $eve_app_page_components_badge
 				card <= Card $eve_app_page_components_card
+				chip <= Chip $eve_app_page_components_chip
+				empty <= Empty $eve_app_page_components_empty
+				pagination <= Pagination $eve_app_page_components_pagination
+				slider <= Slider $eve_app_page_components_slider
 				- delimiter for input logical (Надо где-то его придумать) 
 				radio <= Radio $eve_app_page_components_radio
 				checkbox <= Checkbox $eve_app_page_components_checkbox
@@ -1983,7 +2308,7 @@ $eve_app $eve_page
 		<= Tools
 	tools /
 		<= Sources $mol_link_source
-			uri \https://github.com/best-online-games/eve
+			uri \https://github.com/b-on-g/eve
 			style *
 				alignItems \center
 		<= Lights $mol_lights_toggle

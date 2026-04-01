@@ -19,11 +19,15 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    function $mol_fail(error: any): never;
+    function $node_internal_check(name: string): boolean;
 }
 
 declare namespace $ {
     function $mol_promise_like(val: any): val is Promise<any>;
+}
+
+declare namespace $ {
+    function $mol_fail(error: any): never;
 }
 
 declare namespace $ {
@@ -42,11 +46,14 @@ declare namespace $ {
     function $mol_fail_log(error: unknown): boolean;
 }
 
+declare namespace $ {
+    function $node_autoinstall(this: typeof $, name: string): void;
+}
+
 interface $node {
     [key: string]: any;
 }
 declare var $node: $node;
-declare const cache: Map<string, any>;
 
 declare namespace $ {
     function $mol_func_name(this: $, func: Function): string;
@@ -95,6 +102,11 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    const $mol_key_handle: unique symbol;
+    const $mol_key_store: WeakMap<object, string>;
+}
+
+declare namespace $ {
     class $mol_object2 {
         static $: $;
         [Symbol.toStringTag]: string;
@@ -105,8 +117,10 @@ declare namespace $ {
         static [Symbol.toPrimitive](): any;
         static toString(): any;
         static toJSON(): any;
+        static [$mol_key_handle](): any;
         destructor(): void;
         static destructor(): void;
+        [Symbol.dispose](): void;
         toString(): string;
     }
 }
@@ -390,6 +404,10 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    function $mol_array_chunks<Item>(array: readonly Item[], rule: number | ((item: Item, index: number) => boolean)): Item[][];
+}
+
+declare namespace $ {
     function $mol_tree2_from_json(json: any, span?: $mol_span): $mol_tree2;
 }
 
@@ -460,8 +478,8 @@ declare namespace $ {
         dir: string;
     }> {
     }
-    const $mol_run_spawn: (...args: Parameters<(typeof $node)["child_process"]["spawn"]>) => import("child_process").ChildProcess;
-    const $mol_run_spawn_sync: (...args: Parameters<(typeof $node)["child_process"]["spawnSync"]>) => import("child_process").SpawnSyncReturns<string | NonSharedBuffer>;
+    const $mol_run_spawn: (...args: Parameters<(typeof $node)["child_process"]["spawn"]>) => import("node:child_process").ChildProcess;
+    const $mol_run_spawn_sync: (...args: Parameters<(typeof $node)["child_process"]["spawnSync"]>) => import("node:child_process").SpawnSyncReturns<string | NonSharedBuffer>;
     type $mol_run_options = {
         command: readonly string[] | string;
         dir: string;
@@ -470,18 +488,14 @@ declare namespace $ {
     };
     class $mol_run extends $mol_object {
         static async_enabled(): boolean;
-        static spawn(options: $mol_run_options): $mol_run_error_context | import("child_process").SpawnSyncReturns<string | NonSharedBuffer>;
+        static spawn(options: $mol_run_options): import("node:child_process").SpawnSyncReturns<string | NonSharedBuffer> | $mol_run_error_context;
         static spawn_async({ dir, sync, timeout, command, env }: $mol_run_options & {
             sync?: boolean;
-        }): import("child_process").SpawnSyncReturns<string | NonSharedBuffer> | (Promise<$mol_run_error_context> & {
+        }): import("node:child_process").SpawnSyncReturns<string | NonSharedBuffer> | (Promise<$mol_run_error_context> & {
             destructor: () => void;
         });
         static error_message(res?: $mol_run_error_context): string;
     }
-}
-
-declare namespace $ {
-    function $mol_exec(this: $, dir: string, command: string, ...args: readonly string[]): $mol_run_error_context | import("child_process").SpawnSyncReturns<string | NonSharedBuffer>;
 }
 
 declare namespace $ {
@@ -758,7 +772,74 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    const $mol_key_store: WeakMap<object, string>;
+    const $mol_theme: Record<"image" | "line" | "text" | "field" | "focus" | "back" | "hover" | "card" | "current" | "special" | "control" | "shade" | "spirit", $mol_style_func<"var", unknown>>;
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    let $mol_gap: Record<"text" | "block" | "space" | "blur" | "page" | "round" | "emoji", $mol_style_func<"var", unknown>>;
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    function $mol_dom_render_children(el: Element | DocumentFragment, childNodes: NodeList | Array<Node | string | null>): void;
+}
+
+declare namespace $ {
+    type $mol_type_partial_deep<Val> = Val extends object ? Val extends Function ? Val : {
+        [field in keyof Val]?: $mol_type_partial_deep<Val[field]> | undefined;
+    } : Val;
+}
+
+declare namespace $ {
+    let $mol_jsx_prefix: string;
+    let $mol_jsx_crumbs: string;
+    let $mol_jsx_booked: null | Set<string>;
+    let $mol_jsx_document: $mol_jsx.JSX.ElementClass['ownerDocument'];
+    const $mol_jsx_frag = "";
+    function $mol_jsx<Props extends $mol_jsx.JSX.IntrinsicAttributes, Children extends Array<Node | string>>(Elem: string | ((props: Props, ...children: Children) => Element), props: Props, ...childNodes: Children): Element | DocumentFragment;
+    namespace $mol_jsx.JSX {
+        interface Element extends HTMLElement {
+            class?: string;
+        }
+        interface ElementClass {
+            attributes: {};
+            ownerDocument: Pick<Document, 'getElementById' | 'createElementNS' | 'createDocumentFragment'>;
+            childNodes: Array<Node | string>;
+            valueOf(): Element;
+        }
+        type OrString<Dict> = {
+            [key in keyof Dict]: Dict[key] | string;
+        };
+        type IntrinsicElements = {
+            [key in keyof ElementTagNameMap]?: $.$mol_type_partial_deep<OrString<Element & IntrinsicAttributes & ElementTagNameMap[key]>>;
+        };
+        interface IntrinsicAttributes {
+            id?: string;
+            xmlns?: string;
+        }
+        interface ElementAttributesProperty {
+            attributes: {};
+        }
+        interface ElementChildrenAttribute {
+        }
+    }
+}
+
+declare namespace $ {
+    class $mol_window extends $mol_object {
+        static size(): {
+            width: number;
+            height: number;
+        };
+    }
+}
+
+declare namespace $ {
     function $mol_key<Value>(value: Value): string;
 }
 
@@ -839,344 +920,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    let $mol_action: typeof $mol_wire_method;
-}
-
-declare namespace $ {
-    class $mol_state_arg extends $mol_object {
-        prefix: string;
-        static prolog: string;
-        static separator: string;
-        static href(next?: string): string;
-        static href_normal(): string;
-        static dict(next?: {
-            [key: string]: string | null;
-        }): Readonly<{
-            [key: string]: string;
-        }>;
-        static value(key: string, next?: string | null): string | null;
-        static link(next: Record<string, string | null>): string;
-        static make_link(next: Record<string, string | null>): string;
-        static go(next: {
-            [key: string]: string | null;
-        }): void;
-        static commit(): void;
-        constructor(prefix?: string);
-        value(key: string, next?: string): string | null;
-        sub(postfix: string): $mol_state_arg;
-        link(next: Record<string, string | null>): string;
-    }
-}
-
-declare namespace $ {
-    class $mol_media extends $mol_object2 {
-        static match(query: string, next?: boolean): boolean;
-    }
-}
-
-declare namespace $ {
-    function $mol_wire_solid(): void;
-}
-
-declare namespace $ {
-    let $mol_mem_persist: typeof $mol_wire_solid;
-}
-
-declare namespace $ {
-    function $mol_wire_probe<Value>(task: () => Value, def?: Value): Value | undefined;
-}
-
-declare namespace $ {
-    let $mol_mem_cached: typeof $mol_wire_probe;
-}
-
-declare namespace $ {
-    class $mol_storage extends $mol_object2 {
-        static native(): StorageManager;
-        static persisted(next?: boolean, cache?: 'cache'): boolean;
-        static estimate(): StorageEstimate;
-        static dir(): FileSystemDirectoryHandle;
-    }
-}
-
-declare namespace $ {
-    class $mol_state_local<Value> extends $mol_object {
-        static 'native()': Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
-        static native(): Storage | {
-            getItem(key: string): any;
-            setItem(key: string, value: string): void;
-            removeItem(key: string): void;
-        };
-        static changes(next?: StorageEvent): StorageEvent | undefined;
-        static value<Value>(key: string, next?: Value | null): Value | null;
-        prefix(): string;
-        value(key: string, next?: Value): Value | null;
-    }
-}
-
-declare namespace $ {
-    function $mol_const<Value>(value: Value): {
-        (): Value;
-        '()': Value;
-    };
-}
-
-declare namespace $ {
-    export function $mol_wire_async<Host extends object>(obj: Host): ObjectOrFunctionResultPromisify<Host>;
-    type FunctionResultPromisify<Some> = Some extends (...args: infer Args) => infer Res ? Res extends PromiseLike<unknown> ? Some : (...args: Args) => Promise<Res> : Some;
-    type MethodsResultPromisify<Host extends Object> = {
-        [K in keyof Host]: FunctionResultPromisify<Host[K]>;
-    };
-    type ObjectOrFunctionResultPromisify<Some> = (Some extends (...args: any) => unknown ? FunctionResultPromisify<Some> : {}) & (Some extends Object ? MethodsResultPromisify<Some> : Some);
-    export {};
-}
-
-declare namespace $ {
-    class $mol_lock extends $mol_object {
-        protected promise: null | Promise<void>;
-        wait(): Promise<() => void>;
-        grab(): () => void;
-    }
-}
-
-declare namespace $ {
-    function $mol_compare_array<Value extends ArrayLike<unknown>>(a: Value, b: Value): boolean;
-}
-
-declare namespace $ {
-    type $mol_charset_encoding = 'utf8' | 'utf-16le' | 'utf-16be' | 'ibm866' | 'iso-8859-2' | 'iso-8859-3' | 'iso-8859-4' | 'iso-8859-5' | 'iso-8859-6' | 'iso-8859-7' | 'iso-8859-8' | 'iso-8859-8i' | 'iso-8859-10' | 'iso-8859-13' | 'iso-8859-14' | 'iso-8859-15' | 'iso-8859-16' | 'koi8-r' | 'koi8-u' | 'koi8-r' | 'macintosh' | 'windows-874' | 'windows-1250' | 'windows-1251' | 'windows-1252' | 'windows-1253' | 'windows-1254' | 'windows-1255' | 'windows-1256' | 'windows-1257' | 'windows-1258' | 'x-mac-cyrillic' | 'gbk' | 'gb18030' | 'hz-gb-2312' | 'big5' | 'euc-jp' | 'iso-2022-jp' | 'shift-jis' | 'euc-kr' | 'iso-2022-kr';
-}
-
-declare namespace $ {
-    function $mol_charset_decode(buffer: AllowSharedBufferSource, encoding?: $mol_charset_encoding): string;
-}
-
-declare namespace $ {
-    function $mol_charset_encode(str: string): Uint8Array<ArrayBuffer>;
-    function $mol_charset_encode_to(str: string, buf: Uint8Array<ArrayBuffer>, from?: number): number;
-    function $mol_charset_encode_size(str: string): number;
-}
-
-declare namespace $ {
-    type $mol_file_transaction_mode = 'create' | 'exists_truncate' | 'exists_fail' | 'read_only' | 'write_only' | 'read_write' | 'append';
-    type $mol_file_transaction_buffer = ArrayBufferView;
-    class $mol_file_transaction extends $mol_object {
-        path(): string;
-        modes(): readonly $mol_file_transaction_mode[];
-        write(options: {
-            buffer: ArrayBufferView | string | readonly ArrayBufferView[];
-            offset?: number | null;
-            length?: number | null;
-            position?: number | null;
-        }): number;
-        read(): Uint8Array<ArrayBuffer>;
-        truncate(size: number): void;
-        close(): void;
-        destructor(): void;
-    }
-}
-
-declare namespace $ {
-    class $mol_file_transaction_node extends $mol_file_transaction {
-        protected descr(): number;
-        write({ buffer, offset, length, position }: {
-            buffer: ArrayBufferView | string | readonly ArrayBufferView[];
-            offset?: number | null;
-            length?: number | null;
-            position?: number | null;
-        }): number;
-        truncate(size: number): void;
-        read(): Uint8Array<ArrayBuffer>;
-        close(): void;
-    }
-}
-
-declare namespace $ {
-    class $mol_file_base extends $mol_object {
-        static absolute<This extends typeof $mol_file_base>(this: This, path: string): InstanceType<This>;
-        static relative<This extends typeof $mol_file_base>(this: This, path: string): InstanceType<This>;
-        static base: string;
-        path(): string;
-        parent(): this;
-        exists_cut(): boolean;
-        protected root(): boolean;
-        protected stat(next?: $mol_file_stat | null, virt?: 'virt'): $mol_file_stat | null;
-        protected static changed: Set<$mol_file_base>;
-        protected static frame: null | $mol_after_timeout;
-        protected static changed_add(type: 'change' | 'rename', path: string): void;
-        static watch_debounce(): number;
-        static flush(): void;
-        protected static watching: boolean;
-        protected static lock: $mol_lock;
-        protected static watch_off(path: string): void;
-        static unwatched<Result>(side_effect: () => Result, affected_dir: string): Result;
-        reset(): void;
-        modified(): Date | null;
-        version(): string;
-        protected info(path: string): null | $mol_file_stat;
-        protected ensure(): void;
-        protected drop(): void;
-        protected copy(to: string): void;
-        protected read(): Uint8Array<ArrayBuffer>;
-        protected write(buffer: Uint8Array<ArrayBuffer>): void;
-        protected kids(): readonly this[];
-        readable(opts: {
-            start?: number;
-            end?: number;
-        }): ReadableStream<Uint8Array<ArrayBuffer>>;
-        writable(opts: {
-            start?: number;
-        }): WritableStream<Uint8Array<ArrayBuffer>>;
-        buffer(next?: Uint8Array<ArrayBuffer>): Uint8Array<ArrayBuffer>;
-        stat_make(size: number): {
-            readonly type: "file";
-            readonly size: number;
-            readonly atime: Date;
-            readonly mtime: Date;
-            readonly ctime: Date;
-        };
-        clone(to: string): this | null;
-        watcher(): {
-            destructor(): void;
-        };
-        exists(next?: boolean): boolean;
-        type(): "" | $mol_file_type;
-        name(): string;
-        ext(): string;
-        text(next?: string, virt?: 'virt'): string;
-        text_int(next?: string, virt?: 'virt'): string;
-        sub(reset?: null): this[];
-        resolve(path: string): this;
-        relate(base?: $mol_file_base): string;
-        find(include?: RegExp, exclude?: RegExp): this[];
-        size(): number;
-        toJSON(): string;
-        open(...modes: readonly $mol_file_transaction_mode[]): $mol_file_transaction;
-    }
-}
-
-declare namespace $ {
-    type $mol_file_type = 'file' | 'dir' | 'link';
-    interface $mol_file_stat {
-        type: $mol_file_type;
-        size: number;
-        atime: Date;
-        mtime: Date;
-        ctime: Date;
-    }
-    class $mol_file extends $mol_file_base {
-    }
-}
-
-declare namespace $ {
-    function $mol_file_node_buffer_normalize(buf: Buffer<ArrayBuffer>): Uint8Array<ArrayBuffer>;
-    class $mol_file_node extends $mol_file {
-        static relative<This extends typeof $mol_file>(this: This, path: string): InstanceType<This>;
-        watcher(reset?: null): {
-            destructor(): void;
-        };
-        protected info(path: string): $mol_file_stat | null;
-        protected ensure(): null | undefined;
-        protected copy(to: string): void;
-        protected drop(): void;
-        protected read(): Uint8Array<ArrayBuffer>;
-        protected write(buffer: Uint8Array<ArrayBuffer>): undefined;
-        protected kids(): this[];
-        resolve(path: string): this;
-        relate(base?: $mol_file): string;
-        readable(opts: {
-            start?: number;
-            end?: number;
-        }): ReadableStream<Uint8Array<ArrayBuffer>>;
-        writable(opts?: {
-            start?: number;
-        }): WritableStream<Uint8Array<ArrayBuffer>>;
-    }
-}
-
-declare namespace $ {
-    class $mol_state_local_node<Value> extends $mol_state_local<Value> {
-        static dir(): $mol_file;
-        static value<Value>(key: string, next?: Value | null): Value | null;
-    }
-}
-
-declare namespace $ {
-    function $mol_lights(this: $, next?: boolean): boolean;
-}
-
-declare namespace $ {
-    const $mol_theme: Record<"image" | "line" | "text" | "field" | "focus" | "back" | "hover" | "card" | "current" | "special" | "control" | "shade" | "spirit", $mol_style_func<"var", unknown>>;
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    let $mol_gap: Record<"text" | "block" | "space" | "blur" | "page" | "round", $mol_style_func<"var", unknown>>;
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    function $mol_dom_render_children(el: Element | DocumentFragment, childNodes: NodeList | Array<Node | string | null>): void;
-}
-
-declare namespace $ {
-    type $mol_type_partial_deep<Val> = Val extends object ? Val extends Function ? Val : {
-        [field in keyof Val]?: $mol_type_partial_deep<Val[field]> | undefined;
-    } : Val;
-}
-
-declare namespace $ {
-    let $mol_jsx_prefix: string;
-    let $mol_jsx_crumbs: string;
-    let $mol_jsx_booked: null | Set<string>;
-    let $mol_jsx_document: $mol_jsx.JSX.ElementClass['ownerDocument'];
-    const $mol_jsx_frag = "";
-    function $mol_jsx<Props extends $mol_jsx.JSX.IntrinsicAttributes, Children extends Array<Node | string>>(Elem: string | ((props: Props, ...children: Children) => Element), props: Props, ...childNodes: Children): Element | DocumentFragment;
-    namespace $mol_jsx.JSX {
-        interface Element extends HTMLElement {
-            class?: string;
-        }
-        interface ElementClass {
-            attributes: {};
-            ownerDocument: Pick<Document, 'getElementById' | 'createElementNS' | 'createDocumentFragment'>;
-            childNodes: Array<Node | string>;
-            valueOf(): Element;
-        }
-        type OrString<Dict> = {
-            [key in keyof Dict]: Dict[key] | string;
-        };
-        type IntrinsicElements = {
-            [key in keyof ElementTagNameMap]?: $.$mol_type_partial_deep<OrString<Element & IntrinsicAttributes & ElementTagNameMap[key]>>;
-        };
-        interface IntrinsicAttributes {
-            id?: string;
-            xmlns?: string;
-        }
-        interface ElementAttributesProperty {
-            attributes: {};
-        }
-        interface ElementChildrenAttribute {
-        }
-    }
-}
-
-declare namespace $ {
-    class $mol_window extends $mol_object {
-        static size(): {
-            width: number;
-            height: number;
-        };
-    }
-}
-
-declare namespace $ {
     function $mol_guard_defined<T>(value: T): value is NonNullable<T>;
 }
 
@@ -1208,7 +951,22 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    function $mol_wire_probe<Value>(task: () => Value, def?: Value): Value | undefined;
+}
+
+declare namespace $ {
     function $mol_wire_watch(): void;
+}
+
+declare namespace $ {
+    function $mol_const<Value>(value: Value): {
+        (): Value;
+        '()': Value;
+    };
+}
+
+declare namespace $ {
+    function $mol_wire_solid(): void;
 }
 
 declare namespace $ {
@@ -1237,6 +995,16 @@ declare namespace $ {
     function $mol_dom_render_fields(el: Element, fields: {
         [key: string]: any;
     }): void;
+}
+
+declare namespace $ {
+    export function $mol_wire_async<Host extends object>(obj: Host): ObjectOrFunctionResultPromisify<Host>;
+    type FunctionResultPromisify<Some> = Some extends (...args: infer Args) => infer Res ? Res extends PromiseLike<unknown> ? Some : (...args: Args) => Promise<Res> : Some;
+    type MethodsResultPromisify<Host extends Object> = {
+        [K in keyof Host]: FunctionResultPromisify<Host[K]>;
+    };
+    type ObjectOrFunctionResultPromisify<Some> = (Some extends (...args: any) => unknown ? FunctionResultPromisify<Some> : {}) & (Some extends Object ? MethodsResultPromisify<Some> : Some);
+    export {};
 }
 
 declare namespace $ {
@@ -1663,6 +1431,259 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+    let $mol_action: typeof $mol_wire_method;
+}
+
+declare namespace $ {
+    class $mol_state_arg extends $mol_object {
+        prefix: string;
+        static prolog: string;
+        static separator: string;
+        static href(next?: string): string;
+        static href_normal(): string;
+        static dict(next?: {
+            [key: string]: string | null;
+        }): Readonly<{
+            [key: string]: string;
+        }>;
+        static value(key: string, next?: string | null): string | null;
+        static link(next: Record<string, string | null>): string;
+        static make_link(next: Record<string, string | null>): string;
+        static go(next: {
+            [key: string]: string | null;
+        }): void;
+        static commit(): void;
+        constructor(prefix?: string);
+        value(key: string, next?: string): string | null;
+        sub(postfix: string): $mol_state_arg;
+        link(next: Record<string, string | null>): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_media extends $mol_object2 {
+        static match(query: string, next?: boolean): boolean;
+    }
+}
+
+declare namespace $ {
+    let $mol_mem_persist: typeof $mol_wire_solid;
+}
+
+declare namespace $ {
+    let $mol_mem_cached: typeof $mol_wire_probe;
+}
+
+declare namespace $ {
+    function $mol_wait_user_async(this: $): Promise<unknown>;
+    function $mol_wait_user(this: $): unknown;
+}
+
+declare namespace $ {
+    class $mol_storage extends $mol_object2 {
+        static native(): StorageManager;
+        static persisted(next?: boolean, cache?: 'cache'): boolean;
+        static estimate(): StorageEstimate;
+        static dir(): FileSystemDirectoryHandle;
+    }
+}
+
+declare namespace $ {
+    class $mol_state_local<Value> extends $mol_object {
+        static 'native()': Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
+        static native(): Storage | {
+            getItem(key: string): any;
+            setItem(key: string, value: string): void;
+            removeItem(key: string): void;
+        };
+        static changes(next?: StorageEvent): StorageEvent | undefined;
+        static value<Value>(key: string, next?: Value | null): Value | null;
+        prefix(): string;
+        value(key: string, next?: Value): Value | null;
+    }
+}
+
+declare namespace $ {
+    class $mol_lock extends $mol_object {
+        protected promise: null | Promise<void>;
+        wait(): Promise<() => void>;
+        grab(): () => void;
+    }
+}
+
+declare namespace $ {
+    function $mol_compare_array<Value extends ArrayLike<unknown>>(a: Value, b: Value): boolean;
+}
+
+declare namespace $ {
+    type $mol_charset_encoding = 'utf8' | 'utf-16le' | 'utf-16be' | 'ibm866' | 'iso-8859-2' | 'iso-8859-3' | 'iso-8859-4' | 'iso-8859-5' | 'iso-8859-6' | 'iso-8859-7' | 'iso-8859-8' | 'iso-8859-8i' | 'iso-8859-10' | 'iso-8859-13' | 'iso-8859-14' | 'iso-8859-15' | 'iso-8859-16' | 'koi8-r' | 'koi8-u' | 'koi8-r' | 'macintosh' | 'windows-874' | 'windows-1250' | 'windows-1251' | 'windows-1252' | 'windows-1253' | 'windows-1254' | 'windows-1255' | 'windows-1256' | 'windows-1257' | 'windows-1258' | 'x-mac-cyrillic' | 'gbk' | 'gb18030' | 'hz-gb-2312' | 'big5' | 'euc-jp' | 'iso-2022-jp' | 'shift-jis' | 'euc-kr' | 'iso-2022-kr';
+}
+
+declare namespace $ {
+    function $mol_charset_decode(buffer: AllowSharedBufferSource, encoding?: $mol_charset_encoding): string;
+}
+
+declare namespace $ {
+    function $mol_charset_buffer(size: number): Uint8Array<ArrayBuffer>;
+}
+
+declare namespace $ {
+    function $mol_charset_encode(str: string): Uint8Array<ArrayBuffer>;
+    function $mol_charset_encode_to(str: string, buf: Uint8Array<ArrayBuffer>, from?: number): number;
+    function $mol_charset_encode_size(str: string): number;
+}
+
+declare namespace $ {
+    type $mol_file_transaction_mode = 'create' | 'exists_truncate' | 'exists_fail' | 'read_only' | 'write_only' | 'read_write' | 'append';
+    type $mol_file_transaction_buffer = ArrayBufferView;
+    class $mol_file_transaction extends $mol_object {
+        path(): string;
+        modes(): readonly $mol_file_transaction_mode[];
+        write(options: {
+            buffer: ArrayBufferView | string | readonly ArrayBufferView[];
+            offset?: number | null;
+            length?: number | null;
+            position?: number | null;
+        }): number;
+        read(): Uint8Array<ArrayBuffer>;
+        truncate(size: number): void;
+        flush(): void;
+        close(): void;
+        destructor(): void;
+    }
+}
+
+declare namespace $ {
+    class $mol_file_transaction_node extends $mol_file_transaction {
+        protected descr(): number;
+        write({ buffer, offset, length, position }: {
+            buffer: ArrayBufferView | string | readonly ArrayBufferView[];
+            offset?: number | null;
+            length?: number | null;
+            position?: number | null;
+        }): number;
+        truncate(size: number): void;
+        read(): Uint8Array<ArrayBuffer>;
+        flush(): void;
+        close(): void;
+    }
+}
+
+declare namespace $ {
+    class $mol_file_base extends $mol_object {
+        static absolute<This extends typeof $mol_file_base>(this: This, path: string): InstanceType<This>;
+        static relative<This extends typeof $mol_file_base>(this: This, path: string): InstanceType<This>;
+        static base: string;
+        path(): string;
+        parent(): this;
+        exists_cut(): boolean;
+        protected root(): boolean;
+        protected stat(next?: $mol_file_stat | null, virt?: 'virt'): $mol_file_stat | null;
+        protected static changed: Set<$mol_file_base>;
+        protected static frame: null | $mol_after_timeout;
+        protected static changed_add(type: 'change' | 'rename', path: string): void;
+        static watch_debounce(): number;
+        static flush(): void;
+        protected static watching: boolean;
+        protected static lock: $mol_lock;
+        protected static watch_off(path: string): void;
+        static unwatched<Result>(side_effect: () => Result, affected_dir: string): Result;
+        reset(): void;
+        modified(): Date | null;
+        version(): string;
+        protected info(path: string): null | $mol_file_stat;
+        protected ensure(): void;
+        protected drop(): void;
+        protected copy(to: string): void;
+        protected read(): Uint8Array<ArrayBuffer>;
+        protected write(buffer: Uint8Array<ArrayBuffer>): void;
+        protected kids(): readonly this[];
+        readable(opts: {
+            start?: number;
+            end?: number;
+        }): ReadableStream<Uint8Array<ArrayBuffer>>;
+        writable(opts: {
+            start?: number;
+        }): WritableStream<Uint8Array<ArrayBuffer>>;
+        buffer(next?: Uint8Array<ArrayBuffer>): Uint8Array<ArrayBuffer>;
+        stat_make(size: number): {
+            readonly type: "file";
+            readonly size: number;
+            readonly atime: Date;
+            readonly mtime: Date;
+            readonly ctime: Date;
+        };
+        clone(to: string): this | null;
+        watcher(): {
+            destructor(): void;
+        };
+        exists(next?: boolean): boolean;
+        type(): "" | $mol_file_type;
+        name(): string;
+        ext(): string;
+        text(next?: string, virt?: 'virt'): string;
+        text_int(next?: string, virt?: 'virt'): string;
+        sub(reset?: null): this[];
+        resolve(path: string): this;
+        relate(base?: $mol_file_base): string;
+        find(include?: RegExp, exclude?: RegExp): this[];
+        size(): number;
+        toJSON(): string;
+        open(...modes: readonly $mol_file_transaction_mode[]): $mol_file_transaction;
+    }
+}
+
+declare namespace $ {
+    type $mol_file_type = 'file' | 'dir' | 'link';
+    interface $mol_file_stat {
+        type: $mol_file_type;
+        size: number;
+        atime: Date;
+        mtime: Date;
+        ctime: Date;
+    }
+    class $mol_file extends $mol_file_base {
+    }
+}
+
+declare namespace $ {
+    function $mol_file_node_buffer_normalize(buf: Buffer<ArrayBuffer>): Uint8Array<ArrayBuffer>;
+    class $mol_file_node extends $mol_file {
+        static relative<This extends typeof $mol_file>(this: This, path: string): InstanceType<This>;
+        watcher(reset?: null): {
+            destructor(): void;
+        };
+        protected info(path: string): $mol_file_stat | null;
+        protected ensure(): null | undefined;
+        protected copy(to: string): void;
+        protected drop(): void;
+        protected read(): Uint8Array<ArrayBuffer>;
+        protected write(buffer: Uint8Array<ArrayBuffer>): undefined;
+        protected kids(): this[];
+        resolve(path: string): this;
+        relate(base?: $mol_file): string;
+        readable(opts: {
+            start?: number;
+            end?: number;
+        }): ReadableStream<Uint8Array<ArrayBuffer>>;
+        writable(opts?: {
+            start?: number;
+        }): WritableStream<Uint8Array<ArrayBuffer>>;
+    }
+}
+
+declare namespace $ {
+    class $mol_state_local_node<Value> extends $mol_state_local<Value> {
+        static dir(): $mol_file;
+        static value<Value>(key: string, next?: Value | null): Value | null;
+    }
+}
+
+declare namespace $ {
+    function $mol_lights(this: $, next?: boolean): boolean;
+}
+
+declare namespace $ {
 
 	export class $mol_theme_auto extends $mol_plugin {
 		dark( ): string
@@ -1984,6 +2005,15 @@ declare namespace $ {
 
 //# sourceMappingURL=minor.view.tree.d.ts.map
 declare namespace $ {
+    class $mol_dom_event<EventType extends Event> extends $mol_object {
+        readonly native: EventType;
+        constructor(native: EventType);
+        prevented(next?: boolean): boolean;
+        static wrap<EventType extends Event>(event: EventType): $mol_dom_event<EventType>;
+    }
+}
+
+declare namespace $ {
 }
 
 declare namespace $ {
@@ -2206,7 +2236,7 @@ declare namespace $ {
     export class $mol_regexp<Groups extends Record<string, string>> extends RegExp {
         readonly groups: (Extract<keyof Groups, string>)[];
         constructor(source: string, flags?: string, groups?: (Extract<keyof Groups, string>)[]);
-        [Symbol.matchAll](str: string): RegExpStringIterator<RegExpMatchArray & $mol_type_override<RegExpMatchArray, {
+        [Symbol.matchAll](str: string): RegExpStringIterator<RegExpExecArray & $mol_type_override<RegExpExecArray, {
             groups?: {
                 [key in keyof Groups]: string;
             };
@@ -2221,9 +2251,16 @@ declare namespace $ {
         }> | null;
         generate(params: Groups_to_params<Groups>): string | null;
         get native(): RegExp;
+        static separated<Chunk extends $mol_regexp_source, Sep extends $mol_regexp_source>(chunk: Chunk, sep: Sep): $mol_regexp<[$mol_regexp<[[Chunk], Sep] extends infer T ? T extends [[Chunk], Sep] ? T extends $mol_regexp_source[] ? $mol_type_merge<$mol_type_intersect<{ [key in Extract<keyof T, number>]: $mol_regexp_groups<T[key]>; }[Extract<keyof T, number>]>> : T extends RegExp ? Record<string, string> extends NonNullable<NonNullable<ReturnType<T["exec"]>>["groups"]> ? {} : NonNullable<NonNullable<ReturnType<T["exec"]>>["groups"]> : T extends {
+            readonly [x: string]: $mol_regexp_source;
+        } ? $mol_type_merge<$mol_type_intersect<{ [key_1 in keyof T]: $mol_type_merge<Omit<{ readonly [k in Extract<keyof T, string>]: string; }, key_1> & { readonly [k_1 in key_1]: T[key_1] extends string ? T[key_1] : string; } & $mol_regexp_groups<T[key_1]>>; }[keyof T]>> : never : never : never>, Chunk] extends infer T_1 ? T_1 extends [$mol_regexp<[[Chunk], Sep] extends infer T_2 ? T_2 extends [[Chunk], Sep] ? T_2 extends $mol_regexp_source[] ? $mol_type_merge<$mol_type_intersect<{ [key_4 in Extract<keyof T_2, number>]: $mol_regexp_groups<T_2[key_4]>; }[Extract<keyof T_2, number>]>> : T_2 extends RegExp ? Record<string, string> extends NonNullable<NonNullable<ReturnType<T_2["exec"]>>["groups"]> ? {} : NonNullable<NonNullable<ReturnType<T_2["exec"]>>["groups"]> : T_2 extends {
+            readonly [x: string]: $mol_regexp_source;
+        } ? $mol_type_merge<$mol_type_intersect<{ [key_5 in keyof T_2]: $mol_type_merge<Omit<{ readonly [k in Extract<keyof T_2, string>]: string; }, key_5> & { readonly [k_1 in key_5]: T_2[key_5] extends string ? T_2[key_5] : string; } & $mol_regexp_groups<T_2[key_5]>>; }[keyof T_2]>> : never : never : never>, Chunk] ? T_1 extends $mol_regexp_source[] ? $mol_type_merge<$mol_type_intersect<{ [key_2 in Extract<keyof T_1, number>]: $mol_regexp_groups<T_1[key_2]>; }[Extract<keyof T_1, number>]>> : T_1 extends RegExp ? Record<string, string> extends NonNullable<NonNullable<ReturnType<T_1["exec"]>>["groups"]> ? {} : NonNullable<NonNullable<ReturnType<T_1["exec"]>>["groups"]> : T_1 extends {
+            readonly [x: string]: $mol_regexp_source;
+        } ? $mol_type_merge<$mol_type_intersect<{ [key_3 in keyof T_1]: $mol_type_merge<Omit<{ readonly [k in Extract<keyof T_1, string>]: string; }, key_3> & { readonly [k_1 in key_3]: T_1[key_3] extends string ? T_1[key_3] : string; } & $mol_regexp_groups<T_1[key_3]>>; }[keyof T_1]>> : never : never : never>;
         static repeat<Source extends $mol_regexp_source>(source: Source, min?: number, max?: number): $mol_regexp<$mol_regexp_groups<Source>>;
         static repeat_greedy<Source extends $mol_regexp_source>(source: Source, min?: number, max?: number): $mol_regexp<$mol_regexp_groups<Source>>;
-        static vary<Sources extends readonly $mol_regexp_source[]>(sources: Sources): $mol_regexp<$mol_regexp_groups<Sources[number]>>;
+        static vary<Sources extends readonly $mol_regexp_source[]>(sources: Sources, flags?: string): $mol_regexp<$mol_regexp_groups<Sources[number]>>;
         static optional<Source extends $mol_regexp_source>(source: Source): $mol_regexp<$mol_regexp_groups<Source>>;
         static force_after(source: $mol_regexp_source): $mol_regexp<Record<string, string>>;
         static forbid_after(source: $mol_regexp_source): $mol_regexp<Record<string, string>>;
@@ -3034,7 +3071,7 @@ declare namespace $.$$ {
         sub_visible(): readonly $mol_view_content[];
         message_receive(event?: MessageEvent<[string, string]>): void;
         uri_change(event: MessageEvent<[string, string]>): void;
-        auto(): ($mol_dom_listener | Window)[];
+        auto(): (Window | $mol_dom_listener)[];
     }
 }
 
@@ -3760,6 +3797,49 @@ declare namespace $ {
 }
 
 declare namespace $ {
+
+	export class $eve_flex extends $eve_surface {
+		direction( ): string
+		justify_content( ): string
+		align_items( ): string
+		wrap( ): string
+		gap( ): any
+	}
+	
+}
+
+//# sourceMappingURL=flex.view.tree.d.ts.map
+declare namespace $.$$ {
+    type $eve_flex_direction = typeof $eve_flex.DIRECTIONS[number];
+    type $eve_flex_wrap = 'wrap' | 'nowrap' | 'wrap-reverse';
+    type $eve_flex_justify_content = typeof $eve_flex.JUSTIFY_CONTENTS[number];
+    type $eve_flex_align_items = typeof $eve_flex.ALIGN_ITEMS[number];
+    class $eve_flex extends $.$eve_flex {
+        static readonly DIRECTIONS: readonly ["row", "row-reverse", "column", "column-reverse"];
+        static readonly JUSTIFY_CONTENTS: readonly ["flex-start", "flex-end", "center", "space-between", "space-around", "space-evenly"];
+        static readonly ALIGN_ITEMS: readonly ["flex-start", "flex-end", "center", "space-between", "space-around", "space-evenly", "stretch"];
+        static readonly WRAPS: readonly ["wrap", "nowrap", "wrap-reverse"];
+        attr(): {
+            eve_flex_direction: "row" | "row-reverse" | "column" | "column-reverse";
+            eve_flex_justify_content: "center" | "flex-start" | "flex-end" | "space-between" | "space-around" | "space-evenly";
+            eve_flex_align_items: "center" | "flex-start" | "flex-end" | "space-between" | "space-around" | "space-evenly" | "stretch";
+            eve_flex_wrap: $eve_flex_wrap;
+        };
+        style(): {
+            gap?: string | undefined;
+        };
+        direction(next?: $eve_flex_direction): $eve_flex_direction;
+        justify_content(next?: $eve_flex_justify_content): $eve_flex_justify_content;
+        align_items(next?: $eve_flex_align_items): $eve_flex_align_items;
+        wrap(next?: $eve_flex_wrap): $eve_flex_wrap;
+        gap(next?: string): string | undefined;
+    }
+}
+
+declare namespace $.$$ {
+}
+
+declare namespace $ {
 }
 
 declare namespace $ {
@@ -3796,12 +3876,36 @@ declare namespace $ {
 declare namespace $ {
 
 	type $mol_text__text_eve_app_page_libraries_1 = $mol_type_enforce<
-		string
+		ReturnType< $eve_app_page_libraries['how_to_title'] >
 		,
 		ReturnType< $mol_text['text'] >
 	>
+	type $mol_text__text_eve_app_page_libraries_2 = $mol_type_enforce<
+		ReturnType< $eve_app_page_libraries['how_to_body'] >
+		,
+		ReturnType< $mol_text['text'] >
+	>
+	type $eve_flex__direction_eve_app_page_libraries_3 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_flex['direction'] >
+	>
+	type $eve_flex__gap_eve_app_page_libraries_4 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_flex['gap'] >
+	>
+	type $eve_flex__sub_eve_app_page_libraries_5 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $eve_flex['sub'] >
+	>
 	export class $eve_app_page_libraries extends $eve_page {
-		Content( ): $mol_text
+		how_to_title( ): string
+		How_title( ): $mol_text
+		how_to_body( ): string
+		How_body( ): $mol_text
+		Main( ): $eve_flex
 		title( ): string
 		Head( ): any
 		body( ): readonly(any)[]
@@ -3812,7 +3916,8 @@ declare namespace $ {
 //# sourceMappingURL=libraries.view.tree.d.ts.map
 declare namespace $.$$ {
     class $eve_app_page_libraries extends $.$eve_app_page_libraries {
-        spread_title(id: string): string;
+        how_to_title(): string;
+        how_to_body(): string;
     }
 }
 
@@ -3876,31 +3981,99 @@ declare namespace $.$$ {
 
 declare namespace $ {
 
-	type $mol_pop_bubble__align_mol_pop_1 = $mol_type_enforce<
-		ReturnType< $mol_pop['align'] >
-		,
-		ReturnType< $mol_pop_bubble['align'] >
-	>
-	type $mol_pop_bubble__content_mol_pop_2 = $mol_type_enforce<
+	export class $mol_ghost extends $mol_view {
+		Sub( ): $mol_view
+	}
+	
+}
+
+//# sourceMappingURL=ghost.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $mol_ghost extends $.$mol_ghost {
+        dom_node_external(next?: Element): Element;
+        dom_node_actual(): Element;
+        dom_tree(): Element;
+        title(): string;
+        minimal_width(): number;
+        minimal_height(): number;
+    }
+}
+
+declare namespace $ {
+
+	export class $mol_follower extends $mol_ghost {
+		transform( ): string
+		Anchor( ): $mol_view
+		align( ): readonly(number)[]
+		offset( ): readonly(number)[]
+		style( ): ({ 
+			'transform': ReturnType< $mol_follower['transform'] >,
+		})  & ReturnType< $mol_ghost['style'] >
+	}
+	
+}
+
+//# sourceMappingURL=follower.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $mol_follower extends $.$mol_follower {
+        pos(): {
+            left: number;
+            top: number;
+        } | null;
+        transform(): string;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+
+	type $mol_pop_bubble__content_mol_pop_1 = $mol_type_enforce<
 		ReturnType< $mol_pop['bubble_content'] >
 		,
 		ReturnType< $mol_pop_bubble['content'] >
 	>
-	type $mol_pop_bubble__height_max_mol_pop_3 = $mol_type_enforce<
+	type $mol_pop_bubble__height_max_mol_pop_2 = $mol_type_enforce<
 		ReturnType< $mol_pop['height_max'] >
 		,
 		ReturnType< $mol_pop_bubble['height_max'] >
 	>
+	type $mol_follower__offset_mol_pop_3 = $mol_type_enforce<
+		ReturnType< $mol_pop['bubble_offset'] >
+		,
+		ReturnType< $mol_follower['offset'] >
+	>
+	type $mol_follower__align_mol_pop_4 = $mol_type_enforce<
+		ReturnType< $mol_pop['bubble_align'] >
+		,
+		ReturnType< $mol_follower['align'] >
+	>
+	type $mol_follower__Anchor_mol_pop_5 = $mol_type_enforce<
+		ReturnType< $mol_pop['Anchor'] >
+		,
+		ReturnType< $mol_follower['Anchor'] >
+	>
+	type $mol_follower__Sub_mol_pop_6 = $mol_type_enforce<
+		ReturnType< $mol_pop['Bubble'] >
+		,
+		ReturnType< $mol_follower['Sub'] >
+	>
 	export class $mol_pop extends $mol_view {
+		bubble( ): any
 		Anchor( ): any
-		align( ): string
+		bubble_offset( ): readonly(number)[]
+		bubble_align( ): readonly(number)[]
 		bubble_content( ): readonly($mol_view_content)[]
 		height_max( ): number
 		Bubble( ): $mol_pop_bubble
+		Follower( ): $mol_follower
 		showed( next?: boolean ): boolean
 		align_vert( ): string
 		align_hor( ): string
+		align( ): string
 		prefer( ): string
+		auto( ): readonly(any)[]
 		sub( ): readonly(any)[]
 		sub_visible( ): readonly(any)[]
 	}
@@ -3908,14 +4081,13 @@ declare namespace $ {
 	export class $mol_pop_bubble extends $mol_view {
 		content( ): readonly($mol_view_content)[]
 		height_max( ): number
-		align( ): string
 		sub( ): ReturnType< $mol_pop_bubble['content'] >
 		style( ): ({ 
 			'maxHeight': ReturnType< $mol_pop_bubble['height_max'] >,
 		})  & ReturnType< $mol_view['style'] >
 		attr( ): ({ 
-			'mol_pop_align': ReturnType< $mol_pop_bubble['align'] >,
 			'tabindex': number,
+			'popover': string,
 		})  & ReturnType< $mol_view['attr'] >
 	}
 	
@@ -3930,20 +4102,9 @@ declare namespace $.$$ {
         align(): string;
         align_vert(): "suspense" | "top" | "bottom";
         align_hor(): "suspense" | "left" | "right";
-        View_port(): $mol_view;
-        view_port(): {
-            width: number;
-            height: number;
-            left: number;
-            right: number;
-            top: number;
-            bottom: number;
-        } | {
-            left: number;
-            top: number;
-            width: number;
-            height: number;
-        };
+        bubble_offset(): number[];
+        bubble_align(): number[];
+        bubble(): void;
     }
 }
 
@@ -4442,6 +4603,7 @@ declare namespace $ {
 		bubble_content( ): readonly(any)[]
 		Filter( ): $mol_search
 		Trigger_icon( ): $mol_icon_dots_vertical
+		trigger_enabled( ): ReturnType< $mol_select['enabled'] >
 	}
 	
 }
@@ -4464,49 +4626,6 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
-}
-
-declare namespace $ {
-
-	export class $eve_flex extends $eve_surface {
-		direction( ): string
-		justify_content( ): string
-		align_items( ): string
-		wrap( ): string
-		gap( ): any
-	}
-	
-}
-
-//# sourceMappingURL=flex.view.tree.d.ts.map
-declare namespace $.$$ {
-    type $eve_flex_direction = typeof $eve_flex.DIRECTIONS[number];
-    type $eve_flex_wrap = 'wrap' | 'nowrap' | 'wrap-reverse';
-    type $eve_flex_justify_content = typeof $eve_flex.JUSTIFY_CONTENTS[number];
-    type $eve_flex_align_items = typeof $eve_flex.ALIGN_ITEMS[number];
-    class $eve_flex extends $.$eve_flex {
-        static readonly DIRECTIONS: readonly ["row", "row-reverse", "column", "column-reverse"];
-        static readonly JUSTIFY_CONTENTS: readonly ["flex-start", "flex-end", "center", "space-between", "space-around", "space-evenly"];
-        static readonly ALIGN_ITEMS: readonly ["flex-start", "flex-end", "center", "space-between", "space-around", "space-evenly", "stretch"];
-        static readonly WRAPS: readonly ["wrap", "nowrap", "wrap-reverse"];
-        attr(): {
-            eve_flex_direction: "row" | "row-reverse" | "column" | "column-reverse";
-            eve_flex_justify_content: "center" | "flex-start" | "flex-end" | "space-between" | "space-around" | "space-evenly";
-            eve_flex_align_items: "center" | "flex-start" | "flex-end" | "space-between" | "space-around" | "space-evenly" | "stretch";
-            eve_flex_wrap: $eve_flex_wrap;
-        };
-        style(): {
-            gap?: string | undefined;
-        };
-        direction(next?: $eve_flex_direction): $eve_flex_direction;
-        justify_content(next?: $eve_flex_justify_content): $eve_flex_justify_content;
-        align_items(next?: $eve_flex_align_items): $eve_flex_align_items;
-        wrap(next?: $eve_flex_wrap): $eve_flex_wrap;
-        gap(next?: string): string | undefined;
-    }
-}
-
-declare namespace $.$$ {
 }
 
 declare namespace $ {
@@ -6161,6 +6280,373 @@ declare namespace $.$$ {
 
 declare namespace $ {
 
+	export class $eve_avatar extends $eve_surface {
+		variant( ): string
+		colors( ): string
+		size( next?: string ): string
+		name( ): string
+		uri( ): string
+	}
+	
+}
+
+//# sourceMappingURL=avatar.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $eve_avatar extends $.$eve_avatar {
+        uri(): string;
+        name(): string;
+        initials(): string;
+        sub(): {
+            uri(): string;
+            title(): string;
+            natural_width(next?: null): number;
+            natural_height(next?: null): number;
+            load(): void;
+            loading(): string;
+            decoding(): string;
+            cors(): any;
+            dom_name(): string;
+            attr(): Record<string, any> & ReturnType<$mol_view["attr"]>;
+            event(): Record<string, any>;
+            minimal_width(): number;
+            minimal_height(): number;
+            hint(): string;
+            focused(next?: boolean): boolean;
+            state_key(suffix?: string): string;
+            dom_name_space(): string;
+            sub(): readonly $mol_view_content[];
+            sub_visible(): readonly $mol_view_content[];
+            maximal_width(): number;
+            view_rect(): {
+                width: number;
+                height: number;
+                left: number;
+                right: number;
+                top: number;
+                bottom: number;
+            } | null;
+            dom_id(): string;
+            dom_node_external(next?: Element): Element;
+            dom_node(next?: Element): Element;
+            dom_final(): Element | undefined;
+            dom_tree(next?: Element): Element;
+            dom_node_actual(): Element;
+            auto(): any;
+            render(): void;
+            view_names_owned(): string[];
+            view_names(): Set<string>;
+            theme(next?: string | null): string | null | undefined;
+            attr_static(): {
+                [key: string]: string | number | boolean | null;
+            };
+            style(): {
+                [key: string]: string | number;
+            };
+            field(): {
+                [key: string]: any;
+            };
+            event_async(): {
+                [x: string]: (event: Event) => Promise<void>;
+            };
+            plugins(): readonly $mol_view[];
+            view_find(check: (path: $mol_view, text?: string) => boolean, path?: $mol_view[]): Generator<$mol_view[]>;
+            force_render(path: Set<$mol_view>): void;
+            ensure_visible(view: $mol_view, align?: ScrollLogicalPosition): void;
+            bring(): void;
+            destructor(): void;
+            [$mol_dev_format_head](): any[];
+            get $(): $;
+            set $(next: $);
+            toString(): string;
+            [Symbol.toStringTag]: string;
+            [$mol_ambient_ref]: $;
+            [Symbol.dispose](): void;
+        }[] | {
+            title(): string;
+            maximal_width(): number;
+            width_limit(): number;
+            minimal_width(): number;
+            row_width(): number;
+            minimal_height(): number;
+            line_height(): number;
+            letter_width(): number;
+            sub(): readonly (any)[];
+            hint(): string;
+            focused(next?: boolean): boolean;
+            state_key(suffix?: string): string;
+            dom_name(): string;
+            dom_name_space(): string;
+            sub_visible(): readonly $mol_view_content[];
+            view_rect(): {
+                width: number;
+                height: number;
+                left: number;
+                right: number;
+                top: number;
+                bottom: number;
+            } | null;
+            dom_id(): string;
+            dom_node_external(next?: Element): Element;
+            dom_node(next?: Element): Element;
+            dom_final(): Element | undefined;
+            dom_tree(next?: Element): Element;
+            dom_node_actual(): Element;
+            auto(): any;
+            render(): void;
+            view_names_owned(): string[];
+            view_names(): Set<string>;
+            theme(next?: string | null): string | null | undefined;
+            attr_static(): {
+                [key: string]: string | number | boolean | null;
+            };
+            attr(): {};
+            style(): {
+                [key: string]: string | number;
+            };
+            field(): {
+                [key: string]: any;
+            };
+            event(): {
+                [key: string]: (event: Event) => void;
+            };
+            event_async(): {
+                [x: string]: (event: Event) => Promise<void>;
+            };
+            plugins(): readonly $mol_view[];
+            view_find(check: (path: $mol_view, text?: string) => boolean, path?: $mol_view[]): Generator<$mol_view[]>;
+            force_render(path: Set<$mol_view>): void;
+            ensure_visible(view: $mol_view, align?: ScrollLogicalPosition): void;
+            bring(): void;
+            destructor(): void;
+            [$mol_dev_format_head](): any[];
+            get $(): $;
+            set $(next: $);
+            toString(): string;
+            [Symbol.toStringTag]: string;
+            [$mol_ambient_ref]: $;
+            [Symbol.dispose](): void;
+        }[];
+        attr(): {};
+    }
+}
+
+declare namespace $.$$ {
+}
+
+declare namespace $ {
+
+	type $eve_avatar__name_eve_avatar_group_1 = $mol_type_enforce<
+		ReturnType< $eve_avatar_group['avatar_name'] >
+		,
+		ReturnType< $eve_avatar['name'] >
+	>
+	type $eve_avatar__uri_eve_avatar_group_2 = $mol_type_enforce<
+		ReturnType< $eve_avatar_group['avatar_uri'] >
+		,
+		ReturnType< $eve_avatar['uri'] >
+	>
+	export class $eve_avatar_group extends $eve_flex {
+		group_aria_label( ): string
+		Avatar( id: any): $eve_avatar
+		Avatars( ): readonly(any)[]
+		direction( ): string
+		align_items( ): string
+		wrap( ): string
+		gap( ): any
+		avatars( ): Record<string, any>
+		avatar_ids( ): readonly(string)[]
+		avatar_name( id: any): string
+		avatar_uri( id: any): string
+		attr( ): ({ 
+			'role': string,
+			'aria-label': ReturnType< $eve_avatar_group['group_aria_label'] >,
+		}) 
+		sub( ): ReturnType< $eve_avatar_group['Avatars'] >
+	}
+	
+}
+
+//# sourceMappingURL=group.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $eve_avatar_group extends $.$eve_avatar_group {
+        group_aria_label(): string;
+        avatars(): Record<string, string>;
+        Avatars(): $.$eve_avatar[];
+        avatar_ids(): string[];
+        avatar_name(id: string): string;
+        avatar_uri(id: string): string;
+    }
+}
+
+declare namespace $.$$ {
+}
+
+declare namespace $ {
+
+	type $eve_app_page_sb_playground__component_name_eve_app_page_components_avatar_1 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_playground['component_name'] >
+	>
+	type $eve_app_page_sb_playground__default_source_eve_app_page_components_avatar_2 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_playground['default_source'] >
+	>
+	type $eve_flex__direction_eve_app_page_components_avatar_3 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_flex['direction'] >
+	>
+	type $eve_flex__gap_eve_app_page_components_avatar_4 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_flex['gap'] >
+	>
+	type $eve_flex__align_items_eve_app_page_components_avatar_5 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_flex['align_items'] >
+	>
+	type $eve_flex__sub_eve_app_page_components_avatar_6 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $eve_flex['sub'] >
+	>
+	type $eve_app_page_sb_page__title_eve_app_page_components_avatar_7 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_page['title'] >
+	>
+	type $eve_app_page_sb_page__body_eve_app_page_components_avatar_8 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $eve_app_page_sb_page['body'] >
+	>
+	type $eve_app_page_sb_playground__component_name_eve_app_page_components_avatar_9 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_playground['component_name'] >
+	>
+	type $eve_app_page_sb_playground__default_source_eve_app_page_components_avatar_10 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_playground['default_source'] >
+	>
+	type $eve_app_page_sb_page__title_eve_app_page_components_avatar_11 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_page['title'] >
+	>
+	type $eve_app_page_sb_page__body_eve_app_page_components_avatar_12 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $eve_app_page_sb_page['body'] >
+	>
+	type $eve_app_page_sb_catalog__param_eve_app_page_components_avatar_13 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_catalog['param'] >
+	>
+	type $eve_app_page_sb_catalog__spreads_eve_app_page_components_avatar_14 = $mol_type_enforce<
+		({ 
+			'single': ReturnType< $eve_app_page_components_avatar['Single_page'] >,
+			'group': ReturnType< $eve_app_page_components_avatar['Group_page'] >,
+		}) 
+		,
+		ReturnType< $eve_app_page_sb_catalog['spreads'] >
+	>
+	export class $eve_app_page_components_avatar extends $eve_app_page_sb_page {
+		Playground_photo( ): $eve_app_page_sb_playground
+		Row( ): $eve_flex
+		Single_page( ): $eve_app_page_sb_page
+		Group_playground( ): $eve_app_page_sb_playground
+		Group_page( ): $eve_app_page_sb_page
+		Avatar_catalog( ): $eve_app_page_sb_catalog
+		title( ): string
+		Head( ): any
+		body( ): readonly(any)[]
+	}
+	
+}
+
+//# sourceMappingURL=avatar.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $eve_app_page_components_avatar extends $.$eve_app_page_components_avatar {
+    }
+}
+
+declare namespace $ {
+
+	type $mol_text__text_eve_badge_1 = $mol_type_enforce<
+		ReturnType< $eve_badge['value'] >
+		,
+		ReturnType< $mol_text['text'] >
+	>
+	export class $eve_badge extends $eve_surface {
+		value( ): string
+		Text( ): $mol_text
+		variant( ): string
+		colors( ): string
+		size( next?: string ): string
+		attr( ): ({ 
+			'role': string,
+		})  & ReturnType< $eve_surface['attr'] >
+		sub( ): readonly(any)[]
+	}
+	
+}
+
+//# sourceMappingURL=badge.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $eve_badge extends $.$eve_badge {
+        value(): string;
+    }
+}
+
+declare namespace $.$$ {
+}
+
+declare namespace $ {
+
+	type $eve_app_page_sb_playground__component_name_eve_app_page_components_badge_1 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_playground['component_name'] >
+	>
+	type $eve_app_page_sb_playground__default_source_eve_app_page_components_badge_2 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_playground['default_source'] >
+	>
+	type $eve_app_page_sb_page__title_eve_app_page_components_badge_3 = $mol_type_enforce<
+		any
+		,
+		ReturnType< $eve_app_page_sb_page['title'] >
+	>
+	type $eve_app_page_sb_page__body_eve_app_page_components_badge_4 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $eve_app_page_sb_page['body'] >
+	>
+	export class $eve_app_page_components_badge extends $eve_app_page_sb_page {
+		Playground( ): $eve_app_page_sb_playground
+		Overview_page( ): $eve_app_page_sb_page
+		title( ): string
+		Head( ): any
+		body( ): readonly(any)[]
+	}
+	
+}
+
+//# sourceMappingURL=badge.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $eve_app_page_components_badge extends $.$eve_app_page_components_badge {
+    }
+}
+
+declare namespace $ {
+
 	type $mol_paragraph__title_eve_card_1 = $mol_type_enforce<
 		ReturnType< $eve_card['title'] >
 		,
@@ -6229,6 +6715,991 @@ declare namespace $ {
 }
 
 //# sourceMappingURL=card.view.tree.d.ts.map
+declare namespace $ {
+
+	type $mol_text__text_eve_chip_1 = $mol_type_enforce<
+		ReturnType< $eve_chip['label'] >
+		,
+		ReturnType< $mol_text['text'] >
+	>
+	type $eve_button__variant_eve_chip_2 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_button['variant'] >
+	>
+	type $eve_button__colors_eve_chip_3 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_button['colors'] >
+	>
+	type $eve_button__size_eve_chip_4 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_button['size'] >
+	>
+	type $eve_button__hint_eve_chip_5 = $mol_type_enforce<
+		ReturnType< $eve_chip['remove_hint'] >
+		,
+		ReturnType< $eve_button['hint'] >
+	>
+	type $eve_button__click_eve_chip_6 = $mol_type_enforce<
+		ReturnType< $eve_chip['remove_click'] >
+		,
+		ReturnType< $eve_button['click'] >
+	>
+	type $eve_button__sub_eve_chip_7 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $eve_button['sub'] >
+	>
+	export class $eve_chip extends $eve_flex {
+		label( ): string
+		Label( ): $mol_text
+		remove_hint( ): string
+		remove_click( next?: any ): any
+		Remove_icon( ): $mol_icon_close
+		Remove( ): $eve_button
+		direction( ): string
+		align_items( ): string
+		justify_content( ): string
+		colors( next?: string ): string
+		variant( next?: string ): string
+		size( next?: string ): string
+		attr( ): ({ 
+			'role': string,
+		})  & ReturnType< $eve_flex['attr'] >
+		sub( ): readonly(any)[]
+	}
+	
+}
+
+//# sourceMappingURL=chip.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $eve_chip extends $.$eve_chip {
+        label(): string;
+        remove_hint(): string;
+        remove_click(event?: Event): void;
+    }
+}
+
+declare namespace $.$$ {
+}
+
+declare namespace $ {
+
+	type $eve_app_page_sb_playground__component_name_eve_app_page_components_chip_1 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_playground['component_name'] >
+	>
+	type $eve_app_page_sb_playground__default_source_eve_app_page_components_chip_2 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_playground['default_source'] >
+	>
+	type $eve_app_page_sb_page__title_eve_app_page_components_chip_3 = $mol_type_enforce<
+		any
+		,
+		ReturnType< $eve_app_page_sb_page['title'] >
+	>
+	type $eve_app_page_sb_page__body_eve_app_page_components_chip_4 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $eve_app_page_sb_page['body'] >
+	>
+	export class $eve_app_page_components_chip extends $eve_app_page_sb_page {
+		Playground( ): $eve_app_page_sb_playground
+		Overview_page( ): $eve_app_page_sb_page
+		title( ): string
+		Head( ): any
+		body( ): readonly(any)[]
+	}
+	
+}
+
+//# sourceMappingURL=chip.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $eve_app_page_components_chip extends $.$eve_app_page_components_chip {
+    }
+}
+
+declare namespace $ {
+
+	export class $mol_icon_inbox extends $mol_icon {
+		path( ): string
+	}
+	
+}
+
+//# sourceMappingURL=inbox.view.tree.d.ts.map
+declare namespace $ {
+
+	type $eve_surface__variant_eve_empty_1 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_surface['variant'] >
+	>
+	type $eve_surface__colors_eve_empty_2 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_surface['colors'] >
+	>
+	type $eve_surface__sub_eve_empty_3 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $eve_surface['sub'] >
+	>
+	type $mol_paragraph__title_eve_empty_4 = $mol_type_enforce<
+		ReturnType< $eve_empty['title'] >
+		,
+		ReturnType< $mol_paragraph['title'] >
+	>
+	type $mol_paragraph__title_eve_empty_5 = $mol_type_enforce<
+		ReturnType< $eve_empty['description'] >
+		,
+		ReturnType< $mol_paragraph['title'] >
+	>
+	type $eve_flex__direction_eve_empty_6 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_flex['direction'] >
+	>
+	type $eve_flex__gap_eve_empty_7 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_flex['gap'] >
+	>
+	type $eve_flex__sub_eve_empty_8 = $mol_type_enforce<
+		ReturnType< $eve_empty['action'] >
+		,
+		ReturnType< $eve_flex['sub'] >
+	>
+	export class $eve_empty extends $eve_flex {
+		Icon( ): $mol_icon_inbox
+		Icon_wrap( ): $eve_surface
+		title( ): string
+		Title( ): $mol_paragraph
+		description( ): string
+		Description( ): $mol_paragraph
+		action( ): readonly(any)[]
+		Actions( ): $eve_flex
+		direction( ): string
+		align_items( ): string
+		justify_content( ): string
+		gap( ): string
+		colors( next?: string ): string
+		variant( next?: string ): string
+		attr( ): ({ 
+			'role': string,
+		})  & ReturnType< $eve_flex['attr'] >
+		sub( ): readonly(any)[]
+	}
+	
+}
+
+//# sourceMappingURL=empty.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $eve_empty extends $.$eve_empty {
+        title(): string;
+        description(): string;
+        attr(): {
+            'aria-label': string;
+            role: string;
+        };
+    }
+}
+
+declare namespace $.$$ {
+}
+
+declare namespace $ {
+
+	type $eve_app_page_sb_playground__component_name_eve_app_page_components_empty_1 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_playground['component_name'] >
+	>
+	type $eve_app_page_sb_playground__default_source_eve_app_page_components_empty_2 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_playground['default_source'] >
+	>
+	type $eve_app_page_sb_page__title_eve_app_page_components_empty_3 = $mol_type_enforce<
+		any
+		,
+		ReturnType< $eve_app_page_sb_page['title'] >
+	>
+	type $eve_app_page_sb_page__body_eve_app_page_components_empty_4 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $eve_app_page_sb_page['body'] >
+	>
+	export class $eve_app_page_components_empty extends $eve_app_page_sb_page {
+		Playground( ): $eve_app_page_sb_playground
+		Overview_page( ): $eve_app_page_sb_page
+		title( ): string
+		Head( ): any
+		body( ): readonly(any)[]
+	}
+	
+}
+
+//# sourceMappingURL=empty.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $eve_app_page_components_empty extends $.$eve_app_page_components_empty {
+    }
+}
+
+declare namespace $ {
+
+	export class $eve_pagination extends $eve_flex {
+		direction( ): string
+		align_items( ): string
+		gap( ): string
+		flex_wrap( ): string
+		attr( ): ({ 
+			'role': string,
+		})  & ReturnType< $eve_flex['attr'] >
+	}
+	
+}
+
+//# sourceMappingURL=pagination.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $eve_pagination extends $.$eve_pagination {
+        pagination_label(): string;
+        attr(): {
+            'aria-label': string;
+            role: string;
+        };
+        page(next?: number): number;
+        page_count(): number;
+        prev_label(): string;
+        next_label(): string;
+        prev_disabled(): boolean;
+        next_disabled(): boolean;
+        prev_click(event?: Event): void;
+        next_click(event?: Event): void;
+        page_ids(): string[];
+        page_click(id: string, event?: Event): void;
+        Page(id: string): {
+            label(): string;
+            variant(): "solid" | "outline";
+            colors(): "low";
+            size(): "s";
+            enabled(): boolean;
+            event_activate(event: Event): void;
+            disabled(): boolean;
+            event_key_press(event: KeyboardEvent): any;
+            tab_index(): number;
+            error(): string;
+            hint_safe(): string;
+            sub_visible(): any[];
+            Label(): $.$mol_text;
+            activate(next?: ReturnType<$.$eve_button["event_activate"]>): ReturnType<$.$eve_button["event_activate"]>;
+            clicks(next?: any): any;
+            key_press(next?: ReturnType<$.$eve_button["event_key_press"]>): ReturnType<$.$eve_button["event_key_press"]>;
+            hint(): string;
+            interactive(): boolean;
+            justify_content(): string;
+            align_items(): string;
+            sub(): readonly (any)[];
+            click(next?: any): any;
+            event_click(next?: any): any;
+            status(next?: readonly (any)[]): readonly (any)[];
+            event(): ({
+                click(next?: ReturnType<$.$eve_button["activate"]>): ReturnType<$.$eve_button["activate"]>;
+                dblclick(next?: ReturnType<$.$eve_button["clicks"]>): ReturnType<$.$eve_button["clicks"]>;
+                keydown(next?: ReturnType<$.$eve_button["key_press"]>): ReturnType<$.$eve_button["key_press"]>;
+            }) & ReturnType<$.$eve_flex["event"]>;
+            attr(): ({
+                "disabled": ReturnType<$.$eve_button["disabled"]>;
+                "role": string;
+                "tabindex": ReturnType<$.$eve_button["tab_index"]>;
+                "title": ReturnType<$.$eve_button["hint_safe"]>;
+            }) & ReturnType<$.$eve_flex["attr"]>;
+            Speck(): $mol_speck;
+            direction(): string;
+            wrap(): string;
+            gap(): any;
+            state(next?: any): any;
+            title(): string;
+            focused(next?: boolean): boolean;
+            state_key(suffix?: string): string;
+            dom_name(): string;
+            dom_name_space(): string;
+            minimal_width(): number;
+            maximal_width(): number;
+            minimal_height(): number;
+            view_rect(): {
+                width: number;
+                height: number;
+                left: number;
+                right: number;
+                top: number;
+                bottom: number;
+            } | null;
+            dom_id(): string;
+            dom_node_external(next?: Element): Element;
+            dom_node(next?: Element): Element;
+            dom_final(): Element | undefined;
+            dom_tree(next?: Element): Element;
+            dom_node_actual(): Element;
+            auto(): any;
+            render(): void;
+            view_names_owned(): string[];
+            view_names(): Set<string>;
+            theme(next?: string | null): string | null | undefined;
+            attr_static(): {
+                [key: string]: string | number | boolean | null;
+            };
+            style(): {
+                [key: string]: string | number;
+            };
+            field(): {
+                [key: string]: any;
+            };
+            event_async(): {
+                [x: string]: (event: Event) => Promise<void>;
+            };
+            plugins(): readonly $mol_view[];
+            view_find(check: (path: $mol_view, text?: string) => boolean, path?: $mol_view[]): Generator<$mol_view[]>;
+            force_render(path: Set<$mol_view>): void;
+            ensure_visible(view: $mol_view, align?: ScrollLogicalPosition): void;
+            bring(): void;
+            destructor(): void;
+            [$mol_dev_format_head](): any[];
+            get $(): $;
+            set $(next: $);
+            toString(): string;
+            [Symbol.toStringTag]: string;
+            [$mol_ambient_ref]: $;
+            [Symbol.dispose](): void;
+        };
+        Prev(): {
+            label(): string;
+            enabled(): boolean;
+            variant(): "outline";
+            colors(): "low";
+            size(): "s";
+            event_activate(event: Event): void;
+            disabled(): boolean;
+            event_key_press(event: KeyboardEvent): any;
+            tab_index(): number;
+            error(): string;
+            hint_safe(): string;
+            sub_visible(): any[];
+            Label(): $.$mol_text;
+            activate(next?: ReturnType<$.$eve_button["event_activate"]>): ReturnType<$.$eve_button["event_activate"]>;
+            clicks(next?: any): any;
+            key_press(next?: ReturnType<$.$eve_button["event_key_press"]>): ReturnType<$.$eve_button["event_key_press"]>;
+            hint(): string;
+            interactive(): boolean;
+            justify_content(): string;
+            align_items(): string;
+            sub(): readonly (any)[];
+            click(next?: any): any;
+            event_click(next?: any): any;
+            status(next?: readonly (any)[]): readonly (any)[];
+            event(): ({
+                click(next?: ReturnType<$.$eve_button["activate"]>): ReturnType<$.$eve_button["activate"]>;
+                dblclick(next?: ReturnType<$.$eve_button["clicks"]>): ReturnType<$.$eve_button["clicks"]>;
+                keydown(next?: ReturnType<$.$eve_button["key_press"]>): ReturnType<$.$eve_button["key_press"]>;
+            }) & ReturnType<$.$eve_flex["event"]>;
+            attr(): ({
+                "disabled": ReturnType<$.$eve_button["disabled"]>;
+                "role": string;
+                "tabindex": ReturnType<$.$eve_button["tab_index"]>;
+                "title": ReturnType<$.$eve_button["hint_safe"]>;
+            }) & ReturnType<$.$eve_flex["attr"]>;
+            Speck(): $mol_speck;
+            direction(): string;
+            wrap(): string;
+            gap(): any;
+            state(next?: any): any;
+            title(): string;
+            focused(next?: boolean): boolean;
+            state_key(suffix?: string): string;
+            dom_name(): string;
+            dom_name_space(): string;
+            minimal_width(): number;
+            maximal_width(): number;
+            minimal_height(): number;
+            view_rect(): {
+                width: number;
+                height: number;
+                left: number;
+                right: number;
+                top: number;
+                bottom: number;
+            } | null;
+            dom_id(): string;
+            dom_node_external(next?: Element): Element;
+            dom_node(next?: Element): Element;
+            dom_final(): Element | undefined;
+            dom_tree(next?: Element): Element;
+            dom_node_actual(): Element;
+            auto(): any;
+            render(): void;
+            view_names_owned(): string[];
+            view_names(): Set<string>;
+            theme(next?: string | null): string | null | undefined;
+            attr_static(): {
+                [key: string]: string | number | boolean | null;
+            };
+            style(): {
+                [key: string]: string | number;
+            };
+            field(): {
+                [key: string]: any;
+            };
+            event_async(): {
+                [x: string]: (event: Event) => Promise<void>;
+            };
+            plugins(): readonly $mol_view[];
+            view_find(check: (path: $mol_view, text?: string) => boolean, path?: $mol_view[]): Generator<$mol_view[]>;
+            force_render(path: Set<$mol_view>): void;
+            ensure_visible(view: $mol_view, align?: ScrollLogicalPosition): void;
+            bring(): void;
+            destructor(): void;
+            [$mol_dev_format_head](): any[];
+            get $(): $;
+            set $(next: $);
+            toString(): string;
+            [Symbol.toStringTag]: string;
+            [$mol_ambient_ref]: $;
+            [Symbol.dispose](): void;
+        };
+        Next(): {
+            label(): string;
+            enabled(): boolean;
+            variant(): "outline";
+            colors(): "low";
+            size(): "s";
+            event_activate(event: Event): void;
+            disabled(): boolean;
+            event_key_press(event: KeyboardEvent): any;
+            tab_index(): number;
+            error(): string;
+            hint_safe(): string;
+            sub_visible(): any[];
+            Label(): $.$mol_text;
+            activate(next?: ReturnType<$.$eve_button["event_activate"]>): ReturnType<$.$eve_button["event_activate"]>;
+            clicks(next?: any): any;
+            key_press(next?: ReturnType<$.$eve_button["event_key_press"]>): ReturnType<$.$eve_button["event_key_press"]>;
+            hint(): string;
+            interactive(): boolean;
+            justify_content(): string;
+            align_items(): string;
+            sub(): readonly (any)[];
+            click(next?: any): any;
+            event_click(next?: any): any;
+            status(next?: readonly (any)[]): readonly (any)[];
+            event(): ({
+                click(next?: ReturnType<$.$eve_button["activate"]>): ReturnType<$.$eve_button["activate"]>;
+                dblclick(next?: ReturnType<$.$eve_button["clicks"]>): ReturnType<$.$eve_button["clicks"]>;
+                keydown(next?: ReturnType<$.$eve_button["key_press"]>): ReturnType<$.$eve_button["key_press"]>;
+            }) & ReturnType<$.$eve_flex["event"]>;
+            attr(): ({
+                "disabled": ReturnType<$.$eve_button["disabled"]>;
+                "role": string;
+                "tabindex": ReturnType<$.$eve_button["tab_index"]>;
+                "title": ReturnType<$.$eve_button["hint_safe"]>;
+            }) & ReturnType<$.$eve_flex["attr"]>;
+            Speck(): $mol_speck;
+            direction(): string;
+            wrap(): string;
+            gap(): any;
+            state(next?: any): any;
+            title(): string;
+            focused(next?: boolean): boolean;
+            state_key(suffix?: string): string;
+            dom_name(): string;
+            dom_name_space(): string;
+            minimal_width(): number;
+            maximal_width(): number;
+            minimal_height(): number;
+            view_rect(): {
+                width: number;
+                height: number;
+                left: number;
+                right: number;
+                top: number;
+                bottom: number;
+            } | null;
+            dom_id(): string;
+            dom_node_external(next?: Element): Element;
+            dom_node(next?: Element): Element;
+            dom_final(): Element | undefined;
+            dom_tree(next?: Element): Element;
+            dom_node_actual(): Element;
+            auto(): any;
+            render(): void;
+            view_names_owned(): string[];
+            view_names(): Set<string>;
+            theme(next?: string | null): string | null | undefined;
+            attr_static(): {
+                [key: string]: string | number | boolean | null;
+            };
+            style(): {
+                [key: string]: string | number;
+            };
+            field(): {
+                [key: string]: any;
+            };
+            event_async(): {
+                [x: string]: (event: Event) => Promise<void>;
+            };
+            plugins(): readonly $mol_view[];
+            view_find(check: (path: $mol_view, text?: string) => boolean, path?: $mol_view[]): Generator<$mol_view[]>;
+            force_render(path: Set<$mol_view>): void;
+            ensure_visible(view: $mol_view, align?: ScrollLogicalPosition): void;
+            bring(): void;
+            destructor(): void;
+            [$mol_dev_format_head](): any[];
+            get $(): $;
+            set $(next: $);
+            toString(): string;
+            [Symbol.toStringTag]: string;
+            [$mol_ambient_ref]: $;
+            [Symbol.dispose](): void;
+        };
+        sub(): ({
+            label(): string;
+            enabled(): boolean;
+            variant(): "outline";
+            colors(): "low";
+            size(): "s";
+            event_activate(event: Event): void;
+            disabled(): boolean;
+            event_key_press(event: KeyboardEvent): any;
+            tab_index(): number;
+            error(): string;
+            hint_safe(): string;
+            sub_visible(): any[];
+            Label(): $.$mol_text;
+            activate(next?: ReturnType<$.$eve_button["event_activate"]>): ReturnType<$.$eve_button["event_activate"]>;
+            clicks(next?: any): any;
+            key_press(next?: ReturnType<$.$eve_button["event_key_press"]>): ReturnType<$.$eve_button["event_key_press"]>;
+            hint(): string;
+            interactive(): boolean;
+            justify_content(): string;
+            align_items(): string;
+            sub(): readonly (any)[];
+            click(next?: any): any;
+            event_click(next?: any): any;
+            status(next?: readonly (any)[]): readonly (any)[];
+            event(): ({
+                click(next?: ReturnType<$.$eve_button["activate"]>): ReturnType<$.$eve_button["activate"]>;
+                dblclick(next?: ReturnType<$.$eve_button["clicks"]>): ReturnType<$.$eve_button["clicks"]>;
+                keydown(next?: ReturnType<$.$eve_button["key_press"]>): ReturnType<$.$eve_button["key_press"]>;
+            }) & ReturnType<$.$eve_flex["event"]>;
+            attr(): ({
+                "disabled": ReturnType<$.$eve_button["disabled"]>;
+                "role": string;
+                "tabindex": ReturnType<$.$eve_button["tab_index"]>;
+                "title": ReturnType<$.$eve_button["hint_safe"]>;
+            }) & ReturnType<$.$eve_flex["attr"]>;
+            Speck(): $mol_speck;
+            direction(): string;
+            wrap(): string;
+            gap(): any;
+            state(next?: any): any;
+            title(): string;
+            focused(next?: boolean): boolean;
+            state_key(suffix?: string): string;
+            dom_name(): string;
+            dom_name_space(): string;
+            minimal_width(): number;
+            maximal_width(): number;
+            minimal_height(): number;
+            view_rect(): {
+                width: number;
+                height: number;
+                left: number;
+                right: number;
+                top: number;
+                bottom: number;
+            } | null;
+            dom_id(): string;
+            dom_node_external(next?: Element): Element;
+            dom_node(next?: Element): Element;
+            dom_final(): Element | undefined;
+            dom_tree(next?: Element): Element;
+            dom_node_actual(): Element;
+            auto(): any;
+            render(): void;
+            view_names_owned(): string[];
+            view_names(): Set<string>;
+            theme(next?: string | null): string | null | undefined;
+            attr_static(): {
+                [key: string]: string | number | boolean | null;
+            };
+            style(): {
+                [key: string]: string | number;
+            };
+            field(): {
+                [key: string]: any;
+            };
+            event_async(): {
+                [x: string]: (event: Event) => Promise<void>;
+            };
+            plugins(): readonly $mol_view[];
+            view_find(check: (path: $mol_view, text?: string) => boolean, path?: $mol_view[]): Generator<$mol_view[]>;
+            force_render(path: Set<$mol_view>): void;
+            ensure_visible(view: $mol_view, align?: ScrollLogicalPosition): void;
+            bring(): void;
+            destructor(): void;
+            [$mol_dev_format_head](): any[];
+            get $(): $;
+            set $(next: $);
+            toString(): string;
+            [Symbol.toStringTag]: string;
+            [$mol_ambient_ref]: $;
+            [Symbol.dispose](): void;
+        } | {
+            label(): string;
+            variant(): "solid" | "outline";
+            colors(): "low";
+            size(): "s";
+            enabled(): boolean;
+            event_activate(event: Event): void;
+            disabled(): boolean;
+            event_key_press(event: KeyboardEvent): any;
+            tab_index(): number;
+            error(): string;
+            hint_safe(): string;
+            sub_visible(): any[];
+            Label(): $.$mol_text;
+            activate(next?: ReturnType<$.$eve_button["event_activate"]>): ReturnType<$.$eve_button["event_activate"]>;
+            clicks(next?: any): any;
+            key_press(next?: ReturnType<$.$eve_button["event_key_press"]>): ReturnType<$.$eve_button["event_key_press"]>;
+            hint(): string;
+            interactive(): boolean;
+            justify_content(): string;
+            align_items(): string;
+            sub(): readonly (any)[];
+            click(next?: any): any;
+            event_click(next?: any): any;
+            status(next?: readonly (any)[]): readonly (any)[];
+            event(): ({
+                click(next?: ReturnType<$.$eve_button["activate"]>): ReturnType<$.$eve_button["activate"]>;
+                dblclick(next?: ReturnType<$.$eve_button["clicks"]>): ReturnType<$.$eve_button["clicks"]>;
+                keydown(next?: ReturnType<$.$eve_button["key_press"]>): ReturnType<$.$eve_button["key_press"]>;
+            }) & ReturnType<$.$eve_flex["event"]>;
+            attr(): ({
+                "disabled": ReturnType<$.$eve_button["disabled"]>;
+                "role": string;
+                "tabindex": ReturnType<$.$eve_button["tab_index"]>;
+                "title": ReturnType<$.$eve_button["hint_safe"]>;
+            }) & ReturnType<$.$eve_flex["attr"]>;
+            Speck(): $mol_speck;
+            direction(): string;
+            wrap(): string;
+            gap(): any;
+            state(next?: any): any;
+            title(): string;
+            focused(next?: boolean): boolean;
+            state_key(suffix?: string): string;
+            dom_name(): string;
+            dom_name_space(): string;
+            minimal_width(): number;
+            maximal_width(): number;
+            minimal_height(): number;
+            view_rect(): {
+                width: number;
+                height: number;
+                left: number;
+                right: number;
+                top: number;
+                bottom: number;
+            } | null;
+            dom_id(): string;
+            dom_node_external(next?: Element): Element;
+            dom_node(next?: Element): Element;
+            dom_final(): Element | undefined;
+            dom_tree(next?: Element): Element;
+            dom_node_actual(): Element;
+            auto(): any;
+            render(): void;
+            view_names_owned(): string[];
+            view_names(): Set<string>;
+            theme(next?: string | null): string | null | undefined;
+            attr_static(): {
+                [key: string]: string | number | boolean | null;
+            };
+            style(): {
+                [key: string]: string | number;
+            };
+            field(): {
+                [key: string]: any;
+            };
+            event_async(): {
+                [x: string]: (event: Event) => Promise<void>;
+            };
+            plugins(): readonly $mol_view[];
+            view_find(check: (path: $mol_view, text?: string) => boolean, path?: $mol_view[]): Generator<$mol_view[]>;
+            force_render(path: Set<$mol_view>): void;
+            ensure_visible(view: $mol_view, align?: ScrollLogicalPosition): void;
+            bring(): void;
+            destructor(): void;
+            [$mol_dev_format_head](): any[];
+            get $(): $;
+            set $(next: $);
+            toString(): string;
+            [Symbol.toStringTag]: string;
+            [$mol_ambient_ref]: $;
+            [Symbol.dispose](): void;
+        } | {
+            label(): string;
+            enabled(): boolean;
+            variant(): "outline";
+            colors(): "low";
+            size(): "s";
+            event_activate(event: Event): void;
+            disabled(): boolean;
+            event_key_press(event: KeyboardEvent): any;
+            tab_index(): number;
+            error(): string;
+            hint_safe(): string;
+            sub_visible(): any[];
+            Label(): $.$mol_text;
+            activate(next?: ReturnType<$.$eve_button["event_activate"]>): ReturnType<$.$eve_button["event_activate"]>;
+            clicks(next?: any): any;
+            key_press(next?: ReturnType<$.$eve_button["event_key_press"]>): ReturnType<$.$eve_button["event_key_press"]>;
+            hint(): string;
+            interactive(): boolean;
+            justify_content(): string;
+            align_items(): string;
+            sub(): readonly (any)[];
+            click(next?: any): any;
+            event_click(next?: any): any;
+            status(next?: readonly (any)[]): readonly (any)[];
+            event(): ({
+                click(next?: ReturnType<$.$eve_button["activate"]>): ReturnType<$.$eve_button["activate"]>;
+                dblclick(next?: ReturnType<$.$eve_button["clicks"]>): ReturnType<$.$eve_button["clicks"]>;
+                keydown(next?: ReturnType<$.$eve_button["key_press"]>): ReturnType<$.$eve_button["key_press"]>;
+            }) & ReturnType<$.$eve_flex["event"]>;
+            attr(): ({
+                "disabled": ReturnType<$.$eve_button["disabled"]>;
+                "role": string;
+                "tabindex": ReturnType<$.$eve_button["tab_index"]>;
+                "title": ReturnType<$.$eve_button["hint_safe"]>;
+            }) & ReturnType<$.$eve_flex["attr"]>;
+            Speck(): $mol_speck;
+            direction(): string;
+            wrap(): string;
+            gap(): any;
+            state(next?: any): any;
+            title(): string;
+            focused(next?: boolean): boolean;
+            state_key(suffix?: string): string;
+            dom_name(): string;
+            dom_name_space(): string;
+            minimal_width(): number;
+            maximal_width(): number;
+            minimal_height(): number;
+            view_rect(): {
+                width: number;
+                height: number;
+                left: number;
+                right: number;
+                top: number;
+                bottom: number;
+            } | null;
+            dom_id(): string;
+            dom_node_external(next?: Element): Element;
+            dom_node(next?: Element): Element;
+            dom_final(): Element | undefined;
+            dom_tree(next?: Element): Element;
+            dom_node_actual(): Element;
+            auto(): any;
+            render(): void;
+            view_names_owned(): string[];
+            view_names(): Set<string>;
+            theme(next?: string | null): string | null | undefined;
+            attr_static(): {
+                [key: string]: string | number | boolean | null;
+            };
+            style(): {
+                [key: string]: string | number;
+            };
+            field(): {
+                [key: string]: any;
+            };
+            event_async(): {
+                [x: string]: (event: Event) => Promise<void>;
+            };
+            plugins(): readonly $mol_view[];
+            view_find(check: (path: $mol_view, text?: string) => boolean, path?: $mol_view[]): Generator<$mol_view[]>;
+            force_render(path: Set<$mol_view>): void;
+            ensure_visible(view: $mol_view, align?: ScrollLogicalPosition): void;
+            bring(): void;
+            destructor(): void;
+            [$mol_dev_format_head](): any[];
+            get $(): $;
+            set $(next: $);
+            toString(): string;
+            [Symbol.toStringTag]: string;
+            [$mol_ambient_ref]: $;
+            [Symbol.dispose](): void;
+        })[];
+    }
+}
+
+declare namespace $.$$ {
+}
+
+declare namespace $ {
+
+	type $eve_app_page_sb_playground__component_name_eve_app_page_components_pagination_1 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_playground['component_name'] >
+	>
+	type $eve_app_page_sb_playground__default_source_eve_app_page_components_pagination_2 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_playground['default_source'] >
+	>
+	type $eve_app_page_sb_page__title_eve_app_page_components_pagination_3 = $mol_type_enforce<
+		any
+		,
+		ReturnType< $eve_app_page_sb_page['title'] >
+	>
+	type $eve_app_page_sb_page__body_eve_app_page_components_pagination_4 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $eve_app_page_sb_page['body'] >
+	>
+	export class $eve_app_page_components_pagination extends $eve_app_page_sb_page {
+		Playground( ): $eve_app_page_sb_playground
+		Overview_page( ): $eve_app_page_sb_page
+		title( ): string
+		Head( ): any
+		body( ): readonly(any)[]
+	}
+	
+}
+
+//# sourceMappingURL=pagination.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $eve_app_page_components_pagination extends $.$eve_app_page_components_pagination {
+    }
+}
+
+declare namespace $ {
+
+	type $mol_text__text_eve_slider_1 = $mol_type_enforce<
+		ReturnType< $eve_slider['label'] >
+		,
+		ReturnType< $mol_text['text'] >
+	>
+	type $mol_view__dom_name_eve_slider_2 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_view['dom_name'] >
+	>
+	type $mol_view__attr_eve_slider_3 = $mol_type_enforce<
+		({ 
+			'type': string,
+			'min': ReturnType< $eve_slider['min_str'] >,
+			'max': ReturnType< $eve_slider['max_str'] >,
+			'step': ReturnType< $eve_slider['step_str'] >,
+			'aria_valuetext': ReturnType< $eve_slider['value_text'] >,
+		}) 
+		,
+		ReturnType< $mol_view['attr'] >
+	>
+	type $mol_view__field_eve_slider_4 = $mol_type_enforce<
+		({ 
+			'value': ReturnType< $eve_slider['value_str'] >,
+		}) 
+		,
+		ReturnType< $mol_view['field'] >
+	>
+	type $mol_view__event_eve_slider_5 = $mol_type_enforce<
+		({ 
+			input( next?: ReturnType< $eve_slider['event_input'] > ): ReturnType< $eve_slider['event_input'] >,
+		}) 
+		,
+		ReturnType< $mol_view['event'] >
+	>
+	export class $eve_slider extends $eve_flex {
+		label( ): string
+		Label( ): $mol_text
+		event_input( next?: any ): any
+		Input( ): $mol_view
+		direction( ): string
+		gap( ): string
+		min_str( ): string
+		max_str( ): string
+		step_str( ): string
+		value_str( ): string
+		value_text( ): string
+		sub( ): readonly(any)[]
+	}
+	
+}
+
+//# sourceMappingURL=slider.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $eve_slider extends $.$eve_slider {
+        label(): string;
+        value(next?: number): number;
+        min(): number;
+        max(): number;
+        step(): number;
+        min_str(): string;
+        max_str(): string;
+        step_str(): string;
+        value_str(): string;
+        value_text(): string;
+        event_input(next?: Event): void;
+    }
+}
+
+declare namespace $.$$ {
+}
+
+declare namespace $ {
+
+	type $eve_app_page_sb_playground__component_name_eve_app_page_components_slider_1 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_playground['component_name'] >
+	>
+	type $eve_app_page_sb_playground__default_source_eve_app_page_components_slider_2 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_playground['default_source'] >
+	>
+	type $eve_app_page_sb_page__title_eve_app_page_components_slider_3 = $mol_type_enforce<
+		any
+		,
+		ReturnType< $eve_app_page_sb_page['title'] >
+	>
+	type $eve_app_page_sb_page__body_eve_app_page_components_slider_4 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $eve_app_page_sb_page['body'] >
+	>
+	export class $eve_app_page_components_slider extends $eve_app_page_sb_page {
+		Playground( ): $eve_app_page_sb_playground
+		Overview_page( ): $eve_app_page_sb_page
+		title( ): string
+		Head( ): any
+		body( ): readonly(any)[]
+	}
+	
+}
+
+//# sourceMappingURL=slider.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $eve_app_page_components_slider extends $.$eve_app_page_components_slider {
+    }
+}
+
 declare namespace $ {
 
 	type $mol_view__dom_name_eve_radio_1 = $mol_type_enforce<
@@ -6528,6 +7999,7 @@ declare namespace $ {
 		disabled( next?: any ): any
 		colors( next?: string ): string
 		size( ): any
+		click_toggle( next?: boolean ): boolean
 		attr( ): ({ 
 			'mol_check_checked': ReturnType< $eve_checkbox['checked'] >,
 			'aria-checked': ReturnType< $eve_checkbox['aria_checked'] >,
@@ -6547,6 +8019,7 @@ declare namespace $.$$ {
         checked(next?: boolean): boolean;
         disabled(next?: boolean): boolean;
         indeterminate(next?: boolean): boolean;
+        click_toggle(next?: boolean): boolean;
         variant(): $eve_surface_variant;
         event_click(next?: Event): void;
         aria_checked(): string;
@@ -6573,11 +8046,18 @@ declare namespace $ {
 		,
 		ReturnType< $eve_checkbox['indeterminate'] >
 	>
+	type $mol_text__text_eve_checkbox_labelled_4 = $mol_type_enforce<
+		ReturnType< $eve_checkbox_labelled['label'] >
+		,
+		ReturnType< $mol_text['text'] >
+	>
 	export class $eve_checkbox_labelled extends $eve_button {
 		checked( next?: boolean ): boolean
 		disabled( next?: boolean ): boolean
 		indeterminate( next?: boolean ): boolean
 		Checkbox( ): $eve_checkbox
+		label( ): string
+		Label( ): $mol_text
 		variant( ): string
 		size( next?: string ): string
 		justify_content( ): string
@@ -6591,6 +8071,146 @@ declare namespace $.$$ {
     class $eve_checkbox_labelled extends $.$eve_checkbox_labelled {
         dom_name(): string;
         click(event?: MouseEvent): void;
+    }
+}
+
+declare namespace $ {
+
+	export class $eve_selection_multiple extends $eve_surface {
+		options( ): Record<string, any>
+		option_ids( ): readonly(string)[]
+		option_value( id: any): string
+		option_label( id: any): string
+		option_selected( id: any): boolean
+		option_disabled( id: any): boolean
+		option_indeterminate( id: any): boolean
+		option_click( id: any, next?: any ): any
+	}
+	
+}
+
+//# sourceMappingURL=multiple.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $eve_selection_multiple extends $.$eve_selection_multiple {
+        options(): Record<string, string>;
+        selected(next?: readonly string[]): readonly string[];
+        option_ids(): string[];
+        option_value(id: string): string;
+        option_label(id: string): string;
+        option_selected(id: string): boolean;
+        option_disabled(id: string): boolean;
+        option_indeterminate(id: string): boolean;
+        option_click(id: string, event?: Event): Event | null;
+    }
+}
+
+declare namespace $ {
+
+	type $eve_checkbox__click_toggle_eve_checkbox_group_labelled_1 = $mol_type_enforce<
+		boolean
+		,
+		ReturnType< $eve_checkbox['click_toggle'] >
+	>
+	type $eve_checkbox__checked_eve_checkbox_group_labelled_2 = $mol_type_enforce<
+		ReturnType< $eve_checkbox_group_labelled['checked'] >
+		,
+		ReturnType< $eve_checkbox['checked'] >
+	>
+	type $eve_checkbox__disabled_eve_checkbox_group_labelled_3 = $mol_type_enforce<
+		ReturnType< $eve_checkbox_group_labelled['disabled'] >
+		,
+		ReturnType< $eve_checkbox['disabled'] >
+	>
+	type $eve_checkbox__indeterminate_eve_checkbox_group_labelled_4 = $mol_type_enforce<
+		ReturnType< $eve_checkbox_group_labelled['indeterminate'] >
+		,
+		ReturnType< $eve_checkbox['indeterminate'] >
+	>
+	type $eve_checkbox__event_click_eve_checkbox_group_labelled_5 = $mol_type_enforce<
+		ReturnType< $eve_checkbox_group_labelled['option_click'] >
+		,
+		ReturnType< $eve_checkbox['event_click'] >
+	>
+	type $mol_text__text_eve_checkbox_group_labelled_6 = $mol_type_enforce<
+		ReturnType< $eve_checkbox_group_labelled['label'] >
+		,
+		ReturnType< $mol_text['text'] >
+	>
+	export class $eve_checkbox_group_labelled extends $eve_checkbox_labelled {
+		checked( next?: boolean ): boolean
+		disabled( next?: boolean ): boolean
+		indeterminate( next?: boolean ): boolean
+		option_click( next?: any ): any
+		Checkbox( ): $eve_checkbox
+		label( ): string
+		Label( ): $mol_text
+		sub( ): readonly(any)[]
+	}
+	
+}
+
+//# sourceMappingURL=labelled.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $eve_checkbox_group_labelled extends $.$eve_checkbox_group_labelled {
+    }
+}
+
+declare namespace $ {
+
+	type $eve_checkbox_group_labelled__checked_eve_checkbox_group_1 = $mol_type_enforce<
+		ReturnType< $eve_checkbox_group['option_selected'] >
+		,
+		ReturnType< $eve_checkbox_group_labelled['checked'] >
+	>
+	type $eve_checkbox_group_labelled__disabled_eve_checkbox_group_2 = $mol_type_enforce<
+		ReturnType< $eve_checkbox_group['option_disabled'] >
+		,
+		ReturnType< $eve_checkbox_group_labelled['disabled'] >
+	>
+	type $eve_checkbox_group_labelled__indeterminate_eve_checkbox_group_3 = $mol_type_enforce<
+		ReturnType< $eve_checkbox_group['option_indeterminate'] >
+		,
+		ReturnType< $eve_checkbox_group_labelled['indeterminate'] >
+	>
+	type $eve_checkbox_group_labelled__label_eve_checkbox_group_4 = $mol_type_enforce<
+		ReturnType< $eve_checkbox_group['option_label'] >
+		,
+		ReturnType< $eve_checkbox_group_labelled['label'] >
+	>
+	type $eve_checkbox_group_labelled__event_click_eve_checkbox_group_5 = $mol_type_enforce<
+		ReturnType< $eve_checkbox_group['option_click'] >
+		,
+		ReturnType< $eve_checkbox_group_labelled['event_click'] >
+	>
+	type $eve_flex__direction_eve_checkbox_group_6 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_flex['direction'] >
+	>
+	type $eve_flex__sub_eve_checkbox_group_7 = $mol_type_enforce<
+		ReturnType< $eve_checkbox_group['Options'] >
+		,
+		ReturnType< $eve_flex['sub'] >
+	>
+	export class $eve_checkbox_group extends $eve_selection_multiple {
+		group_aria_label( ): string
+		Option( id: any): $eve_checkbox_group_labelled
+		Options( ): readonly(any)[]
+		Layout( ): $eve_flex
+		attr( ): ({ 
+			'role': string,
+			'aria-label': ReturnType< $eve_checkbox_group['group_aria_label'] >,
+		}) 
+		sub( ): readonly(any)[]
+	}
+	
+}
+
+//# sourceMappingURL=group.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $eve_checkbox_group extends $.$eve_checkbox_group {
+        group_aria_label(): string;
+        Options(): $.$eve_checkbox_group_labelled[];
     }
 }
 
@@ -6636,15 +8256,36 @@ declare namespace $ {
 		,
 		ReturnType< $eve_app_page_sb_page['body'] >
 	>
-	type $eve_app_page_sb_catalog__param_eve_app_page_components_checkbox_9 = $mol_type_enforce<
+	type $eve_app_page_sb_playground__component_name_eve_app_page_components_checkbox_9 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_playground['component_name'] >
+	>
+	type $eve_app_page_sb_playground__default_source_eve_app_page_components_checkbox_10 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_playground['default_source'] >
+	>
+	type $eve_app_page_sb_page__title_eve_app_page_components_checkbox_11 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $eve_app_page_sb_page['title'] >
+	>
+	type $eve_app_page_sb_page__body_eve_app_page_components_checkbox_12 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $eve_app_page_sb_page['body'] >
+	>
+	type $eve_app_page_sb_catalog__param_eve_app_page_components_checkbox_13 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $eve_app_page_sb_catalog['param'] >
 	>
-	type $eve_app_page_sb_catalog__spreads_eve_app_page_components_checkbox_10 = $mol_type_enforce<
+	type $eve_app_page_sb_catalog__spreads_eve_app_page_components_checkbox_14 = $mol_type_enforce<
 		({ 
 			'bare': ReturnType< $eve_app_page_components_checkbox['Bare_page'] >,
 			'labelled': ReturnType< $eve_app_page_components_checkbox['Labelled_page'] >,
+			'group': ReturnType< $eve_app_page_components_checkbox['Group_page'] >,
 		}) 
 		,
 		ReturnType< $eve_app_page_sb_catalog['spreads'] >
@@ -6654,6 +8295,8 @@ declare namespace $ {
 		Bare_page( ): $eve_app_page_sb_page
 		Labelled_playground( ): $eve_app_page_sb_playground
 		Labelled_page( ): $eve_app_page_sb_page
+		Group_playground( ): $eve_app_page_sb_playground
+		Group_page( ): $eve_app_page_sb_page
 		Check_catalog( ): $eve_app_page_sb_catalog
 		title( ): string
 		Head( ): any
@@ -7085,7 +8728,13 @@ declare namespace $ {
 			'flex': ReturnType< $eve_app_page_components['Flex'] >,
 			'button': ReturnType< $eve_app_page_components['Button'] >,
 			'alert': ReturnType< $eve_app_page_components['Alert'] >,
+			'avatar': ReturnType< $eve_app_page_components['Avatar'] >,
+			'badge': ReturnType< $eve_app_page_components['Badge'] >,
 			'card': ReturnType< $eve_app_page_components['Card'] >,
+			'chip': ReturnType< $eve_app_page_components['Chip'] >,
+			'empty': ReturnType< $eve_app_page_components['Empty'] >,
+			'pagination': ReturnType< $eve_app_page_components['Pagination'] >,
+			'slider': ReturnType< $eve_app_page_components['Slider'] >,
 			'radio': ReturnType< $eve_app_page_components['Radio'] >,
 			'checkbox': ReturnType< $eve_app_page_components['Checkbox'] >,
 			'switch': ReturnType< $eve_app_page_components['Switch'] >,
@@ -7100,7 +8749,13 @@ declare namespace $ {
 		Flex( ): $eve_app_page_components_flex
 		Button( ): $eve_app_page_components_button
 		Alert( ): $eve_app_page_components_alert
+		Avatar( ): $eve_app_page_components_avatar
+		Badge( ): $eve_app_page_components_badge
 		Card( ): $eve_app_page_components_card
+		Chip( ): $eve_app_page_components_chip
+		Empty( ): $eve_app_page_components_empty
+		Pagination( ): $eve_app_page_components_pagination
+		Slider( ): $eve_app_page_components_slider
 		Radio( ): $eve_app_page_components_radio
 		Checkbox( ): $eve_app_page_components_checkbox
 		Switch( ): $eve_app_page_components_switch
