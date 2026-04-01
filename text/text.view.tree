@@ -1,0 +1,13 @@
+$eve_text $eve_surface
+	variant \text
+	colors? \medium
+	interactive? null
+	text_variant \bodyMd
+	text_align \start
+	font_weight_override? null
+	variable_font false
+	modifiers /string
+	content \
+	sub /
+		<= Body $mol_text
+			text <= content \

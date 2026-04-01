@@ -20,6 +20,20 @@ $eve_app_page_components_button $eve_app_page_sb_page
 								\		<= Icon $mol_icon_karate
 								\		^
 								\
+				inline <= Inline_page $eve_app_page_sb_page
+					title \Inline
+					body /
+						<= Inline_playground $eve_app_page_sb_playground
+							component_name \Live_button_inline
+							default_source \
+								\Live_button_inline $eve_button_inline
+								\	colors \primary
+								\	variant \ghost
+								\	size \s
+								\	label \Action
+								\	sub /
+								\	^
+								\
 				- variants <= Variants $eve_app_page_components_button_variants
 				- colors <= Colors $eve_app_page_components_button_colors
 				- sizes <= Sizes $eve_app_page_components_button_sizes

@@ -1,21 +1,44 @@
 $eve_app_page_components_surface $eve_app_page_sb_page
 	title \Surface
+	Head null
 	body /
-		<= Hint $mol_text
-			text \TODO: сделать по-другому селект этот, а то он путает...
-		<= Variant_select $mol_select
-			dictionary <= variants *
-				soft \Soft
-				solid \Solid
-				outline \Outline
-				ghost \Ghost
-			value? <=> Variant_select_value? \soft
-		<= Card $eve_flex
-			align_items \center
-			justify_content \center
-			sub /
-				<= Showcase_grid $eve_surface
-					sub <= grid_cells /
+		<= Surface_catalog $eve_app_page_sb_catalog
+			param \surface
+			spreads *
+				playground <= Playground_page $eve_app_page_sb_page
+					title \Playground
+					body /
+						<= Playground_live $eve_app_page_sb_playground
+							component_name \Live_surface
+							default_source \
+								\Live_surface $eve_surface
+								\	colors \primary
+								\	variant \solid
+								\	size \m
+								\	state? null
+								\	interactive? null
+								\	sub /
+								\		<= Live_label $mol_text
+								\			text \Surface
+								\
+				showcase <= Showcase_page $eve_app_page_sb_page
+					title \Showcase
+					body /
+						<= Hint $mol_text
+							text \TODO: сделать по-другому селект этот, а то он путает...
+						<= Variant_select $mol_select
+							dictionary <= variants *
+								soft \Soft
+								solid \Solid
+								outline \Outline
+								ghost \Ghost
+							value? <=> Variant_select_value? \soft
+						<= Card $eve_flex
+							align_items \center
+							justify_content \center
+							sub /
+								<= Showcase_grid $eve_surface
+									sub <= grid_cells /
 	Grid_empty $eve_surface
 	Grid_column_header* $mol_paragraph
 		title <= grid_header_text* \

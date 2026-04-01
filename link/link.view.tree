@@ -1,0 +1,7 @@
+$eve_link $eve_text
+	variant \text
+	colors \primary
+	interactive true
+	text_variant \bodyMd
+	modifiers /
+		underline

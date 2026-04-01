@@ -1,0 +1,109 @@
+$eve_app_page_components_text $eve_app_page_sb_page
+	title \Text
+	Head null
+	body /
+		<= Text_catalog $eve_app_page_sb_catalog
+			param \text
+			spreads *
+				playground <= Playground_page $eve_app_page_sb_page
+					title \Playground
+					body /
+						<= Playground_live $eve_app_page_sb_playground
+							component_name \Live_text
+							default_source \
+								\Live_text $eve_text
+								\	colors \medium
+								\	text_variant \bodyMd
+								\	text_align \start
+								\	font_weight_override? null
+								\	variable_font false
+								\	modifiers /
+								\		underline
+								\	content \The quick brown fox jumps over the lazy dog.
+								\
+				samples <= Samples_page $eve_app_page_sb_page
+					title \Samples
+					body /
+						<= Samples $eve_flex
+							direction \column
+							gap \1rem
+							sub /
+								<= H_stack $eve_flex
+									direction \row
+									gap \1.5rem
+									wrap \wrap
+									align_items \flex-start
+									sub /
+										<= H1 $eve_text
+											colors \primary
+											text_variant \heading3xl
+											content \Heading 3xl
+										<= H2 $eve_text
+											text_variant \heading2xl
+											content \Heading 2xl
+										<= H3 $eve_text
+											text_variant \headingXl
+											content \Heading xl
+								<= Body_stack $eve_flex
+									direction \column
+									gap \0.5rem
+									sub /
+										<= B_lg $eve_text
+											text_variant \bodyLg
+											content \Body large — quick brown fox
+										<= B_md $eve_text
+											text_variant \bodyMd
+											content \Body medium — quick brown fox
+										<= B_sm $eve_text
+											text_variant \bodySm
+											content \Body small — quick brown fox
+								<= Align_demo $eve_text
+									colors \high
+									text_variant \bodyMd
+									text_align \center
+									content \Centered body (text_align)
+								<= Weight_demo $eve_text
+									text_variant \bodyMd
+									font_weight_override \bold
+									content \Bold override on bodyMd
+								<= Variable_hint $eve_text
+									colors \low
+									text_variant \bodySm
+									content \Toggle variable_font in Playground for variable fonts (wght axis); static fonts ignore it.
+								<= Modifiers_row $eve_flex
+									direction \row
+									gap \1rem
+									align_items \center
+									wrap \wrap
+									sub /
+										<= Mod_upper $eve_text
+											text_variant \bodyMd
+											modifiers /
+												uppercase
+											content \uppercase
+										<= Mod_strike $eve_text
+											text_variant \bodyMd
+											modifiers /
+												strikethrough
+											content \strikethrough
+										<= Mod_under $eve_text
+											text_variant \bodyMd
+											modifiers /
+												underline
+											content \underline
+										<= Mod_combo $eve_text
+											text_variant \bodyMd
+											modifiers /
+												underline
+												strikethrough
+											content \underline + strikethrough
+								<= Interactive_row $eve_flex
+									direction \row
+									gap \1rem
+									align_items \center
+									wrap \wrap
+									sub /
+										<= Demo_link $eve_link
+											content \Eve link (see Components → Link)
+										<= Demo_btn $eve_button_inline
+											label \Button inline

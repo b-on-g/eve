@@ -1,0 +1,13 @@
+$eve_app_page_components_link $eve_app_page_sb_page
+	title \Link
+	Head null
+	body /
+		<= Playground_live $eve_app_page_sb_playground
+			component_name \Live_link
+			default_source \
+				\Live_link $eve_link
+				\	content \Follow link
+				\	text_align \start
+				\	font_weight_override? null
+				\	variable_font false
+				\

@@ -7,6 +7,8 @@ $eve_app_page_components $eve_page
 			menu_filter_enabled true
 			spreads *
 				surfaces <= Surfaces $eve_app_page_components_surface
+				text <= Text $eve_app_page_components_text
+				link <= Link $eve_app_page_components_link
 				flex <= Flex $eve_app_page_components_flex
 				button <= Button $eve_app_page_components_button
 				alert <= Alert $eve_app_page_components_alert

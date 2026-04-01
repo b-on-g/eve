@@ -1,0 +1,5 @@
+$eve_button_inline $eve_button
+	variant \ghost
+	colors \primary
+	size \s
+	label \
